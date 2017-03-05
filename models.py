@@ -29,6 +29,9 @@ class Image(models.Model):
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
 
+    def __str__(self):
+        return '{} photo #{}'.format(self.content_object, self.position)
+
 
 @receiver(pre_delete, sender=Image)
 def mymodel_delete(sender, instance, **kwargs):
