@@ -9,11 +9,11 @@ from django.dispatch.dispatcher import receiver
 from slugify import UniqueSlugify
 
 def _make_src(slug, filename=''):
-    if filename:
+    if filename and '.' in filename:
         ext = filename.split('.')[-1]
+        src = "{}.{}".format(slug, ext)
     else:
-        ext = ''
-    src = "{}.{}".format(slug, ext)
+        src = slug
     return os.path.join('gallery', src)
 
 def _unique_src_check(slug, uids):
