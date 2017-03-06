@@ -1,3 +1,5 @@
+import os
+
 from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -6,12 +8,18 @@ from django.dispatch.dispatcher import receiver
 
 from slugify import UniqueSlugify
 
-from . import utils
+def _make_src(slug, filename=''):
+    if filename:
+        ext = filename.split('.')[-1]
+    else:
+        ext = ''
+    src = "{}.{}".format(slug, ext)
+    return os.path.join('gallery', src)
 
 def _unique_src_check(slug, uids):
     if slug in uids:
         return False
-    src = utils.make_src(slug)
+    src = _make_src(slug)
     return not Image.objects.filter(src__startswith=src)
 
 slugify_unique = UniqueSlugify(unique_check=_unique_src_check, to_lower=True)
@@ -19,7 +27,7 @@ slugify_unique = UniqueSlugify(unique_check=_unique_src_check, to_lower=True)
 def _upload_rename(instance, filename):
     title = str(instance.content_object)
     slug = slugify_unique(title)
-    src = utils.make_src(slug, filename)
+    src = _make_src(slug, filename)
     return src
 
 class Image(models.Model):
