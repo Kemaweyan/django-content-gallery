@@ -32,13 +32,23 @@ def _upload_rename(instance, filename):
 
 class Image(models.Model):
     src = models.ImageField(upload_to=_upload_rename)
-    position = models.IntegerField(db_index=True)
+    position = models.IntegerField(default=0, db_index=True)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
 
     def __str__(self):
         return '{} photo #{}'.format(self.content_object, self.position)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            images = Image.objects.filter(
+                content_type__exact=self.content_type,
+                object_id__exact=self.object_id
+            ).order_by('-position')
+            if images:
+                self.position = images[0].position + 1
+        super().save(*args, **kwargs)
 
 
 @receiver(pre_delete, sender=Image)
