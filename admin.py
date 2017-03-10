@@ -1,8 +1,9 @@
 from django.contrib import admin
 
 from . import models
+from . import forms
 
 class ImageAdmin(admin.ModelAdmin):
-    fields = ('src', 'content_type', 'object_id')
+    form = forms.ImageAdminForm
 
 admin.site.register(models.Image, ImageAdmin)
