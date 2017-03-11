@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.utils.safestring import mark_safe
 
+from . import utils
+
 class ContentTypeSelect(forms.Select):
 
     def _filter_choices(self):
@@ -17,19 +19,19 @@ class ContentTypeSelect(forms.Select):
                     filtered_choices.append(choice)
             except:
                 pass
-        self.choices = filtered_choices        
+        self.choices = filtered_choices
 
     def render(self, name, value, attrs=None):
         self._filter_choices()
         output = super().render(name, value, attrs)
-        output += '''<script type="text/javascript">
+        js = '''<script type="text/javascript">
             (function($) {
                 $(document).ready(function() {
                     $("#id_content_type").change(function() {
                         $("#id_object_id option:gt(0)").remove();
                         if (!this.value) return
                         $.ajax({
-                            url: "/gallery/ajax/choices/" + this.value,
+                            url: "%s" + this.value,
                             dataType: "json",
                             success: function (result) {
                                 $el = $("#id_object_id");
@@ -44,6 +46,7 @@ class ContentTypeSelect(forms.Select):
                 });
             })(django.jQuery);
         </script>'''
+        output += js % utils.get_choices_url_pattern()
         return mark_safe(output)
 
 
