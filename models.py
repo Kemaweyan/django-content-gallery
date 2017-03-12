@@ -83,5 +83,8 @@ class Image(models.Model):
 @receiver(pre_delete, sender=Image)
 def image_delete(sender, instance, **kwargs):
     thumb_path = utils.create_thumbnail_path(instance.src.path)
-    os.remove(thumb_path)
+    try:
+        os.remove(thumb_path)
+    except FileNotFoundError:
+        pass
     instance.src.delete(False)

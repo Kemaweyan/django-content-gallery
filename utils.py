@@ -9,4 +9,4 @@ def get_choices_url_pattern():
 
 def create_thumbnail_path(path):
     name, ext = os.path.splitext(path)
-    return "{}_thumbnail.{}".format(name, ext)
+    return "{}_thumbnail{}".format(name, ext)
