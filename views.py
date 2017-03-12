@@ -20,4 +20,4 @@ def choices(request, pk):
             raise PermissionDenied
     except:
         raise Http404
-    return HttpResponse(json.dumps(response))
+    return HttpResponse(json.dumps(response), content_type='application/json')
