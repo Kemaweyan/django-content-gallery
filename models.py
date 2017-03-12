@@ -10,6 +10,7 @@ from slugify import UniqueSlugify
 from PIL import Image as Img
 
 from . import settings
+from . import utils
 
 IMG_W = settings.GALLERY_IMAGE_WIDTH
 IMG_H = settings.GALLERY_IMAGE_HEIGHT
@@ -50,13 +51,9 @@ def _resize_image(path):
     size = (IMG_W, IMG_H)
     _resize(path, size)
 
-def _create_thumbnail_path(path):
-    name, ext = os.path.splitext(path)
-    return "{}_thumbnail.{}".format(name, ext)
-
 def _create_thumbnail(path):
     size = (THUMB_W, THUMB_H)
-    thumb_path = _create_thumbnail_path(path)
+    thumb_path = utils.create_thumbnail_path(path)
     _resize(path, size, thumb_path)
    
 
@@ -85,6 +82,6 @@ class Image(models.Model):
 
 @receiver(pre_delete, sender=Image)
 def image_delete(sender, instance, **kwargs):
-    thumb_path = _create_thumbnail_path(instance.src.path)
+    thumb_path = utils.create_thumbnail_path(instance.src.path)
     os.remove(thumb_path)
     instance.src.delete(False)
