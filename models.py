@@ -7,6 +7,12 @@ from django.db.models.signals import pre_delete
 from django.dispatch.dispatcher import receiver
 
 from slugify import UniqueSlugify
+from PIL import Image as Img
+
+from . import settings
+
+IMG_W = settings.GALLERY_IMAGE_WIDTH
+IMG_H = settings.GALLERY_IMAGE_HEIGHT
 
 def _make_src(slug, filename=''):
     if filename and '.' in filename:
@@ -30,6 +36,21 @@ def _upload_rename(instance, filename):
     src = _make_src(slug, filename)
     return src
 
+def _resize_image(path):
+    img = Img.open(path)
+    width, height = img.size
+    if width <= IMG_W and height <= IMG_H:
+        return
+    ar = width / height
+    if ar > IMG_W / IMG_H:
+        width = IMG_W
+        height = round(width / ar)
+    else:
+        height = IMG_H
+        width = round(height / ar)
+    new_img = img.resize((width, height), Img.ANTIALIAS)
+    new_img.save(path)
+
 class Image(models.Model):
     src = models.ImageField(upload_to=_upload_rename)
     position = models.IntegerField(default=0, db_index=True)
@@ -49,6 +70,7 @@ class Image(models.Model):
             if images:
                 self.position = images[0].position + 1
         super().save(*args, **kwargs)
+        _resize_image(self.src.path)
 
 
 @receiver(pre_delete, sender=Image)
