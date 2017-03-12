@@ -14,6 +14,9 @@ from . import settings
 IMG_W = settings.GALLERY_IMAGE_WIDTH
 IMG_H = settings.GALLERY_IMAGE_HEIGHT
 
+THUMB_W = settings.GALLERY_THUMBNAIL_WIDTH
+THUMB_H = settings.GALLERY_THUMBNAIL_HEIGHT
+
 def _make_src(slug, filename=''):
     if filename and '.' in filename:
         ext = filename.split('.')[-1]
@@ -36,20 +39,26 @@ def _upload_rename(instance, filename):
     src = _make_src(slug, filename)
     return src
 
-def _resize_image(path):
+def _resize(path, size, rename=""):
     img = Img.open(path)
-    width, height = img.size
-    if width <= IMG_W and height <= IMG_H:
-        return
-    ar = width / height
-    if ar > IMG_W / IMG_H:
-        width = IMG_W
-        height = round(width / ar)
-    else:
-        height = IMG_H
-        width = round(height / ar)
-    new_img = img.resize((width, height), Img.ANTIALIAS)
-    new_img.save(path)
+    img.thumbnail(size)
+    if rename:
+        path = rename
+    img.save(path, img.format)    
+
+def _resize_image(path):
+    size = (IMG_W, IMG_H)
+    _resize(path, size)
+
+def _create_thumbnail_path(path):
+    name, ext = os.path.splitext(path)
+    return "{}_thumbnail.{}".format(name, ext)
+
+def _create_thumbnail(path):
+    size = (THUMB_W, THUMB_H)
+    thumb_path = _create_thumbnail_path(path)
+    _resize(path, size, thumb_path)
+   
 
 class Image(models.Model):
     src = models.ImageField(upload_to=_upload_rename)
@@ -71,8 +80,11 @@ class Image(models.Model):
                 self.position = images[0].position + 1
         super().save(*args, **kwargs)
         _resize_image(self.src.path)
+        _create_thumbnail(self.src.path)
 
 
 @receiver(pre_delete, sender=Image)
 def image_delete(sender, instance, **kwargs):
+    thumb_path = _create_thumbnail_path(instance.src.path)
+    os.remove(thumb_path)
     instance.src.delete(False)
