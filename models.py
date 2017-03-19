@@ -12,7 +12,7 @@ def _unique_src_check(slug, uids):
     if slug in uids:
         return False
     src = utils.make_src(slug)
-    return not Image.objects.filter(src__startswith=src)
+    return not Image.objects.filter(image__startswith=src)
 
 slugify_unique = UniqueSlugify(unique_check=_unique_src_check, to_lower=True)
 
@@ -38,7 +38,7 @@ class ImageManager(models.Manager):
    
 
 class Image(models.Model):
-    src = models.ImageField(upload_to=_upload_rename)
+    image = models.ImageField(upload_to=_upload_rename)
     position = models.IntegerField(default=0, db_index=True)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
@@ -59,15 +59,15 @@ class Image(models.Model):
                 self.position = images[0].position + 1
         else:
             image = Image.objects.get(pk=self.pk)
-            if self.src.path != image.src.path:
+            if self.image.path != image.image.path:
                 image.delete_files()
         super().save(*args, **kwargs)
-        utils.resize_image(self.src.path)
-        utils.create_thumbnail(self.src.path)
+        utils.resize_image(self.image.path)
+        utils.create_thumbnail(self.image.path)
 
     def delete_files(self):
-        utils.delete_thumbnail(self.src.path)
-        self.src.delete(False)
+        utils.delete_thumbnail(self.image.path)
+        self.image.delete(False)
 
     def delete(self, *args, **kwargs):
         self.delete_files()
@@ -75,4 +75,4 @@ class Image(models.Model):
 
     @property
     def thumbnail(self):
-        return utils.create_thumbnail_path(self.src.url)
+        return utils.create_thumbnail_path(self.image.url)

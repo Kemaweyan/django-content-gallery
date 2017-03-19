@@ -15,7 +15,7 @@ class ImageAdminForm(ModelForm):
 
     class Meta:
         model = models.Image
-        fields = ('src', 'content_type', 'object_id')
+        fields = ('image', 'content_type', 'object_id')
         widgets = {
             'content_type': widgets.ContentTypeSelect,
             'object_id': widgets.ObjectIdSelect,
