@@ -3,8 +3,6 @@ import os
 from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from django.db.models.signals import pre_delete
-from django.dispatch.dispatcher import receiver
 
 from slugify import UniqueSlugify
 
@@ -47,16 +45,15 @@ class Image(models.Model):
         utils.resize_image(self.src.path)
         utils.create_thumbnail(self.src.path)
 
+    def delete(self, *args, **kwargs):
+        thumb_path = utils.create_thumbnail_path(self.src.path)
+        try:
+            os.remove(thumb_path)
+        except FileNotFoundError:
+            pass
+        self.src.delete(False)
+        super().delete(*args, **kwargs)
+
     @property
     def thumbnail(self):
         return utils.create_thumbnail_path(self.src.url)
-
-
-@receiver(pre_delete, sender=Image)
-def image_delete(sender, instance, **kwargs):
-    thumb_path = utils.create_thumbnail_path(instance.src.path)
-    try:
-        os.remove(thumb_path)
-    except FileNotFoundError:
-        pass
-    instance.src.delete(False)
