@@ -47,6 +47,10 @@ class Image(models.Model):
         utils.resize_image(self.src.path)
         utils.create_thumbnail(self.src.path)
 
+    @property
+    def thumbnail(self):
+        return utils.create_thumbnail_path(self.src.url)
+
 
 @receiver(pre_delete, sender=Image)
 def image_delete(sender, instance, **kwargs):
