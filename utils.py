@@ -1,5 +1,5 @@
-import re
 import os
+import re
 from PIL import Image
 
 from django.core import urlresolvers as ur
@@ -43,3 +43,10 @@ def create_thumbnail(path):
     size = (THUMB_W, THUMB_H)
     thumb_path = create_thumbnail_path(path)
     resize(path, size, thumb_path)
+
+def delete_thumbnail(path):
+    thumb_path = create_thumbnail_path(path)
+    try:
+        os.remove(thumb_path)
+    except FileNotFoundError:
+        pass

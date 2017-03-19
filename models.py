@@ -21,6 +21,20 @@ def _upload_rename(instance, filename):
     slug = slugify_unique(title)
     src = utils.make_src(slug, filename)
     return src
+
+
+class ImageQuerySet(models.QuerySet):
+
+    def delete(self):
+        for obj in self:
+            obj.delete_files()
+        return super().delete()
+
+
+class ImageManager(models.Manager):
+
+    def get_queryset(self):
+        return ImageQuerySet(self.model, using=self._db)
    
 
 class Image(models.Model):
@@ -29,6 +43,8 @@ class Image(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
+
+    objects = ImageManager()
 
     def __str__(self):
         return '{} photo #{}'.format(self.content_object, self.position)
@@ -41,18 +57,21 @@ class Image(models.Model):
             ).order_by('-position')
             if images:
                 self.position = images[0].position + 1
+        else:
+            image = Image.objects.get(pk=self.pk)
+            if self.src.path != image.src.path:
+                image.delete_files()
         super().save(*args, **kwargs)
         utils.resize_image(self.src.path)
         utils.create_thumbnail(self.src.path)
 
-    def delete(self, *args, **kwargs):
-        thumb_path = utils.create_thumbnail_path(self.src.path)
-        try:
-            os.remove(thumb_path)
-        except FileNotFoundError:
-            pass
+    def delete_files(self):
+        utils.delete_thumbnail(self.src.path)
         self.src.delete(False)
-        super().delete(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        self.delete_files()
+        return super().delete(*args, **kwargs)
 
     @property
     def thumbnail(self):
