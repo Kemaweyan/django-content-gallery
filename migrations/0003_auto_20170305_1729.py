@@ -16,6 +16,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='image',
             name='src',
-            field=models.ImageField(upload_to=gallery.models._upload_rename),
+            field=models.ImageField(upload_to='gallery/'),
         ),
     ]
