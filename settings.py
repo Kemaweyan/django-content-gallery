@@ -26,7 +26,12 @@ try:
 except AttributeError:
     GALLERY_PATH = 'gallery'
 
-MEDIA_ROOT = settings.MEDIA_ROOT
-MEDIA_URL = settings.MEDIA_URL
+try:
+    MEDIA_ROOT = settings.MEDIA_ROOT
+except AttributeError:
+    MEDIA_ROOT = os.path.join(settings.BASE_DIR, 'media')
 
-
+try:
+    MEDIA_URL = settings.MEDIA_URL
+except AttributeError:
+    MEDIA_URL = '/media/'
