@@ -35,13 +35,13 @@ def get_file_name(filename):
     return name
 
 def create_path(filename):
-    return os.path.join(settings.MEDIA_ROOT, 'gallery', filename)
+    return os.path.join(settings.MEDIA_ROOT, settings.GALLERY_PATH, filename)
 
 def create_url(filename):
-    return os.path.join(settings.MEDIA_URL, 'gallery', filename)
+    return os.path.join(settings.MEDIA_URL, settings.GALLERY_PATH, filename)
 
 def create_db_slug(slug):
-    return os.path.join('gallery', slug)
+    return os.path.join(settings.GALLERY_PATH, slug)
 
 def _resize(src, dst, size):
     img = Image.open(src)

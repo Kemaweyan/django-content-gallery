@@ -9,6 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 from slugify import UniqueSlugify
 
 from . import utils
+from . import settings
 
 def _unique_slug_check(slug, uids):
     slug = utils.create_db_slug(slug)
@@ -32,7 +33,7 @@ class ImageManager(models.Manager):
    
 
 class Image(models.Model):
-    image = models.ImageField(upload_to='gallery/')
+    image = models.ImageField(upload_to=settings.GALLERY_PATH)
     position = models.IntegerField(default=0, db_index=True)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()

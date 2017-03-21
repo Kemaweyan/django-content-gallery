@@ -21,5 +21,12 @@ except AttributeError:
     GALLERY_THUMBNAIL_WIDTH = 133
     GALLERY_THUMBNAIL_HEIGHT = 100
 
+try:
+    GALLERY_PATH = settings.GALLERY_PATH
+except AttributeError:
+    GALLERY_PATH = 'gallery'
+
 MEDIA_ROOT = settings.MEDIA_ROOT
 MEDIA_URL = settings.MEDIA_URL
+
+
