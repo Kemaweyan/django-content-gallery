@@ -1,0 +1,14 @@
+{% load static %}
+
+<div class="gallery_preview_container" style="width: {{ div_width }}px; height: {{ div_height }}px;">
+{% if no_image %}
+    <div id ="{{ html_id }}" class="gallery_preview" style="width: {{ image_width }}px; height: {{ image_height }}px; line-height: {{ image_height }}px;">
+        <img src="{% static 'images/gallery/no_image.png' %}" class="middle_img">
+    </div>
+{% else %}
+    <a href="#" id ="{{ html_id }}" class="open_gallery gallery_preview" style="width: {{ image_width }}px; height: {{ image_height }}px; line-height: {{ image_height }}px;">
+        <div><img src="{{ preview_url }}" class="middle_img"></div>
+    </a>
+    <img src="{% static 'images/gallery/zoom.png' %}" class="zoom" style="left: {{ zoom_left }}px;">
+{% endif %}
+</div>
