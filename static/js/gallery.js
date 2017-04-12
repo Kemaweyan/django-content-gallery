@@ -146,25 +146,28 @@
             checkScrollButtons(newLeft);
         }
 
-       function setImage(index) {
+        function _setImage(index, callback) {
             img = gallery.getImage(index);
             if (!img) return;
             $choices.addClass("choice");
             $($choices[index]).removeClass("choice");
             src = isSmall() ? img.small_image : img.image;
-            $image.animate({width: 0, height: 0}, function () {
-                $image.attr("src", src);
-                $image.animate({width: img.width, height: img.height});
+            callback(img, src);
+        }
+
+        function setImage(index) {
+            _setImage(index, function (img, src) {
+                $image.animate({width: 0, height: 0}, function () {
+                    $image.attr("src", src);
+                    $image.animate({width: img.width, height: img.height});
+                });
             });
         }
 
-       function setImageFast(index) {
-            img = gallery.getImage(index);
-            if (!img) return;
-            $choices.addClass("choice");
-            $($choices[index]).removeClass("choice");
-            src = isSmall() ? img.small_image : img.image;
-            $image.attr("src", src).css({width: img.width, height: img.height});
+        function setImageFast(index) {
+            _setImage(index, function (img, src) {
+                $image.attr("src", src).css({width: img.width, height: img.height});
+            });
         }
 
         function changeImage(index) {
