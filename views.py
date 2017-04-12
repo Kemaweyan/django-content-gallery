@@ -46,6 +46,8 @@ def gallery_data(request, app_label, content_type, object_id):
     for img in qs:
         images.append({
             "image": img.image_url,
+            "width": img.image.width,
+            "height": img.image.height,
             "small_image": img.small_image_url,
             "thumbnail": img.thumbnail_url
         })
