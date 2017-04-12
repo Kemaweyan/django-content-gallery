@@ -261,14 +261,16 @@
             $thumbnailsContainer = $(".content_gallery_thumbnails_container");
             $thumbnails = $(".content_gallery_thumbnails_container > ul");
 
-            $thumbnails.on("click", "li", function () {
-                setImage($(this).index());
-            });
+            if (!ready) {
+                $thumbnails.on("click", "li", function () {
+                    setImage($(this).index());
+                });
 
-            $(".content_gallery_prev_image").click(previousImage)
-            $(".content_gallery_next_image").click(nextImage);
-            $scrollLeft.click(scrollLeft);
-            $scrollRight.click(scrollRight);
+                $(".content_gallery_prev_image").click(previousImage)
+                $(".content_gallery_next_image").click(nextImage);
+                $scrollLeft.click(scrollLeft);
+                $scrollRight.click(scrollRight);
+            }
 
             $thumbnails.empty();
 
