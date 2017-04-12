@@ -164,7 +164,7 @@
             $choices.addClass("choice");
             $($choices[index]).removeClass("choice");
             src = isSmall() ? img.small_image : img.image;
-            $image.attr("src", src);
+            $image.attr("src", src).css({width: img.width, height: img.height});
         }
 
         function changeImage(index) {
