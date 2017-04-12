@@ -83,6 +83,32 @@
         };
     })();
 
+    var animateSync = (function () {
+        var activeTasks = 0;
+
+        function safeRun(callback) {
+            if (activeTasks > 0) return;
+
+            callback();
+        }
+
+        function safeAnimate($obj, css, callback) {
+            ++activeTasks;
+
+            $obj.animate(css, function () {
+                --activeTasks;
+
+                if (callback)
+                    callback();
+            });
+        }
+
+        return {
+            safeRun: safeRun,
+            safeAnimate: safeAnimate
+        };
+    })();
+
     var galleryView = (function (gallery) {
         var $galleryView,
             $imageContainer,
@@ -96,7 +122,6 @@
             $thumbnailsContainer;
 
         var winWidth, winHeight, thumbnailWidth, maxOffset;
-        var animationInProgress = false;
         var ready = false;
 
         function isSmall() {
@@ -128,25 +153,17 @@
             if (left + begin >= 0 && left + end <= $thumbnailsContainer.width())
                 return;
 
-            animationInProgress = true;
-
-            if (left + begin < 0) {
+            if (left + begin < 0)
                 newLeft = -begin;
-                $thumbnails.animate({left: newLeft}, function () {
-                    animationInProgress = false;
-                });
-            }
 
-            if (left + end > $thumbnailsContainer.width()) {
+            if (left + end > $thumbnailsContainer.width())
                 newLeft = $thumbnailsContainer.width() - end;
-                $thumbnails.animate({left: newLeft}, function () {
-                    animationInProgress = false;
-                 });
-            }
+
+            animateSync.safeAnimate($thumbnails, {left: newLeft}, null);
             checkScrollButtons(newLeft);
         }
 
-        function _setImage(index, callback) {
+        function setImage(index, callback) {
             img = gallery.getImage(index);
             if (!img) return;
             $choices.addClass("choice");
@@ -155,25 +172,24 @@
             callback(img, src);
         }
 
-        function setImage(index) {
-            _setImage(index, function (img, src) {
-                $image.animate({width: 0, height: 0}, function () {
+        function setImageAnim(index) {
+            setImage(index, function (img, src) {
+                animateSync.safeAnimate($image, {width: 0, height: 0}, function () {
                     $image.attr("src", src);
-                    $image.animate({width: img.width, height: img.height});
+                    animateSync.safeAnimate($image, {width: img.width, height: img.height}, null);
                 });
             });
         }
 
         function setImageFast(index) {
-            _setImage(index, function (img, src) {
+            setImage(index, function (img, src) {
                 $image.attr("src", src).css({width: img.width, height: img.height});
             });
         }
 
-        function changeImage(index) {
-            if (animationInProgress) return;
-            setImage(index);
-            scrollToImage(index);           
+        function slideImage(index) {
+            setImageAnim(index);
+            scrollToImage(index);
         }
 
         function setImageViewSize(imgSize) {
@@ -210,37 +226,43 @@
         }
 
         function nextImage() {
-            index = gallery.next();
-            changeImage(index);
+            animateSync.safeRun(function () {
+                index = gallery.next();
+                slideImage(index);
+            });
         }
 
         function previousImage() {
-           index = gallery.prev();
-           changeImage(index);
+            animateSync.safeRun(function () {
+               index = gallery.prev();
+               slideImage(index);
+            });
+        }
+
+        function setImageByIndex(index) {
+            animateSync.safeRun(function () {
+                setImageAnim(index);
+            });
         }
 
         function scrollLeft() {
-            if (animationInProgress) return;
-            left = parseInt($thumbnails.css("left"));
-            if (left < 0) {
-                animationInProgress = true;
-                $thumbnails.animate({left: "+=" + thumbnailWidth}, function () {
-                    animationInProgress = false;
-                });
-            checkScrollButtons(left + thumbnailWidth);
-            }
+            animateSync.safeRun(function () {
+                left = parseInt($thumbnails.css("left"));
+                if (left < 0) {
+                    animateSync.safeAnimate($thumbnails, {left: "+=" + thumbnailWidth}, null);
+                    checkScrollButtons(left + thumbnailWidth);
+                }
+            });
         }
 
         function scrollRight() {
-            if (animationInProgress) return;
-            left = parseInt($thumbnails.css("left"));
-            if (left > maxOffset) {
-                animationInProgress = true;
-                $thumbnails.animate({left: "-=" + thumbnailWidth}, function () {
-                    animationInProgress = false;
-                });
-            checkScrollButtons(left - thumbnailWidth);
-            }
+            animateSync.safeRun(function () {
+                left = parseInt($thumbnails.css("left"));
+                if (left > maxOffset) {
+                    animateSync.safeAnimate($thumbnails, {left: "-=" + thumbnailWidth}, null);
+                    checkScrollButtons(left - thumbnailWidth);
+                }
+            });
         }
 
         function resize() {
@@ -278,7 +300,7 @@
 
             if (!ready) {
                 $thumbnails.on("click", "li", function () {
-                    setImage($(this).index());
+                    setImageByIndex($(this).index());
                 });
 
                 $(".content_gallery_prev_image").click(previousImage)
