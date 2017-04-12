@@ -158,6 +158,15 @@
             });
         }
 
+       function setImageFast(index) {
+            img = gallery.getImage(index);
+            if (!img) return;
+            $choices.addClass("choice");
+            $($choices[index]).removeClass("choice");
+            src = isSmall() ? img.small_image : img.image;
+            $image.attr("src", src);
+        }
+
         function changeImage(index) {
             if (animationInProgress) return;
             setImage(index);
@@ -250,7 +259,7 @@
             setGalleryViewPosition();
 
             index = gallery.current();
-            setImage(index);
+            setImageFast(index);
         }
 
         function init(app_label, content_type, object_id) {
