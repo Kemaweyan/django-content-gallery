@@ -172,8 +172,8 @@
 
         function changeImage(index) {
             if (animationInProgress) return;
-            setImage(index);
-            scrollToImage(index);                
+            setImageFast(index);
+            scrollToImage(index);           
         }
 
         function setImageViewSize(imgSize) {
