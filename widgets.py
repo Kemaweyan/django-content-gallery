@@ -26,7 +26,7 @@ class ContentTypeSelect(forms.Select):
         output = super().render(name, value, attrs)
         js = '''<script type="text/javascript">
             (function($) {
-                $(document).ready(function() {
+                $(function() {
                     $("#id_content_type").change(function() {
                         $("#id_object_id option:gt(0)").remove();
                         if (!this.value) return
@@ -34,7 +34,7 @@ class ContentTypeSelect(forms.Select):
                             url: "%s" + this.value,
                             dataType: "json",
                             success: function (result) {
-                                $el = $("#id_object_id");
+                                var $el = $("#id_object_id");
                                 $.each(result, function (i, product) {
                                     $el.append($("<option></option>")
                                         .attr("value", product.id)

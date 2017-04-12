@@ -4,23 +4,12 @@ import re
 import io
 from PIL import Image
 import magic
+from abc import ABCMeta, abstractmethod
 
 from django.core import urlresolvers as ur
 from django.core.files import uploadedfile as uf
 
 from . import settings
-
-# the size of large image
-LARGE_W = settings.GALLERY_LARGE_WIDTH
-LARGE_H = settings.GALLERY_LARGE_HEIGHT
-
-# the size of normal image
-IMG_W = settings.GALLERY_IMAGE_WIDTH
-IMG_H = settings.GALLERY_IMAGE_HEIGHT
-
-# the size of small image (thumbnail)
-THUMB_W = settings.GALLERY_THUMBNAIL_WIDTH
-THUMB_H = settings.GALLERY_THUMBNAIL_HEIGHT
 
 def get_choices_url_pattern():
     """
@@ -32,78 +21,118 @@ def get_choices_url_pattern():
     # remove id (last digits in the URL)
     return re.sub(r'\d+$', '', choices_url)
 
-def get_basename(path):
-    """Returns basename of path. A shortcut for os.path.basename"""
-    return os.path.basename(path)
-
-def get_file_ext(filename):
-    """Returns the extension of the file"""
+def get_ext(filename):
     name, ext = os.path.splitext(filename)
     return ext
 
-def get_file_name(filename):
-    """Returns the name of the file without extension"""
-    name, ext = os.path.splitext(os.path.basename(filename))
+def get_name(filename):
+    name, ext = os.path.splitext(filename)
     return name
 
 def create_path(filename):
-    """Returns the path to the file in the GALLERY_PATH folder"""
     return os.path.join(settings.MEDIA_ROOT, settings.GALLERY_PATH, filename)
 
 def create_url(filename):
-    """Returns the URL to the file"""
-    return os.path.join(settings.MEDIA_URL, settings.GALLERY_PATH, filename)
+    media_url = settings.MEDIA_URL.rstrip('/')
+    gallery_path = settings.GALLERY_PATH.strip('/')
+    return '/'.join([media_url, gallery_path, filename])
 
-def create_db_slug(slug):
-    """
-    Returns the slug in pattern that could be stored in the database.
-    After saving the model, ImageField adds GALLERY_PATH to image filename,
-    therefore the image field in the database contains filename with that
-    path. This function adds the path to the slug in order to search such
-    items in the database.
-    """
-    return os.path.join(settings.GALLERY_PATH, slug)
+def name_in_db(name):
+    return os.path.join(settings.GALLERY_PATH, name)
 
-def _resize(src, dst, size):
-    """Resizes image data from src using size, saves to dst"""
-    img = Image.open(src)
-    img.thumbnail(size)
-    img.save(dst, img.format)
 
-def resize_image(img):
-    """
-    Resizes image data to IMAGE_SIZE and returns the InMemoryUploadedFile
-    object that could be assigned to ImageField field.
-    """
-    size = (IMG_W, IMG_H)
-    output = io.BytesIO()
-    _resize(img, output, size)
-    # get mime type of data
-    mime = magic.from_buffer(output.getvalue(), mime=True)
-    f = uf.InMemoryUploadedFile(output, 'ImageField', img.name, mime,
-        sys.getsizeof(output), None)
-    return f
+class BaseImageData(metaclass=ABCMeta):
 
-def create_thumbnail(img, path):
-    """Creates the thumbnail and saves it to path"""
-    size = (THUMB_W, THUMB_H)
-    _resize(img, path, size)
+    def __init__(self, image, width, height):
+        self.name = os.path.basename(image.name)
+        self.size = (width, height)
 
-def create_large_image(img, path):
-    """Creates the large image and saves it to path"""
-    size = (LARGE_W, LARGE_H)
-    _resize(img, path, size)
+    @property
+    def filename(self):
+        return self._create_filename(self.name)
 
-def safe_delete(path):
-    """Removes the file if it exists"""
-    try:
-        os.remove(path)
-    except:
+    @property
+    def path(self):
+        return create_path(self.filename)
+
+    @property
+    def url(self):
+        return create_url(self.filename)
+
+    def _resize(self, src, dst):
+        img = Image.open(src)
+        img.thumbnail(self.size)
+        img.save(dst, img.format)
+
+    @abstractmethod
+    def _create_image(self, image):
         pass
 
-def safe_rename(src, dst):
-    """Renames the file if it exists"""
-    try:
-        os.rename(src, dst)
-    except:
+    @abstractmethod
+    def _create_filename(self, filename):
         pass
+
+    def _change_ext(self, filename):
+        name = get_name(self.name)
+        ext = get_ext(filename)
+        self.name = name + ext
+
+    def save(self, image, slug):
+        is_uploaded = '/' not in image.name
+        if is_uploaded and self.name:
+            self.delete()
+        if slug:
+            new_name = slug + get_ext(image.name)
+            if self.name and not is_uploaded:
+                self._rename_file(new_name)
+            self.name = new_name
+        if is_uploaded:
+            if not slug:
+                self._change_ext(image.name)
+            self._create_image(image)
+
+    def _rename_file(self, name):
+        new_filename = self._create_filename(name)
+        new_path = create_path(new_filename)
+        os.rename(self.path, new_path)
+
+    def delete(self):
+        try:
+            os.remove(self.path)
+        except FileNotFoundError:
+            pass
+
+
+class ImageFile(BaseImageData):
+
+    def __init__(self, image, width, height, word):
+        self.word = word
+        super().__init__(image, width, height)
+
+    def _create_filename(self, filename):
+        name, ext = os.path.splitext(filename)
+        return "{}_{}{}".format(name, self.word, ext)
+
+    def _create_image(self, image):
+        self._resize(image, self.path)
+
+
+class InMemoryImageData(BaseImageData):
+
+    def __init__(self, image, width, height):
+        super().__init__(image, width, height)
+        self.data = None
+
+    def _create_filename(self, filename):
+        return filename
+
+    def _create_image(self, image):
+        output = io.BytesIO()
+        self._resize(image, output)
+        mime = magic.from_buffer(output.getvalue(), mime=True)
+        self.data = uf.InMemoryUploadedFile(output, 'ImageField', self.name,
+            mime, sys.getsizeof(output), None)
+
+    @property
+    def name_in_db(self):
+        return name_in_db(self.name)

@@ -1,5 +1,3 @@
-import os
-
 import PIL
 
 from django.db import models
@@ -11,8 +9,28 @@ from slugify import UniqueSlugify
 from . import utils
 from . import settings
 
+# the size of image
+IMG_W = settings.GALLERY_IMAGE_WIDTH
+IMG_H = settings.GALLERY_IMAGE_HEIGHT
+
+# the size of small image
+SMALL_W = settings.GALLERY_SMALL_IMAGE_WIDTH
+SMALL_H = settings.GALLERY_SMALL_IMAGE_HEIGHT
+
+# the size of small image (thumbnail)
+THUMB_W = settings.GALLERY_THUMBNAIL_WIDTH
+THUMB_H = settings.GALLERY_THUMBNAIL_HEIGHT
+
+# the size of preview
+PREVIEW_W = settings.GALLERY_PREVIEW_WIDTH
+PREVIEW_H = settings.GALLERY_PREVIEW_HEIGHT
+
+# the size of small preview
+SMALL_PREVIEW_W = settings.GALLERY_SMALL_PREVIEW_WIDTH
+SMALL_PREVIEW_H = settings.GALLERY_SMALL_PREVIEW_HEIGHT
+
 def _unique_slug_check(slug, uids):
-    slug = utils.create_db_slug(slug)
+    slug = utils.name_in_db(slug)
     return not Image.objects.filter(image__startswith=slug)
 
 slugify_unique = UniqueSlugify(unique_check=_unique_slug_check, to_lower=True)
@@ -43,7 +61,19 @@ class Image(models.Model):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._get_names()
+        self.init_type = None
+        self.init_id = self.object_id
+        if self.object_id:
+            self.init_type = self.content_type
+        self.thumbnail = utils.ImageFile(self.image, THUMB_W, THUMB_H,
+            'thumbnail')
+        self.image_data = utils.InMemoryImageData(self.image, IMG_W, IMG_H)
+        self.small_image = utils.ImageFile(self.image, SMALL_W, SMALL_H,
+            'small')
+        self.preview = utils.ImageFile(self.image, PREVIEW_W, PREVIEW_H,
+            'preview')
+        self.small_preview = utils.ImageFile(self.image, SMALL_PREVIEW_W,
+            SMALL_PREVIEW_H, 'small_preview')
 
     def __str__(self):
         return '{} photo #{}'.format(self.content_object, self.position)
@@ -55,108 +85,69 @@ class Image(models.Model):
         ).order_by('-position')
         if images:
             self.position = images[0].position + 1
-
-    def _create_file_name(self, word):
-        return "{}_{}{}".format(self.slug, word, self.ext)
-
-    @property
-    def image_name(self):
-        return utils.get_basename(self.image.name)
-
-    def _set_image_name(self):
-        self.image.name = ''.join([self.slug, self.ext])
-
-    @property
-    def thumbnail_name(self):
-        return self._create_file_name('thumbnail')
-
-    @property
-    def large_image_name(self):
-        return self._create_file_name('large')
-
-    @property
-    def image_path(self):
-        return utils.create_path(self.image_name)
-
-    @property
-    def thumbnail_path(self):
-        return utils.create_path(self.thumbnail_name)
-
-    @property
-    def large_image_path(self):
-        return utils.create_path(self.large_image_name)
-
-    @property
-    def image_url(self):
-        return utils.create_url(self.image_name)
-
-    @property
-    def thumbnail_url(self):
-        return utils.create_url(self.thumbnail_name)
-
-    @property
-    def large_image_url(self):
-        return utils.create_url(self.large_image_name)
-
-    def _create_names(self):
-        title = str(self.content_object)
-        self.slug = slugify_unique(title)
-        self.ext = utils.get_file_ext(self.image_name)
-        self._set_image_name()
-
-    def _get_names(self, image=None):
-        if image:
-            obj = image
         else:
-            obj = self
-        self.slug = utils.get_file_name(obj.image_name)
-        self.ext = utils.get_file_ext(self.image_name)
-        if image:
-            self._set_image_name()
+            self.position = 0
 
-    def _object_changed(self, image):
-        return self.content_type != image.content_type \
-            or self.object_id != image.object_id
+    def _object_changed(self):
+        return self.content_type != self.init_type \
+            or self.object_id != self.init_id
 
-    def _is_uploaded(self, image):
-        return self.image.path != image.image.path
+    def _get_slug(self):
+        title = str(self.content_object)
+        return slugify_unique(title)
 
     def save(self, *args, **kwargs):
-        if not self.pk:
+        if not self.pk or self._object_changed():
             self._get_position()
-            self._create_names()
-            self._create_images()
+            slug = self._get_slug()
         else:
-            old_image = Image.objects.get(pk=self.pk)
-            is_uploaded = self._is_uploaded(old_image)
-            if self._object_changed(old_image):
-                self._create_names()
-                if not is_uploaded:
-                    self._rename_files(old_image)
-            else:
-                self._get_names(old_image)
-            if is_uploaded:
-                old_image.delete_files()
-                self._create_images()
+            slug = ''
+        self.image_data.save(self.image, slug)
+        self.thumbnail.save(self.image, slug)
+        self.small_image.save(self.image, slug)
+        if self.position == 0:
+            self.preview.save(self.image, slug)
+            self.small_preview.save(self.image, slug)
+        else:
+            self.preview.delete()
+            self.small_preview.delete()
+        if self.image_data.data:
+            self.image = self.image_data.data
+        else:
+            self.image.name = self.image_data.name_in_db
         super().save(*args, **kwargs)
 
-    def _create_images(self):
-        utils.create_thumbnail(self.image, self.thumbnail_path)
-        utils.create_large_image(self.image, self.large_image_path)
-        self.image = utils.resize_image(self.image)
-
-    def _rename_files(self, old_image):
-        old_image._get_names()
-        utils.safe_rename(old_image.image_path, self.image_path)
-        utils.safe_rename(old_image.thumbnail_path, self.thumbnail_path)
-        utils.safe_rename(old_image.large_image_path, self.large_image_path)
-
     def delete_files(self):
-        self._get_names()
-        utils.safe_delete(self.thumbnail_path)
-        utils.safe_delete(self.large_image_path)
-        utils.safe_delete(self.image_path)
+        self.thumbnail.delete()
+        self.image_data.delete()
+        self.small_image.delete()
+        self.preview.delete()
+        self.small_preview.delete()
 
     def delete(self, *args, **kwargs):
         self.delete_files()
         return super().delete(*args, **kwargs)
+
+    @property
+    def thumbnail_url(self):
+        return self.thumbnail.url
+
+    @property
+    def image_url(self):
+        return self.image_data.url
+
+    @property
+    def small_image_url(self):
+        return self.small_image.url
+
+    @property
+    def preview_url(self):
+        if self.position != 0:
+            return None
+        return self.preview.url
+
+    @property
+    def small_preview_url(self):
+        if self.position != 0:
+            return None
+        return self.small_preview.url
