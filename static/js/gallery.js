@@ -172,7 +172,7 @@
 
         function changeImage(index) {
             if (animationInProgress) return;
-            setImageFast(index);
+            setImage(index);
             scrollToImage(index);           
         }
 
