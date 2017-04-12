@@ -49,16 +49,6 @@ def gallery_data(request, app_label, content_type, object_id):
             "small_image": img.small_image_url,
             "thumbnail": img.thumbnail_url
         })
-        images.append({
-            "image": img.image_url,
-            "small_image": img.small_image_url,
-            "thumbnail": img.thumbnail_url
-        })
-        images.append({
-            "image": img.image_url,
-            "small_image": img.small_image_url,
-            "thumbnail": img.thumbnail_url
-        })
 
     response = {
         "image_size": image_size,
