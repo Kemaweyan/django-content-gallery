@@ -299,7 +299,7 @@
             $thumbnails = $(".content_gallery_thumbnails_container > ul");
 
             if (!ready) {
-                $thumbnails.on("click", "li", function () {
+                $thumbnails.on("click", "li.choice", function () {
                     setImageByIndex($(this).index());
                 });
 
