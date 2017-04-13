@@ -21,6 +21,17 @@ def get_choices_url_pattern():
     # remove id (last digits in the URL)
     return re.sub(r'\d+$', '', choices_url)
 
+def calculate_image_size(size, max_size):
+    # copied from PIL.Image.thumbnail
+    x, y = size
+    if x > max_size[0]:
+        y = int(max(y * max_size[0] / x, 1))
+        x = int(max_size[0])
+    if y > max_size[1]:
+        x = int(max(x * max_size[1] / y, 1))
+        y = int(max_size[1])
+    return x, y
+
 def get_ext(filename):
     name, ext = os.path.splitext(filename)
     return ext

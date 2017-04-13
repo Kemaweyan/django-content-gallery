@@ -7,6 +7,7 @@ from django.core.exceptions import PermissionDenied
 
 from . import settings
 from . import models
+from . import utils
 
 def choices(request, pk):
     if not request.is_ajax():
@@ -43,12 +44,22 @@ def gallery_data(request, app_label, content_type, object_id):
 
     ctype = ContentType.objects.get(app_label=app_label, model=content_type)
     qs = models.Image.objects.filter(content_type__exact=ctype, object_id__exact=object_id).order_by('position')
+    max_size = (
+        settings.GALLERY_SMALL_IMAGE_WIDTH,
+        settings.GALLERY_SMALL_IMAGE_HEIGHT
+    )
     for img in qs:
+        size = (img.image.width, img.image.height)
+        small_width, small_height = utils.calculate_image_size(size, max_size)
         images.append({
             "image": img.image_url,
             "image_size": {
                 "width": img.image.width,
                 "height": img.image.height
+            },
+            "small_image_size": {
+                "width": small_width,
+                "height": small_height
             },
             "small_image": img.small_image_url,
             "thumbnail": img.thumbnail_url
