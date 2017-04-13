@@ -43,7 +43,8 @@ def gallery_data(request, app_label, content_type, object_id):
     images = []
 
     ctype = ContentType.objects.get(app_label=app_label, model=content_type)
-    qs = models.Image.objects.filter(content_type__exact=ctype, object_id__exact=object_id).order_by('position')
+    qs = models.Image.objects.filter(content_type__exact=ctype,
+            object_id__exact=object_id).order_by('position')
     max_size = (
         settings.GALLERY_SMALL_IMAGE_WIDTH,
         settings.GALLERY_SMALL_IMAGE_HEIGHT
