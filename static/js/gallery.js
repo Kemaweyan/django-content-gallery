@@ -176,14 +176,14 @@
             setImage(index, function (img, src) {
                 animateSync.safeAnimate($image, {width: 0, height: 0}, function () {
                     $image.attr("src", src);
-                    animateSync.safeAnimate($image, {width: img.width, height: img.height}, null);
+                    animateSync.safeAnimate($image, {width: img.image_size.width, height: img.image_size.height}, null);
                 });
             });
         }
 
         function setImageFast(index) {
             setImage(index, function (img, src) {
-                $image.attr("src", src).css({width: img.width, height: img.height});
+                $image.attr("src", src).css({width: img.image_size.width, height: img.image_size.height});
             });
         }
 
