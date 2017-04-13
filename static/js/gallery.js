@@ -168,22 +168,28 @@
             if (!img) return;
             $choices.addClass("choice");
             $($choices[index]).removeClass("choice");
-            src = isSmall() ? img.small_image : img.image;
-            callback(img, src);
+            if (isSmall()) {
+                src = img.small_image;
+                size = img.small_image_size;
+            } else {
+                src = img.image;
+                size = img.image_size;
+            }
+            callback(size, src);
         }
 
         function setImageAnim(index) {
-            setImage(index, function (img, src) {
+            setImage(index, function (size, src) {
                 animateSync.safeAnimate($image, {width: 0, height: 0}, function () {
                     $image.attr("src", src);
-                    animateSync.safeAnimate($image, {width: img.image_size.width, height: img.image_size.height}, null);
+                    animateSync.safeAnimate($image, {width: size.width, height: size.height}, null);
                 });
             });
         }
 
         function setImageFast(index) {
-            setImage(index, function (img, src) {
-                $image.attr("src", src).css({width: img.image_size.width, height: img.image_size.height});
+            setImage(index, function (size, src) {
+                $image.attr("src", src).css({width: size.width, height: size.height});
             });
         }
 
