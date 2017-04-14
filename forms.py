@@ -13,6 +13,17 @@ class ImageAdminForm(ModelForm):
             model_class = None
         self.fields['object_id'].widget.model_class = model_class
 
+    def clean(self):
+        cleaned_data = super().clean()
+        if self.is_bound:
+            try:
+                ctype = cleaned_data.get('content_type')
+                model_class = ctype.model_class()
+                self.fields['object_id'].widget.model_class = model_class
+            except:
+                pass
+        return cleaned_data
+
     class Meta:
         model = models.Image
         fields = ('image', 'content_type', 'object_id')
