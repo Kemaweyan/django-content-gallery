@@ -1,9 +1,9 @@
-from django.forms import ModelForm
+from django import forms
 
 from . import models
 from . import widgets
 
-class ImageAdminForm(ModelForm):
+class ImageAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ImageAdminForm, self).__init__(*args, **kwargs)
@@ -31,3 +31,8 @@ class ImageAdminForm(ModelForm):
             'content_type': widgets.ContentTypeSelect,
             'object_id': widgets.ObjectIdSelect,
         }
+
+
+class ImageAdminInlineForm(forms.ModelForm):
+    class Meta:
+        widgets = {'position': forms.HiddenInput()}

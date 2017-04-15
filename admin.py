@@ -6,6 +6,7 @@ from . import forms
 
 class ImageAdminInline(GenericStackedInline):
     model = models.Image
+    form = forms.ImageAdminInlineForm
 
 class ImageAdmin(admin.ModelAdmin):
     form = forms.ImageAdminForm
