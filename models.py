@@ -76,7 +76,7 @@ class Image(models.Model):
             SMALL_PREVIEW_H, 'small_preview')
 
     def __str__(self):
-        return '{} photo #{}'.format(self.content_object, self.position)
+        return '{} photo #{}'.format(self.content_object, self.position + 1)
 
     def _get_position(self):
         images = Image.objects.filter(
