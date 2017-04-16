@@ -1,9 +1,12 @@
+import os
+
 from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.utils.safestring import mark_safe
 from django.template.loader import render_to_string
 
 from . import utils
+from . import settings
 
 class ContentTypeSelect(forms.Select):
 
@@ -71,5 +74,15 @@ class ImageWidget(forms.Widget):
     template_name = 'gallery/edit_inline/image_widget.html'
 
     def render(self, name, value, attrs=None):
-        context = {"name": name, "value": value}
+        if value:
+            img_url = utils.create_url(os.path.basename(value.name))
+        else:
+            img_url = ""
+        context = {
+            "name": name,
+            "value": value,
+            "width": settings.GALLERY_THUMBNAIL_WIDTH,
+            "height": settings.GALLERY_THUMBNAIL_HEIGHT,
+            "img_url": img_url
+        }
         return render_to_string(self.template_name, context)
