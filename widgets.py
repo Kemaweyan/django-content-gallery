@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.utils.safestring import mark_safe
+from django.template.loader import render_to_string
 
 from . import utils
 
@@ -67,5 +68,8 @@ class ObjectIdSelect(forms.Select):
 
 class ImageWidget(forms.Widget):
 
+    template_name = 'gallery/edit_inline/image_widget.html'
+
     def render(self, name, value, attrs=None):
-        return '<input type="text" name="{}" value="{}">'.format(name, value)
+        context = {"name": name, "value": value}
+        return render_to_string(self.template_name, context)
