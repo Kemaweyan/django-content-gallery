@@ -63,3 +63,9 @@ class ObjectIdSelect(forms.Select):
     def render(self, name, value, attrs=None):
         self._create_choices()
         return super().render(name, value, attrs)
+
+
+class ImageWidget(forms.Widget):
+
+    def render(self, name, value, attrs=None):
+        return '<input type="text" name="{}" value="{}">'.format(name, value)
