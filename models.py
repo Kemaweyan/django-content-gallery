@@ -71,10 +71,16 @@ class GalleryImageFieldFile(ImageFieldFile):
         self.small_image.save(self, slug)
         self.preview.save(self, slug)
         self.small_preview.save(self, slug)
-        self.name = self.image_data.name_in_db
 
-    def save(self, *args, **kwargs):
-        self.image_data.data.save()
+    def has_uploaded(self):
+        if self.data:
+            return True
+        self.name = self.image_data.name_in_db
+        return False
+
+    @property
+    def data(self):
+        return self.image_data.data
 
     def delete_files(self):
         self.thumbnail.delete()
@@ -132,6 +138,8 @@ class Image(models.Model):
         else:
             slug = ''
         self.image.save_files(slug)
+        if self.image.has_uploaded():
+            self.image = self.image.data
         super().save(*args, **kwargs)
 
     def delete_files(self):
