@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.utils.safestring import mark_safe
+from django.db.models import BLANK_CHOICE_DASH
 
 from . import utils
 
@@ -53,7 +54,7 @@ class ContentTypeSelect(forms.Select):
 class ObjectIdSelect(forms.Select):
 
     def _create_choices(self):
-        choices = [("", "---------")]
+        choices = BLANK_CHOICE_DASH
         if self.model_class:
             items = self.model_class.objects.all()
             for item in items:
