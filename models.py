@@ -72,6 +72,13 @@ class GalleryImageFieldFile(ImageFieldFile):
         self.preview.save(self, slug)
         self.small_preview.save(self, slug)
 
+    def save(self, name, content, save=True):
+        if self.data:
+            content = self.data
+        name = self.image_data.name
+        print(name)
+        super().save(name, content, save)
+
     @property
     def has_uploaded(self):
         if self.data:
