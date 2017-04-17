@@ -70,12 +70,11 @@ class ObjectIdSelect(forms.Select):
 
 
 class ImageWidget(forms.Widget):
-
     template_name = 'gallery/edit_inline/image_widget.html'
 
     def render(self, name, value, attrs=None):
         if value:
-            img_url = utils.create_url(os.path.basename(value.name))
+            img_url = value.image_url
         else:
             img_url = ""
         context = {
