@@ -75,14 +75,14 @@ class ImageWidget(forms.Widget):
 
     def render(self, name, value, attrs=None):
         if value:
-            img_url = value.image_url
+            img_url = value.small_preview_url
         else:
             img_url = ""
         context = {
             "name": name,
             "value": value,
-            "width": settings.GALLERY_THUMBNAIL_WIDTH,
-            "height": settings.GALLERY_THUMBNAIL_HEIGHT,
+            "width": settings.GALLERY_SMALL_PREVIEW_WIDTH,
+            "height": settings.GALLERY_SMALL_PREVIEW_HEIGHT,
             "img_url": img_url
         }
         return render_to_string(self.template_name, context)
