@@ -75,8 +75,6 @@ class GalleryImageFieldFile(ImageFieldFile):
     def save(self, name, content, save=True):
         if self.data:
             content = self.data
-        name = self.image_data.name
-        print(name)
         super().save(name, content, save)
 
     @property
@@ -146,8 +144,6 @@ class Image(models.Model):
         else:
             slug = ''
         self.image.save_files(slug)
-        if self.image.has_uploaded:
-            self.image = self.image.data
         super().save(*args, **kwargs)
 
     def delete_files(self):
