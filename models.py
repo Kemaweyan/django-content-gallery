@@ -72,6 +72,7 @@ class GalleryImageFieldFile(ImageFieldFile):
         self.preview.save(self, slug)
         self.small_preview.save(self, slug)
 
+    @property
     def has_uploaded(self):
         if self.data:
             return True
@@ -138,7 +139,7 @@ class Image(models.Model):
         else:
             slug = ''
         self.image.save_files(slug)
-        if self.image.has_uploaded():
+        if self.image.has_uploaded:
             self.image = self.image.data
         super().save(*args, **kwargs)
 
