@@ -48,10 +48,43 @@ class ImageManager(models.Manager):
 
     def get_queryset(self):
         return ImageQuerySet(self.model, using=self._db)
+
+
+class GalleryImageField(models.ImageField):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.thumbnail = utils.ImageFile(self, THUMB_W, THUMB_H,
+            'thumbnail')
+        self.image_data = utils.InMemoryImageData(self, IMG_W, IMG_H)
+        self.small_image = utils.ImageFile(self, SMALL_W, SMALL_H,
+            'small')
+        self.preview = utils.ImageFile(self, PREVIEW_W, PREVIEW_H,
+            'preview')
+        self.small_preview = utils.ImageFile(self, SMALL_PREVIEW_W,
+            SMALL_PREVIEW_H, 'small_preview')
+
+    def save_files(self, slug):
+        self.image_data.save(self, slug)
+        self.thumbnail.save(self, slug)
+        self.small_image.save(self, slug)
+        self.preview.save(self.image, slug)
+        self.small_preview.save(self.image, slug)
+        if self.image_data.data:
+            self = self.image_data.data
+        else:
+            self.name = self.image_data.name_in_db
+
+    def delete_files(self):
+        self.thumbnail.delete()
+        self.image_data.delete()
+        self.small_image.delete()
+        self.preview.delete()
+        self.small_preview.delete()
    
 
 class Image(models.Model):
-    image = models.ImageField(upload_to=settings.GALLERY_PATH)
+    image = GalleryImageField(upload_to=settings.GALLERY_PATH)
     position = models.IntegerField(default=0, db_index=True)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
@@ -65,15 +98,6 @@ class Image(models.Model):
         self.init_id = self.object_id
         if self.object_id:
             self.init_type = self.content_type
-        self.thumbnail = utils.ImageFile(self.image, THUMB_W, THUMB_H,
-            'thumbnail')
-        self.image_data = utils.InMemoryImageData(self.image, IMG_W, IMG_H)
-        self.small_image = utils.ImageFile(self.image, SMALL_W, SMALL_H,
-            'small')
-        self.preview = utils.ImageFile(self.image, PREVIEW_W, PREVIEW_H,
-            'preview')
-        self.small_preview = utils.ImageFile(self.image, SMALL_PREVIEW_W,
-            SMALL_PREVIEW_H, 'small_preview')
 
     def __str__(self):
         return '{} photo #{}'.format(self.content_object, self.position + 1)
@@ -102,27 +126,11 @@ class Image(models.Model):
             slug = self._get_slug()
         else:
             slug = ''
-        self.image_data.save(self.image, slug)
-        self.thumbnail.save(self.image, slug)
-        self.small_image.save(self.image, slug)
-        if self.position == 0:
-            self.preview.save(self.image, slug)
-            self.small_preview.save(self.image, slug)
-        else:
-            self.preview.delete()
-            self.small_preview.delete()
-        if self.image_data.data:
-            self.image = self.image_data.data
-        else:
-            self.image.name = self.image_data.name_in_db
+        self.image.save_files(slug)
         super().save(*args, **kwargs)
 
     def delete_files(self):
-        self.thumbnail.delete()
-        self.image_data.delete()
-        self.small_image.delete()
-        self.preview.delete()
-        self.small_preview.delete()
+        self.image.delete_files()
 
     def delete(self, *args, **kwargs):
         self.delete_files()
