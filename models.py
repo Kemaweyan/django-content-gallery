@@ -90,6 +90,26 @@ class GalleryImageFieldFile(ImageFieldFile):
         self.preview.delete()
         self.small_preview.delete()
 
+    @property
+    def thumbnail_url(self):
+        return self.thumbnail.url
+
+    @property
+    def image_url(self):
+        return self.image_data.url
+
+    @property
+    def small_image_url(self):
+        return self.small_image.url
+
+    @property
+    def preview_url(self):
+        return self.preview.url
+
+    @property
+    def small_preview_url(self):
+        return self.small_preview.url
+
 
 class GalleryImageField(models.ImageField):
     attr_class = GalleryImageFieldFile
@@ -151,24 +171,20 @@ class Image(models.Model):
 
     @property
     def thumbnail_url(self):
-        return self.image.thumbnail.url
+        return self.image.thumbnail_url
 
     @property
     def image_url(self):
-        return self.image.image_data.url
+        return self.image.image_url
 
     @property
     def small_image_url(self):
-        return self.image.small_image.url
+        return self.image.small_image_url
 
     @property
     def preview_url(self):
-        if self.position != 0:
-            return None
-        return self.image.preview.url
+        return self.image.preview_url
 
     @property
     def small_preview_url(self):
-        if self.position != 0:
-            return None
-        return self.image.small_preview.url
+        return self.image.small_preview_url
