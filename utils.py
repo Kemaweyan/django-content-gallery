@@ -55,8 +55,11 @@ def name_in_db(name):
 class BaseImageData(metaclass=ABCMeta):
 
     def __init__(self, image, width, height):
-        self.name = os.path.basename(image.name)
+        self._set_name(image.name)
         self.size = (width, height)
+
+    def _set_name(self, name):
+        self.name = os.path.basename(name)
 
     @property
     def filename(self):
@@ -88,8 +91,9 @@ class BaseImageData(metaclass=ABCMeta):
         ext = get_ext(filename)
         self.name = name + ext
 
-    def save(self, image, slug):
+    def save(self, image, slug, name):
         is_uploaded = '/' not in image.name
+        self._set_name(name)
         if is_uploaded and self.name:
             self.delete()
         if slug:

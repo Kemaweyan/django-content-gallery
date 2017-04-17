@@ -65,24 +65,19 @@ class GalleryImageFieldFile(ImageFieldFile):
         self.small_preview = utils.ImageFile(self, SMALL_PREVIEW_W,
             SMALL_PREVIEW_H, 'small_preview')
 
-    def save_files(self, slug):
-        self.image_data.save(self, slug)
-        self.thumbnail.save(self, slug)
-        self.small_image.save(self, slug)
-        self.preview.save(self, slug)
-        self.small_preview.save(self, slug)
+    def save_files(self, slug, name):
+        self.image_data.save(self, slug, name)
+        self.thumbnail.save(self, slug, name)
+        self.small_image.save(self, slug, name)
+        self.preview.save(self, slug, name)
+        self.small_preview.save(self, slug, name)
+        if not self.data:
+            self.name = self.image_data.name_in_db
 
     def save(self, name, content, save=True):
-        if self.data:
-            content = self.data
+        content = self.data
+        name = self.data.name
         super().save(name, content, save)
-
-    @property
-    def has_uploaded(self):
-        if self.data:
-            return True
-        self.name = self.image_data.name_in_db
-        return False
 
     @property
     def data(self):
@@ -115,6 +110,7 @@ class Image(models.Model):
         self.init_id = self.object_id
         if self.object_id:
             self.init_type = self.content_type
+        self.image_name = self.image.name
 
     def __str__(self):
         return '{} photo #{}'.format(self.content_object, self.position + 1)
@@ -143,7 +139,7 @@ class Image(models.Model):
             slug = self._get_slug()
         else:
             slug = ''
-        self.image.save_files(slug)
+        self.image.save_files(slug, self.image_name)
         super().save(*args, **kwargs)
 
     def delete_files(self):
