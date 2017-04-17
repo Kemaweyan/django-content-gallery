@@ -1,6 +1,7 @@
 import PIL
 
 from django.db import models
+from django.db.models.fields.files import ImageFieldFile
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
@@ -50,7 +51,7 @@ class ImageManager(models.Manager):
         return ImageQuerySet(self.model, using=self._db)
 
 
-class GalleryImageField(models.ImageField):
+class GalleryImageFieldFile(ImageFieldFile):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -68,12 +69,12 @@ class GalleryImageField(models.ImageField):
         self.image_data.save(self, slug)
         self.thumbnail.save(self, slug)
         self.small_image.save(self, slug)
-        self.preview.save(self.image, slug)
-        self.small_preview.save(self.image, slug)
-        if self.image_data.data:
-            self = self.image_data.data
-        else:
-            self.name = self.image_data.name_in_db
+        self.preview.save(self, slug)
+        self.small_preview.save(self, slug)
+        self.name = self.image_data.name_in_db
+
+    def save(self, *args, **kwargs):
+        self.image_data.data.save()
 
     def delete_files(self):
         self.thumbnail.delete()
@@ -81,6 +82,10 @@ class GalleryImageField(models.ImageField):
         self.small_image.delete()
         self.preview.delete()
         self.small_preview.delete()
+
+
+class GalleryImageField(models.ImageField):
+    attr_class = GalleryImageFieldFile
    
 
 class Image(models.Model):
@@ -138,24 +143,24 @@ class Image(models.Model):
 
     @property
     def thumbnail_url(self):
-        return self.thumbnail.url
+        return self.image.thumbnail.url
 
     @property
     def image_url(self):
-        return self.image_data.url
+        return self.image.image_data.url
 
     @property
     def small_image_url(self):
-        return self.small_image.url
+        return self.image.small_image.url
 
     @property
     def preview_url(self):
         if self.position != 0:
             return None
-        return self.preview.url
+        return self.image.preview.url
 
     @property
     def small_preview_url(self):
         if self.position != 0:
             return None
-        return self.small_preview.url
+        return self.image.small_preview.url
