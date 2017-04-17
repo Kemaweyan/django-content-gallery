@@ -71,17 +71,13 @@ class GalleryImageFieldFile(ImageFieldFile):
         self.small_image.save(self, slug, name)
         self.preview.save(self, slug, name)
         self.small_preview.save(self, slug, name)
-        if not self.data:
+        if not self.image_data.data:
             self.name = self.image_data.name_in_db
 
     def save(self, name, content, save=True):
-        content = self.data
-        name = self.data.name
+        content = self.image_data.data
+        name = self.image_data.data.name
         super().save(name, content, save)
-
-    @property
-    def data(self):
-        return self.image_data.data
 
     def delete_files(self):
         self.thumbnail.delete()
