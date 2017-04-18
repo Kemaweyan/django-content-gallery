@@ -1,7 +1,4 @@
-import PIL
-
 from django.db import models
-from django.db.models.fields.files import ImageFieldFile
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
@@ -9,26 +6,7 @@ from slugify import UniqueSlugify
 
 from . import utils
 from . import settings
-
-# the size of image
-IMG_W = settings.GALLERY_IMAGE_WIDTH
-IMG_H = settings.GALLERY_IMAGE_HEIGHT
-
-# the size of small image
-SMALL_W = settings.GALLERY_SMALL_IMAGE_WIDTH
-SMALL_H = settings.GALLERY_SMALL_IMAGE_HEIGHT
-
-# the size of small image (thumbnail)
-THUMB_W = settings.GALLERY_THUMBNAIL_WIDTH
-THUMB_H = settings.GALLERY_THUMBNAIL_HEIGHT
-
-# the size of preview
-PREVIEW_W = settings.GALLERY_PREVIEW_WIDTH
-PREVIEW_H = settings.GALLERY_PREVIEW_HEIGHT
-
-# the size of small preview
-SMALL_PREVIEW_W = settings.GALLERY_SMALL_PREVIEW_WIDTH
-SMALL_PREVIEW_H = settings.GALLERY_SMALL_PREVIEW_HEIGHT
+from . import fields
 
 def _unique_slug_check(slug, uids):
     slug = utils.name_in_db(slug)
@@ -49,70 +27,10 @@ class ImageManager(models.Manager):
 
     def get_queryset(self):
         return ImageQuerySet(self.model, using=self._db)
-
-
-class GalleryImageFieldFile(ImageFieldFile):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.thumbnail = utils.ImageFile(self, THUMB_W, THUMB_H,
-            'thumbnail')
-        self.image_data = utils.InMemoryImageData(self, IMG_W, IMG_H)
-        self.small_image = utils.ImageFile(self, SMALL_W, SMALL_H,
-            'small')
-        self.preview = utils.ImageFile(self, PREVIEW_W, PREVIEW_H,
-            'preview')
-        self.small_preview = utils.ImageFile(self, SMALL_PREVIEW_W,
-            SMALL_PREVIEW_H, 'small_preview')
-
-    def save_files(self, slug, name):
-        self.image_data.save(self, slug, name)
-        self.thumbnail.save(self, slug, name)
-        self.small_image.save(self, slug, name)
-        self.preview.save(self, slug, name)
-        self.small_preview.save(self, slug, name)
-        if not self.image_data.data:
-            self.name = self.image_data.name_in_db
-
-    def save(self, name, content, save=True):
-        content = self.image_data.data
-        name = self.image_data.data.name
-        super().save(name, content, save)
-
-    def delete_files(self):
-        self.thumbnail.delete()
-        self.image_data.delete()
-        self.small_image.delete()
-        self.preview.delete()
-        self.small_preview.delete()
-
-    @property
-    def thumbnail_url(self):
-        return self.thumbnail.url
-
-    @property
-    def image_url(self):
-        return self.image_data.url
-
-    @property
-    def small_image_url(self):
-        return self.small_image.url
-
-    @property
-    def preview_url(self):
-        return self.preview.url
-
-    @property
-    def small_preview_url(self):
-        return self.small_preview.url
-
-
-class GalleryImageField(models.ImageField):
-    attr_class = GalleryImageFieldFile
    
 
 class Image(models.Model):
-    image = GalleryImageField(upload_to=settings.GALLERY_PATH)
+    image = fields.GalleryImageField(upload_to=settings.GALLERY_PATH)
     position = models.IntegerField(default=0, db_index=True)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
