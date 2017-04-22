@@ -9,6 +9,11 @@ class ImageAdminInline(GenericInlineModelAdmin):
     form = forms.ImageAdminInlineForm
     template = "gallery/edit_inline/image_admin.html"
 
+    class Media:
+        js = (
+            "https://code.jquery.com/ui/1.12.1/jquery-ui.js",
+        )
+
 class ImageAdmin(admin.ModelAdmin):
     form = forms.ImageAdminForm
 
