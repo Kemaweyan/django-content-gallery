@@ -10,7 +10,7 @@
             items: "> :not(.addNewImage)",
             placeholder: "placeholder",
             update: function (event, ui) {
-                $("#sortedImages > .image-position").each(function (i) {
+                $("#sortedImages").find(".image-position").each(function (i) {
                     $(this).val(i);
                 });
                 $("#sortedImages").find(".image-delete").val(0);
