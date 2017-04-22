@@ -21,6 +21,7 @@
             {% endfor %}
         {% endfor %}
       {% endfor %}
+      {% if inline_admin_form.needs_explicit_pk_field %}{{ inline_admin_form.pk_field.field }}{% endif %}
     </div>
   </div>{% endif %}
 {% endfor %}
