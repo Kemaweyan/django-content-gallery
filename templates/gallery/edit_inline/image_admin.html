@@ -12,15 +12,15 @@
 {% for inline_admin_form in inline_admin_formset %}
   {% if not forloop.last %}<div class="imageObject">
     <div class="imageHeader imageHeaderBg"></div>
-      <div class="imageContent">
-        {{ inline_admin_form.deletion_field.field.as_hidden }}
-        {% for fieldset in inline_admin_form %}
-          {% for line in fieldset %}
-              {% for field in line %}
-                {{ field.field }}
-              {% endfor %}
-          {% endfor %}
+    <div class="imageContent">
+      {{ inline_admin_form.deletion_field.field.as_hidden }}
+      {% for fieldset in inline_admin_form %}
+        {% for line in fieldset %}
+            {% for field in line %}
+              {{ field.field }}
+            {% endfor %}
         {% endfor %}
+      {% endfor %}
     </div>
   </div>{% endif %}
 {% endfor %}

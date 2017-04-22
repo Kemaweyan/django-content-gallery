@@ -12,7 +12,8 @@ class ImageAdminInline(GenericInlineModelAdmin):
 
     class Media:
         js = (
-            "https://code.jquery.com/ui/1.12.1/jquery-ui.js",
+            "/static/admin/js/jquery-ui.js",
+            "/static/admin/js/inline_admin.js",
         )
         css = {
             "all": ("/static/admin/css/inline_admin.css",)
