@@ -8,6 +8,7 @@ class ImageAdminInline(GenericInlineModelAdmin):
     model = models.Image
     form = forms.ImageAdminInlineForm
     template = "gallery/edit_inline/image_admin.html"
+    extra = 1
 
     class Media:
         js = (
