@@ -13,7 +13,7 @@
   {% if not forloop.last %}<div class="imageObject">
     <div class="imageHeader imageHeaderBg"></div>
     <div class="imageContent">
-      {{ inline_admin_form.deletion_field.field.as_hidden }}
+      <span class="image-delete">{{ inline_admin_form.deletion_field.field.as_hidden }}</span>
       {% for fieldset in inline_admin_form %}
         {% for line in fieldset %}
             {% for field in line %}
