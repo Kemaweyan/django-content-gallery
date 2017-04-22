@@ -19,6 +19,10 @@ class ImageAdminInline(GenericInlineModelAdmin):
             "all": ("/static/admin/css/inline_admin.css",)
         }
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.order_by('position')
+
 class ImageAdmin(admin.ModelAdmin):
     form = forms.ImageAdminForm
 
