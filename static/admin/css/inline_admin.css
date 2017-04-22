@@ -1,0 +1,72 @@
+.imagesHeader {
+    background-color: #79aec8;
+    color: #fff;
+    font-family: "Roboto","Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    padding: 8px;
+    margin: 20px 0 5px 0;
+}
+.imagesContainer {
+    overflow: hidden;
+    margin: 0;
+}
+.imageObject {
+    float: left;
+    margin: 5px;
+    width: 147px;
+    height: 141px;
+    border: 1px solid #bbb;
+    border-radius: 3px;
+}
+.imageObject .imageHeader {
+    margin: 2px;
+    height: 20px;
+    border-radius: 2px 2px 0 0;
+}
+.imageObject .imageHeaderBg {
+    background-color: #79aec8;
+}
+.imageObject .imageContent {
+    text-align: center;
+    height: 114px;
+    padding: 0px 3px 3px 3px;
+    line-height: 114px;
+}
+.imageObject .imageContent img {
+    vertical-align: middle;
+    max-width: 141px;
+    max-height: 114px;
+}
+.imagesContainer .placeholder {
+    float: left;
+    border: 1px dotted black;
+    width: 147px;
+    height: 141px;
+    margin: 5px;
+}
+.imagesContainer .addNewImage {
+    background-image: url('images/plus.png');
+    cursor: pointer;
+}
+.imagesContainer .addNewImage .whiteBox {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    opacity: 0.5;
+}
+.imagesContainer .addNewImage:hover .whiteBox {
+    display: none;
+}
+
+.imagesToDeleteContainer .imageHeaderBg {
+    background-color: #ba2121;
+}
+#imagesToDelete {
+    overflow: hidden;
+    border: 1px dotted #000;
+    min-height: 151px;
+}
+#imagesToDelete div {
+    opacity: 0.7;
+}
