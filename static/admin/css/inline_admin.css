@@ -46,7 +46,7 @@
     margin: 5px;
 }
 .imagesContainer .addNewImage {
-    background-image: url('images/plus.png');
+    background-image: url('../images/add_image.png');
     cursor: pointer;
 }
 .imagesContainer .addNewImage .whiteBox {
