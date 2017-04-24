@@ -12,7 +12,7 @@ class ImageAdminForm(forms.ModelForm):
             model_class = self.instance.content_type.model_class()
         except:
             model_class = None
-        if initial and initial.get('inline'):
+        if initial and initial.get('_popup'):
             self.fields['content_type'].widget = forms.HiddenInput()
             self.fields['object_id'].widget = forms.HiddenInput()
         else:
