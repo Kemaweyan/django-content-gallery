@@ -6,12 +6,18 @@ from . import widgets
 class ImageAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
+        initial = kwargs.get('initial')
         super(ImageAdminForm, self).__init__(*args, **kwargs)
         try:
             model_class = self.instance.content_type.model_class()
         except:
             model_class = None
-        self.fields['object_id'].widget.model_class = model_class
+        if initial and initial.get('inline'):
+            self.fields['content_type'].widget = forms.HiddenInput()
+            self.fields['object_id'].widget = forms.HiddenInput()
+        else:
+            self.fields['object_id'].widget.model_class = model_class
+        
 
     def clean(self):
         cleaned_data = super().clean()
