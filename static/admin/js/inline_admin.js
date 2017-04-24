@@ -17,5 +17,9 @@
                 $("#imagesToDelete").find(".image-delete").find("input").val(1);
             }
         });
+
+        $("#id_image").on("change", function () {
+            
+        });
     });
 })(django.jQuery);
