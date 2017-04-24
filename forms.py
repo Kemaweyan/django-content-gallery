@@ -17,7 +17,6 @@ class ImageAdminForm(forms.ModelForm):
             self.fields['object_id'].widget = forms.HiddenInput()
         else:
             self.fields['object_id'].widget.model_class = model_class
-        
 
     def clean(self):
         cleaned_data = super().clean()
