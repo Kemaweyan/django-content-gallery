@@ -1,20 +1,20 @@
 (function ($) {
     $(function () {
 
-        $(".imagesContainer").sortable({
+        $(".images-container").sortable({
             cursor: "move",
             revert: 200,
             tolerance: "pointer",
-            connectWith: ".imagesContainer",
-            handle: ".imageHeader",
+            connectWith: ".images-container",
+            handle: ".image-header",
             items: "> :not(.addNewImage)",
             placeholder: "placeholder",
             update: function (event, ui) {
-                $("#sortedImages").find(".image-position").each(function (i) {
+                $("#sorted-images").find(".image-position").each(function (i) {
                     $(this).val(i);
                 });
-                $("#sortedImages").find(".image-delete").find("input").val();
-                $("#imagesToDelete").find(".image-delete").find("input").val(1);
+                $("#sorted-images").find(".image-delete").find("input").val();
+                $("#images-to-delete").find(".image-delete").find("input").val(1);
             }
         });
 
@@ -42,17 +42,16 @@
                         xhr.overrideMimeType("application/json");
                 },
                 success: function (response) {
-                    $("#sortedImages").find(".addNewImage").before(
+                    $("#sorted-images").find(".add-new-image").before(
                         $("<div></div>")
-                        .addClass("imageObject")
+                        .addClass("image-object")
                         .append(
                             $("<div></div>")
-                            .addClass("imageHeader")
-                            .addClass("imageHeaderBg")
+                            .addClass("image-header")
                         )
                         .append(
                             $("<div></div>")
-                            .addClass("imageContent")
+                            .addClass("image-content")
                             .append(
                                 $("<span></span>")
                                 .addClass("image-delete")
