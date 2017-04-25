@@ -8,7 +8,7 @@
 {{ inline_admin_formset.formset.management_form }}
 {{ inline_admin_formset.formset.non_form_errors }}
 
-<div id="sorted-images" class="images-container">
+<div id="gallery-sorted-images" class="images-container">
 <input type="hidden" id="id_image">
 {% if inline_admin_formset.formset.instance.pk %}
   {% for inline_admin_form in inline_admin_formset %}
@@ -33,7 +33,7 @@
   </div>
   <div class="images-to-delete-container">
     <h2>THESE IMAGES WILL BE DELETED. DRAG HERE IMAGES YOU WANT TO DELETE</h2>
-    <div id="images-to-delete" class="images-container"></div>
+    <div id="gallery-images-to-delete" class="images-container"></div>
   </div>
 {% else %}
   <h3>Can't attach images to non-existing object. First create the object and then add images.</h3>

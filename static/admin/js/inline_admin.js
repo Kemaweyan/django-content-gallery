@@ -10,11 +10,11 @@
             items: "> :not(.addNewImage)",
             placeholder: "placeholder",
             update: function (event, ui) {
-                $("#sorted-images").find(".image-position").each(function (i) {
+                $("#gallery-sorted-images").find(".image-position").each(function (i) {
                     $(this).val(i);
                 });
-                $("#sorted-images").find(".image-delete").find("input").val();
-                $("#images-to-delete").find(".image-delete").find("input").val(1);
+                $("#gallery-sorted-images").find(".image-delete").find("input").val();
+                $("#gallery-images-to-delete").find(".image-delete").find("input").val(1);
             }
         });
 
@@ -42,7 +42,7 @@
                         xhr.overrideMimeType("application/json");
                 },
                 success: function (response) {
-                    $("#sorted-images").find(".add-new-image").before(
+                    $("#gallery-sorted-images").find(".add-new-image").before(
                         $("<div></div>")
                         .addClass("image-object")
                         .append(

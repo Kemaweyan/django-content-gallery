@@ -49,11 +49,11 @@
 .gallery-inline-formset .images-to-delete-container .image-object .image-header {
     background-color: #ba2121;
 }
-.gallery-inline-formset #images-to-delete {
+.gallery-inline-formset #gallery-images-to-delete {
     overflow: hidden;
     border: 1px dotted #000;
     min-height: 151px;
 }
-.gallery-inline-formset #images-to-delete div {
+.gallery-inline-formset #gallery-images-to-delete div {
     opacity: 0.7;
 }
