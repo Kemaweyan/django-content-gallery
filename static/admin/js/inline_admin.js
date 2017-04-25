@@ -29,9 +29,11 @@
 
             var $totla_forms = $group.find("#id_" + prefix + "-TOTAL_FORMS");
             var new_id = $totla_forms.val();
+            var new_forms_count = parseInt(new_id) + 1;
 
             var new_prefix = prefix + "-" + new_id;
-            $totla_forms.val(parseInt(new_id) + 1);
+            $totla_forms.val(new_forms_count);
+            $group.find("#id_" + prefix + "-INITIAL_FORMS").val(new_forms_count);
 
             var url = "/admin/gallery/image/ajax/preview/" + image_id;
             $.ajax({
