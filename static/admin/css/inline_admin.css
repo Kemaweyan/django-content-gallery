@@ -46,17 +46,12 @@
     margin: 5px;
 }
 .imagesContainer .addNewImage {
+    display: block;
     background-image: url('../images/add_image.png');
     cursor: pointer;
 }
-.imagesContainer .addNewImage .whiteBox {
-    width: 100%;
-    height: 100%;
-    background-color: #fff;
-    opacity: 0.5;
-}
-.imagesContainer .addNewImage:hover .whiteBox {
-    display: none;
+.imagesContainer .addNewImage:hover {
+    background-image: url('../images/add_image_hover.png');
 }
 
 .imagesToDeleteContainer .imageHeaderBg {
