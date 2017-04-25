@@ -13,7 +13,7 @@
                 $("#gallery-sorted-images").find(".image-position").each(function (i) {
                     $(this).val(i);
                 });
-                $("#gallery-sorted-images").find(".image-delete").find("input").val();
+                $("#gallery-sorted-images").find(".image-delete").find("input").val(0);
                 $("#gallery-images-to-delete").find(".image-delete").find("input").val(1);
             }
         });
