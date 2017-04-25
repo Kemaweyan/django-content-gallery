@@ -13,7 +13,7 @@
                 $("#gallery-sorted-images").find(".image-position").each(function (i) {
                     $(this).val(i);
                 });
-                $("#gallery-sorted-images").find(".image-delete").find("input").val(0);
+                $("#gallery-sorted-images").find(".image-delete").find("input").removeAttr("value");
                 $("#gallery-images-to-delete").find(".image-delete").find("input").val(1);
             }
         });
@@ -62,7 +62,6 @@
                                     .attr("type", "hidden")
                                     .attr("id", "id_" + new_prefix + "-DELETE")
                                     .attr("name", new_prefix + "-DELETE")
-                                    .val(0)
                                 )
                             )
                             .append(
