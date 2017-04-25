@@ -1,0 +1,59 @@
+.gallery-inline-formset .images-container {
+    overflow: hidden;
+    margin: 0;
+}
+.gallery-inline-formset .image-object {
+    float: left;
+    margin: 5px;
+    width: 147px;
+    height: 141px;
+    border: 1px solid #bbb;
+    border-radius: 3px;
+}
+.gallery-inline-formset .image-object .image-header {
+    margin: 2px;
+    height: 20px;
+    border-radius: 2px 2px 0 0;
+    background-color: #79aec8;
+}
+.gallery-inline-formset .image-object .image-content {
+    text-align: center;
+    height: 114px;
+    padding: 0px 3px 3px 3px;
+    line-height: 114px;
+}
+.gallery-inline-formset .image-object .image-content img {
+    vertical-align: middle;
+    max-width: 141px;
+    max-height: 114px;
+}
+.gallery-inline-formset .images-container .placeholder {
+    float: left;
+    border: 1px dotted black;
+    width: 147px;
+    height: 141px;
+    margin: 5px;
+}
+.gallery-inline-formset .images-container .add-new-image {
+    display: block;
+    background-image: url('../images/add_image.png');
+    cursor: pointer;
+}
+.gallery-inline-formset .images-container .add-new-image:hover {
+    background-image: url('../images/add_image_hover.png');
+}
+.gallery-inline-formset .images-to-delete-container h2 {
+    background-color: #ba2121;
+    margin: 20px 0 5px 0;
+}
+.gallery-inline-formset .images-to-delete-container .image-object .image-header {
+    background-color: #ba2121;
+}
+.gallery-inline-formset #gallery-images-to-delete {
+    overflow: hidden;
+    border: 1px dotted #000;
+    min-height: 151px;
+}
+.gallery-inline-formset #gallery-images-to-delete div {
+    opacity: 0.7;
+}

@@ -1,17 +1,22 @@
-from django.forms import ModelForm
+from django import forms
 
 from . import models
 from . import widgets
 
-class ImageAdminForm(ModelForm):
+class ImageAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
+        initial = kwargs.get('initial')
         super(ImageAdminForm, self).__init__(*args, **kwargs)
         try:
             model_class = self.instance.content_type.model_class()
         except:
             model_class = None
-        self.fields['object_id'].widget.model_class = model_class
+        if initial and initial.get('_popup'):
+            self.fields['content_type'].widget = forms.HiddenInput()
+            self.fields['object_id'].widget = forms.HiddenInput()
+        else:
+            self.fields['object_id'].widget.model_class = model_class
 
     def clean(self):
         cleaned_data = super().clean()
@@ -30,4 +35,12 @@ class ImageAdminForm(ModelForm):
         widgets = {
             'content_type': widgets.ContentTypeSelect,
             'object_id': widgets.ObjectIdSelect,
+        }
+
+
+class ImageAdminInlineForm(forms.ModelForm):
+    class Meta:
+        widgets = {
+            'position': forms.HiddenInput(attrs={'class': 'image-position'}),
+            'image': widgets.ImageWidget()
         }

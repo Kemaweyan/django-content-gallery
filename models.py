@@ -1,5 +1,3 @@
-import PIL
-
 from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -8,26 +6,7 @@ from slugify import UniqueSlugify
 
 from . import utils
 from . import settings
-
-# the size of image
-IMG_W = settings.GALLERY_IMAGE_WIDTH
-IMG_H = settings.GALLERY_IMAGE_HEIGHT
-
-# the size of small image
-SMALL_W = settings.GALLERY_SMALL_IMAGE_WIDTH
-SMALL_H = settings.GALLERY_SMALL_IMAGE_HEIGHT
-
-# the size of small image (thumbnail)
-THUMB_W = settings.GALLERY_THUMBNAIL_WIDTH
-THUMB_H = settings.GALLERY_THUMBNAIL_HEIGHT
-
-# the size of preview
-PREVIEW_W = settings.GALLERY_PREVIEW_WIDTH
-PREVIEW_H = settings.GALLERY_PREVIEW_HEIGHT
-
-# the size of small preview
-SMALL_PREVIEW_W = settings.GALLERY_SMALL_PREVIEW_WIDTH
-SMALL_PREVIEW_H = settings.GALLERY_SMALL_PREVIEW_HEIGHT
+from . import fields
 
 def _unique_slug_check(slug, uids):
     slug = utils.name_in_db(slug)
@@ -51,7 +30,7 @@ class ImageManager(models.Manager):
    
 
 class Image(models.Model):
-    image = models.ImageField(upload_to=settings.GALLERY_PATH)
+    image = fields.GalleryImageField(upload_to=settings.GALLERY_PATH)
     position = models.IntegerField(default=0, db_index=True)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
@@ -65,18 +44,10 @@ class Image(models.Model):
         self.init_id = self.object_id
         if self.object_id:
             self.init_type = self.content_type
-        self.thumbnail = utils.ImageFile(self.image, THUMB_W, THUMB_H,
-            'thumbnail')
-        self.image_data = utils.InMemoryImageData(self.image, IMG_W, IMG_H)
-        self.small_image = utils.ImageFile(self.image, SMALL_W, SMALL_H,
-            'small')
-        self.preview = utils.ImageFile(self.image, PREVIEW_W, PREVIEW_H,
-            'preview')
-        self.small_preview = utils.ImageFile(self.image, SMALL_PREVIEW_W,
-            SMALL_PREVIEW_H, 'small_preview')
+        self.image_name = self.image.name
 
     def __str__(self):
-        return '{} photo #{}'.format(self.content_object, self.position)
+        return '{} photo #{}'.format(self.content_object, self.position + 1)
 
     def _get_position(self):
         images = Image.objects.filter(
@@ -102,27 +73,11 @@ class Image(models.Model):
             slug = self._get_slug()
         else:
             slug = ''
-        self.image_data.save(self.image, slug)
-        self.thumbnail.save(self.image, slug)
-        self.small_image.save(self.image, slug)
-        if self.position == 0:
-            self.preview.save(self.image, slug)
-            self.small_preview.save(self.image, slug)
-        else:
-            self.preview.delete()
-            self.small_preview.delete()
-        if self.image_data.data:
-            self.image = self.image_data.data
-        else:
-            self.image.name = self.image_data.name_in_db
+        self.image.save_files(slug, self.image_name)
         super().save(*args, **kwargs)
 
     def delete_files(self):
-        self.thumbnail.delete()
-        self.image_data.delete()
-        self.small_image.delete()
-        self.preview.delete()
-        self.small_preview.delete()
+        self.image.delete_files()
 
     def delete(self, *args, **kwargs):
         self.delete_files()
@@ -130,24 +85,20 @@ class Image(models.Model):
 
     @property
     def thumbnail_url(self):
-        return self.thumbnail.url
+        return self.image.thumbnail_url
 
     @property
     def image_url(self):
-        return self.image_data.url
+        return self.image.image_url
 
     @property
     def small_image_url(self):
-        return self.small_image.url
+        return self.image.small_image_url
 
     @property
     def preview_url(self):
-        if self.position != 0:
-            return None
-        return self.preview.url
+        return self.image.preview_url
 
     @property
     def small_preview_url(self):
-        if self.position != 0:
-            return None
-        return self.small_preview.url
+        return self.image.small_preview_url

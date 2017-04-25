@@ -1,9 +1,13 @@
+import os
+
 from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.utils.safestring import mark_safe
+from django.template.loader import render_to_string
 from django.db.models import BLANK_CHOICE_DASH
 
 from . import utils
+from . import settings
 
 class ContentTypeSelect(forms.Select):
 
@@ -64,3 +68,21 @@ class ObjectIdSelect(forms.Select):
     def render(self, name, value, attrs=None):
         self._create_choices()
         return super().render(name, value, attrs)
+
+
+class ImageWidget(forms.Widget):
+    template_name = 'gallery/edit_inline/image_widget.html'
+
+    def render(self, name, value, attrs=None):
+        if value:
+            img_url = value.small_preview_url
+        else:
+            img_url = ""
+        context = {
+            "name": name,
+            "value": value,
+            "width": settings.GALLERY_SMALL_PREVIEW_WIDTH,
+            "height": settings.GALLERY_SMALL_PREVIEW_HEIGHT,
+            "img_url": img_url
+        }
+        return render_to_string(self.template_name, context)
