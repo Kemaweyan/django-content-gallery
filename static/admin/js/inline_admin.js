@@ -7,7 +7,7 @@
             tolerance: "pointer",
             connectWith: ".images-container",
             handle: ".image-header",
-            items: "> :not(.addNewImage)",
+            items: "> :not(.add-new-image)",
             placeholder: "placeholder",
             update: function (event, ui) {
                 $("#gallery-sorted-images").find(".image-position").each(function (i) {
