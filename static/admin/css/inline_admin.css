@@ -42,7 +42,6 @@
 .images-container .add-new-image:hover {
     background-image: url('../images/add_image_hover.png');
 }
-
 .images-to-delete-container h2 {
     background-color: #ba2121;
     margin: 20px 0 5px 0;
