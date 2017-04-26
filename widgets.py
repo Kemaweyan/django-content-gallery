@@ -79,10 +79,6 @@ class ImageWidget(forms.Widget):
         else:
             img_url = ""
         context = {
-            "name": name,
-            "value": value,
-            "width": settings.GALLERY_SMALL_PREVIEW_WIDTH,
-            "height": settings.GALLERY_SMALL_PREVIEW_HEIGHT,
             "img_url": img_url
         }
         return render_to_string(self.template_name, context)
