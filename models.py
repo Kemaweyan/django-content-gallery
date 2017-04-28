@@ -105,7 +105,10 @@ class Image(models.Model):
         return self.image.small_preview_url
 
 
-class ContentGalleryMixin:
+class ContentGalleryMixin(models.Model):
 
     gallery = GenericRelation(Image)
     gallery_visible = True
+
+    class Meta:
+        abstract = True
