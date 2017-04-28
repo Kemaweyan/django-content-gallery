@@ -1,3 +1,3 @@
-{% if img_url %}
-  <img src="{{ img_url }}" id="{{ html_id }}" class="open_gallery">
+{% if image %}
+  <img src="{{ image.small_preview_url }}" data-image-src="{{ image.image_url }}" data-small-image-src="{{ image.small_image_url }}">
 {% endif %}

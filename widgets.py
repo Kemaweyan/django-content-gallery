@@ -74,18 +74,7 @@ class ImageWidget(forms.Widget):
     template_name = 'gallery/edit_inline/image_widget.html'
 
     def render(self, name, image, attrs=None):
-        if image:
-            img_url = image.small_preview_url
-            html_id = "-".join([
-                'gallery',
-                image.content_type.app_label,
-                image.content_type.model,
-                str(image.object_id)
-            ])
-        else:
-            img_url = ""
         context = {
-            "html_id": name,
-            "img_url": img_url
+            "image": image
         }
         return render_to_string(self.template_name, context)
