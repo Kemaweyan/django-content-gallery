@@ -1,3 +1,5 @@
-{% if image %}
-  <img src="{{ image.small_preview_url }}" data-image-src="{{ image.image_url }}" data-small-image-src="{{ image.small_image_url }}">
+{% if image_exists %}
+  <img src="{{ preview_src }}" data-image="{{ image_data }}">
+{% else %}
+  
 {% endif %}
