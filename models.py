@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericRelation
 
 from slugify import UniqueSlugify
 
@@ -102,3 +103,9 @@ class Image(models.Model):
     @property
     def small_preview_url(self):
         return self.image.small_preview_url
+
+
+class ContentGalleryMixin:
+
+    gallery = GenericRelation(Image)
+    gallery_visible = True
