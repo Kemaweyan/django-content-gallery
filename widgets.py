@@ -75,19 +75,14 @@ class ImageWidget(forms.Widget):
     template_name = 'gallery/edit_inline/image_widget.html'
 
     def render(self, name, image, attrs=None):
-        if image:
-            data = {
-                "image_url": image.image_url,
-                "small_image_url": image.small_image_url
-            }
-            context = {
-                "image_exists": True,
-                "preview_src": image.small_preview_url,
-                "image_data": json.dumps(data)
-            }
-        else:
-            context = {
-                "image_exists": False,
-                "preview_src": "empty",  # add url to empty image
-            }
+        if not image:
+            return "";
+        data = {
+            "image_url": image.image_url,
+            "small_image_url": image.small_image_url
+        }
+        context = {
+            "preview_src": image.small_preview_url,
+            "image_data": json.dumps(data)
+        }
         return render_to_string(self.template_name, context)
