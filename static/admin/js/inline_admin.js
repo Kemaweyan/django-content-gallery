@@ -16,8 +16,8 @@
             }
 
             function setViewSize() {
-                $imageView.width(image.width + 20);
-                $imageView.height(image.height + 45);
+                $imageView.width(image.width);
+                $imageView.height(image.height + 25);
                 $imageContainer.height(image.height);
                 $imageContainer.css({"line-height": image.height + "px"});
             }
