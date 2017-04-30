@@ -88,5 +88,12 @@
                 }
             });
         });
+
+        $(".gallery-inline-formset").on("click", ".gallery-image-preview", function (e) {
+            e.preventDefault();
+
+            data = JSON.parse($(this).attr("data-image"));
+            
+        });
     });
 })(django.jQuery);
