@@ -78,8 +78,16 @@ class ImageWidget(forms.Widget):
         if not image:
             return "";
         data = {
-            "image_url": image.image_url,
-            "small_image_url": image.small_image_url
+            "image": {
+                "url": image.image_url,
+                "width": settings.GALLERY_IMAGE_WIDTH,
+                "height": settings.GALLERY_IMAGE_HEIGHT
+            },
+            "small_image":  {
+                "url": image.small_image_url,
+                "width": settings.GALLERY_SMALL_IMAGE_WIDTH,
+                "height": settings.GALLERY_SMALL_IMAGE_HEIGHT
+            }
         }
         context = {
             "preview_src": image.small_preview_url,
