@@ -1,32 +1,24 @@
 (function ($) {
 
-    var galleryView = (function () {
+    window.ContentGallery = window.ContentGallery || {};
+
+    var galleryAdminView = (function () {
             var $imageView,
                 $imageContainer,
                 $img;
 
-            var winWidth, winHeight, imageData, image;
+            var imageData, image;
 
             function isSmall() {
-                winWidth = $(window).width();
-                winHeight = $(window).height();
-
-                return winWidth < imageData.image.width + 40 ||
-                       winHeight < imageData.image.height + 65;
+                return ContentGallery.isSmallHelper(imageData.image.width + 40, imageData.image.height + 65);
             }
 
             function setViewSize() {
-                $imageView.width(image.width);
-                $imageView.height(image.height + 25);
-                $imageContainer.height(image.height);
-                $imageContainer.css({"line-height": image.height + "px"});
+                ContentGallery.setViewSizeHelper($imageView, $imageContainer, image.width, image.height, 25);
             }
 
             function setViewPosition() {
-                galLeft = (winWidth - $imageView.outerWidth()) / 2;
-                galTop = (winHeight - $imageView.outerHeight()) / 2;
-
-                $imageView.css({"top": galTop, "left": galLeft});
+                ContentGallery.setViewPositionHelper($imageView);
             }
 
             function init() {
@@ -53,6 +45,8 @@
                 setImage: setImage
             };
         })();
+
+    ContentGallery.galleryAdminView = galleryAdminView;
 
     $(function () {
 
@@ -144,8 +138,8 @@
             });
         });
 
-        galleryView.init();
-        $(window).resize(galleryView.resize);
+        galleryAdminView.init();
+        $(window).resize(galleryAdminView.resize);
 
         var $adminImageView = $("#content-gallery-admin-preview");
 
@@ -153,7 +147,7 @@
             e.preventDefault();
 
             var data = JSON.parse($(this).attr("data-image"));
-            galleryView.setImage(data);
+            galleryAdminView.setImage(data);
 
             $adminImageView.show();
         });
