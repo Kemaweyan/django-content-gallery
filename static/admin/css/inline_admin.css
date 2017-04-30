@@ -57,3 +57,49 @@
 .gallery-inline-formset #gallery-images-to-delete div {
     opacity: 0.7;
 }
+
+#content-gallery-admin-preview {
+    display: none;
+}
+#content-gallery-admin-preview #content-gallery-black-box {
+    background-color: #000;
+    width: 100%;
+    opacity: 0.5;
+    z-index: 50;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    height: 1000px;
+}
+#content-gallery-admin-preview  #content-gallery-view {
+    padding: 10px 10px 10px 10px;
+    border-radius: 10px;
+    z-index: 60;
+    background-color: #fff;
+    position: fixed;
+}
+#content-gallery-admin-preview .content-gallery-top-panel {
+    height: 20px;
+}
+#content-gallery-admin-preview .content-gallery-widget {
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-position: center center;
+    opacity: 0.5;
+}
+#content-gallery-admin-preview .content-gallery-widget:hover {
+    opacity: 1;
+}
+#content-gallery-admin-preview .content-gallery-close-button {
+    width: 20px;
+    height: 20px;
+    float: right;
+    background-image: url('../../images/gallery/close_button.png');
+}
+#content-gallery-admin-preview .content-gallery-image-container {
+    text-align: center;
+    margin-top: 5px;
+}
+#content-gallery-admin-preview .content-gallery-image-container img {
+    vertical-align: middle;
+}
