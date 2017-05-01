@@ -48,4 +48,24 @@
     })();
 
     ContentGallery.galleryAdminView = galleryAdminView;
+
+    $(function () {
+        galleryAdminView.init();
+        $(window).resize(galleryAdminView.resize);
+
+        var $adminImageView = $("#content-gallery-admin-preview");
+
+        $(".gallery-inline-formset").on("click", ".gallery-image-preview", function (e) {
+            e.preventDefault();
+
+            var data = JSON.parse($(this).attr("data-image"));
+            galleryAdminView.setImage(data);
+
+            $adminImageView.show();
+        });
+
+        $("#content-gallery-admin-preview").on("click", ".content-gallery-close", function () {
+            $adminImageView.hide();
+        });
+    });
 })(django.jQuery);
