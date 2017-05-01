@@ -12,7 +12,7 @@ from . import forms
 class ImageAdminInline(GenericInlineModelAdmin):
     model = models.Image
     form = forms.ImageAdminInlineForm
-    template = "gallery/edit_inline/image_admin.html"
+    template = "gallery/edit_inline/image_admin_inline.html"
     extra = 0
 
     class Media:
@@ -20,7 +20,7 @@ class ImageAdminInline(GenericInlineModelAdmin):
             "/static/admin/js/jquery-ui.js",
             "/static/js/content-gallery-helpers.js",
             "/static/admin/js/content-gallery-admin-view.js",
-            "/static/admin/js/inline_admin.js",
+            "/static/admin/js/content-gallery-inline-admin.js",
         )
         css = {
             "all": ("/static/admin/css/inline_admin.css",)
