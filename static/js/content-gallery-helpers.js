@@ -1,3 +1,6 @@
+window.django = window.django || {};
+django.jQuery = django.jQuery || jQuery;
+
 (function ($) {
 
     window.ContentGallery = window.ContentGallery || {};
@@ -20,10 +23,10 @@
     }
     ContentGallery.setViewPositionHelper = setViewPosition;
 
-    function setViewSize($view, $container, width, height, additional_height) {
-        $view.width(width);
+    function setViewSize($view, $subView, $container, width, height,  additional_width, additional_height) {
+        $view.width(width + additional_width);
         $view.height(height + additional_height);
-        $container.height(height);
+        $subView.height(height);
         $container.css({"line-height": height + "px"});
     }
     ContentGallery.setViewSizeHelper = setViewSize;

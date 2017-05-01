@@ -14,7 +14,7 @@
             }
 
             function setViewSize() {
-                ContentGallery.setViewSizeHelper($imageView, $imageContainer, image.width, image.height, 25);
+                ContentGallery.setViewSizeHelper($imageView, $imageContainer, image.width, image.height, 0, 25);
             }
 
             function setViewPosition() {
