@@ -7,8 +7,8 @@
     </div>
 {% else %}
     <a href="#" id ="{{ html_id }}" class="open_gallery gallery_preview" style="width: {{ image_width }}px; height: {{ image_height }}px; line-height: {{ image_height }}px;">
-        <div><img src="{{ preview_url }}" class="middle_img"></div>
+        <div><img src="{{ preview_url }}" class="middle_img" alt="{{ alt }}"></div>
     </a>
-    <img src="{% static 'images/gallery/zoom.png' %}" class="zoom" style="left: {{ zoom_left }}px;">
+    <img src="{% static 'images/gallery/zoom.png' %}" class="zoom" style="left: {{ zoom_left }}px;" alt="">
 {% endif %}
 </div>

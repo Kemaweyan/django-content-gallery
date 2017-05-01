@@ -33,6 +33,7 @@ def gallery_preview(obj):
     context.update({
         'preview_url': image.preview_url,
         'html_id': html_id,
+        'alt': str(image),
         'no_image': False
     })
     return context
