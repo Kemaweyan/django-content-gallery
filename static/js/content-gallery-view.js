@@ -14,7 +14,7 @@
             $imageView,
             $thumbnailsContainer;
 
-        var winWidth, winHeight, thumbnailWidth, maxOffset;
+        var thumbnailWidth, maxOffset;
         var ready = false;
 
         function isSmall() {
