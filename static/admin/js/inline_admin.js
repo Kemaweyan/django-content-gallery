@@ -3,7 +3,8 @@
     window.ContentGallery = window.ContentGallery || {};
 
     var galleryAdminView = (function () {
-            var $imageView,
+            var $galleryView,
+                $imageView,
                 $imageContainer,
                 $img;
 
@@ -14,15 +15,16 @@
             }
 
             function setViewSize() {
-                ContentGallery.setViewSizeHelper($imageView, $imageContainer, image.width, image.height, 0, 25);
+                ContentGallery.setViewSizeHelper($galleryView, $imageView, $imageContainer, image.width, image.height, 0, 25);
             }
 
             function setViewPosition() {
-                ContentGallery.setViewPositionHelper($imageView);
+                ContentGallery.setViewPositionHelper($galleryView);
             }
 
             function init() {
-                $imageView = $("#content-gallery-view");
+                $galleryView = $("#content-gallery-view");
+                $imageView = $("#content-gallery-image-view");
                 $imageContainer = $imageView.find(".content-gallery-image-container");
                 $img = $imageContainer.find("img");
             }
