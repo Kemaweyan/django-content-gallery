@@ -94,7 +94,7 @@
     width: 20px;
     height: 20px;
     float: right;
-    background-image: url('../../images/gallery/close_button.png');
+    background-image: url('../../images/close_button.png');
 }
 #content-gallery-admin-preview .content-gallery-image-container {
     text-align: center;
