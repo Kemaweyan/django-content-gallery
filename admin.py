@@ -17,13 +17,13 @@ class ImageAdminInline(GenericInlineModelAdmin):
 
     class Media:
         js = (
-            "/static/admin/js/jquery-ui.js",
-            "/static/js/content-gallery-helpers.js",
-            "/static/admin/js/content-gallery-admin-view.js",
-            "/static/admin/js/content-gallery-inline-admin.js",
+            "/static/content_gallery/admin/js/jquery-ui.js",
+            "/static/content_gallery/js/content-gallery-helpers.js",
+            "/static/content_gallery/admin/js/content-gallery-admin-view.js",
+            "/static/content_gallery/admin/js/content-gallery-inline-admin.js",
         )
         css = {
-            "all": ("/static/admin/css/inline_admin.css",)
+            "all": ("/static/content_gallery/admin/css/inline_admin.css",)
         }
 
     def get_queryset(self, request):
