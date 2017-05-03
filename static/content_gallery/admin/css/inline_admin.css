@@ -36,11 +36,11 @@
 }
 .gallery-inline-formset .images-container .add-new-image {
     display: block;
-    background-image: url('../img/add_image.png');
+    background-image: url('../img/add-image.png');
     cursor: pointer;
 }
 .gallery-inline-formset .images-container .add-new-image:hover {
-    background-image: url('../img/add_image_hover.png');
+    background-image: url('../img/add-image-hover.png');
 }
 .gallery-inline-formset .images-to-delete-container h2 {
     background-color: #ba2121;
@@ -94,7 +94,7 @@
     width: 20px;
     height: 20px;
     float: right;
-    background-image: url('../../img/close_button.png');
+    background-image: url('../../img/close-button.png');
 }
 #content-gallery-admin-preview .content-gallery-image-container {
     text-align: center;

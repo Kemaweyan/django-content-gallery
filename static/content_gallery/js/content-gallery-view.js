@@ -24,14 +24,14 @@
 
         function checkScrollButtons(left) {
             if (left < 0)
-                $scrollLeft.removeClass("content_gallery_inactive");
+                $scrollLeft.removeClass("content-gallery-inactive");
             else
-                $scrollLeft.addClass("content_gallery_inactive");
+                $scrollLeft.addClass("content-gallery-inactive");
 
             if (left > maxOffset)
-                $scrollRight.removeClass("content_gallery_inactive");
+                $scrollRight.removeClass("content-gallery-inactive");
             else
-                $scrollRight.addClass("content_gallery_inactive");
+                $scrollRight.addClass("content-gallery-inactive");
         }
 
         function scrollToImage(index) {
@@ -173,23 +173,23 @@
         }
 
         function init(app_label, content_type, object_id) {
-            $galleryView = $("#content_gallery_view");
-            $imageView = $("#content_gallery_image_view");
-            $imageContainer = $(".content_gallery_image_container");
-            $image = $(".content_gallery_image_container > img");
-            $thumbnailsView = $("#content_gallery_thumbnails_view");
-            $scrollLeft = $(".content_gallery_scroll_left");
-            $scrollRight = $(".content_gallery_scroll_right");
-            $thumbnailsContainer = $(".content_gallery_thumbnails_container");
-            $thumbnails = $(".content_gallery_thumbnails_container > ul");
+            $galleryView = $("#content-gallery-view");
+            $imageView = $("#content-gallery-image-view");
+            $imageContainer = $(".content-gallery-image-container");
+            $image = $(".content-gallery-image-container > img");
+            $thumbnailsView = $("#content-gallery-thumbnails-view");
+            $scrollLeft = $(".content-gallery-scroll-left");
+            $scrollRight = $(".content-gallery-scroll-right");
+            $thumbnailsContainer = $(".content-gallery-thumbnails-container");
+            $thumbnails = $(".content-gallery-thumbnails-container > ul");
 
             if (!ready) {
                 $thumbnails.on("click", "li.choice", function () {
                     setImageByIndex($(this).index());
                 });
 
-                $(".content_gallery_prev_image").click(previousImage)
-                $(".content_gallery_next_image").click(nextImage);
+                $(".content-gallery-prev-image").click(previousImage)
+                $(".content-gallery-next-image").click(nextImage);
                 $scrollLeft.click(scrollLeft);
                 $scrollRight.click(scrollRight);
             }
@@ -211,7 +211,7 @@
                 ready = true;
                 resize();
 
-                $("#content_gallery").show();
+                $("#content-gallery").show();
             });
         }
 
@@ -226,7 +226,7 @@
     $(window).resize(galleryView.resize);
 
     $(function () {
-        $(".open_gallery").click(function() {
+        $(".open-gallery").click(function() {
             matches = $(this).attr("id").match(/^gallery-(\w+)-(\w+)-(\d+)$/i);
             if (!matches) return;
             app_label = matches[1];
@@ -235,8 +235,8 @@
             galleryView.init(app_label, content_type, object_id);
         });
 
-        $(".content_gallery_close").click(function() {
-            $("#content_gallery").hide();
+        $(".content-gallery-close").click(function() {
+            $("#content-gallery").hide();
         });
     });
 })(jQuery);
