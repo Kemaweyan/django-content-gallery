@@ -43,12 +43,12 @@
 #content_gallery_view #content_gallery_image_view div.content_gallery_prev_image {
     width: 100px;
     float: left;
-    background-image: url('../images/left-arrow.png');
+    background-image: url('../img/left-arrow.png');
 }
 #content_gallery_view #content_gallery_image_view div.content_gallery_next_image {
     width: 100px;
     float: right;
-    background-image: url('../images/right-arrow.png');
+    background-image: url('../img/right-arrow.png');
 }
 #content_gallery_view .content_gallery_top_panel div {
     width: 20px;
@@ -56,7 +56,7 @@
     float: right;
 }
 #content_gallery_view .content_gallery_top_panel .content_gallery_close_button {
-    background-image: url('../images/close_button.png');
+    background-image: url('../img/close_button.png');
 }
 #content_gallery_view #content_gallery_thumbnails_view {
     margin: 10px auto;
@@ -67,12 +67,12 @@
 #content_gallery_view #content_gallery_thumbnails_view .content_gallery_scroll_left {
     float: left;
     width: 15px;
-    background-image: url('../images/left-arrow-small.png');
+    background-image: url('../img/left-arrow-small.png');
 }
 #content_gallery_view #content_gallery_thumbnails_view .content_gallery_scroll_right {
     float: right;
     width: 15px;
-    background-image: url('../images/right-arrow-small.png');
+    background-image: url('../img/right-arrow-small.png');
 }
 #content_gallery_view #content_gallery_thumbnails_view .content_gallery_thumbnails_container {
     overflow: hidden;
