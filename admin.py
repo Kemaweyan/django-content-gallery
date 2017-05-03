@@ -23,7 +23,7 @@ class ImageAdminInline(GenericInlineModelAdmin):
             "/static/content_gallery/admin/js/content-gallery-inline-admin.js",
         )
         css = {
-            "all": ("/static/content_gallery/admin/css/inline_admin.css",)
+            "all": ("/static/content_gallery/admin/css/content-gallery-inline-admin.css",)
         }
 
     def get_queryset(self, request):
