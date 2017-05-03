@@ -70,10 +70,16 @@
                                 )
                             )
                             .append(
-                                $("<img>")
-                                .attr("src", response.preview_url)
-                            )
+                                $("<a></a>")
+                                .addClass("content-gallery-image-preview")
+                                .attr("href", "#")
+                                .attr("data-image", response.image_data)
                                 .append(
+                                    $("<img>")
+                                    .attr("src", response.preview_url)
+                                )
+                            )
+                            .append(
                                 $("<input>")
                                 .addClass("image-position")
                                 .attr("type", "hidden")

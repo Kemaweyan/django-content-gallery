@@ -8,6 +8,7 @@ from django.http import HttpResponse
 
 from . import models
 from . import forms
+from . import utils
 
 class ImageAdminInline(GenericInlineModelAdmin):
     model = models.Image
@@ -47,9 +48,11 @@ class ImageAdmin(admin.ModelAdmin):
 
     def preview(self, request, pk):
         image = get_object_or_404(models.Image, pk=pk)
+        data = utils.create_image_data(image)
         response = {
             "preview_url": image.preview_url,
             "position": image.position,
+            "image_data": json.dumps(data),
         }
         return HttpResponse(json.dumps(response), content_type='application/json')
 

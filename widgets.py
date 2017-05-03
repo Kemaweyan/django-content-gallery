@@ -8,7 +8,6 @@ from django.template.loader import render_to_string
 from django.db.models import BLANK_CHOICE_DASH
 
 from . import utils
-from . import settings
 
 class ContentTypeSelect(forms.Select):
 
@@ -77,18 +76,7 @@ class ImageWidget(forms.Widget):
     def render(self, name, image, attrs=None):
         if not image:
             return "";
-        data = {
-            "image": {
-                "url": image.image_url,
-                "width": settings.GALLERY_IMAGE_WIDTH,
-                "height": settings.GALLERY_IMAGE_HEIGHT
-            },
-            "small_image":  {
-                "url": image.small_image_url,
-                "width": settings.GALLERY_SMALL_IMAGE_WIDTH,
-                "height": settings.GALLERY_SMALL_IMAGE_HEIGHT
-            }
-        }
+        data = utils.create_image_data(image)
         context = {
             "preview_src": image.small_preview_url,
             "image_data": json.dumps(data)
