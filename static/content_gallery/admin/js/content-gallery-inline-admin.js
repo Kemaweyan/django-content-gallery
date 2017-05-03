@@ -26,7 +26,7 @@
         $("#id_image").on("change", function () {
             var image_id = this.value;
 
-            var $group = $(".gallery-inline-formset");
+            var $group = $(".content-gallery-inline-formset");
 
             var opts = $group.attr("data-inline-formset");
             var obj = JSON.parse(opts);
