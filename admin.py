@@ -18,13 +18,25 @@ class ImageAdminInline(GenericInlineModelAdmin):
 
     class Media:
         js = (
-            "/static/content_gallery/admin/js/jquery-ui.js",
-            "/static/content_gallery/js/content-gallery-helpers.js",
-            "/static/content_gallery/admin/js/content-gallery-admin-view.js",
-            "/static/content_gallery/admin/js/content-gallery-inline-admin.js",
+            utils.create_static_url(
+                "content_gallery/admin/js/jquery-ui.js"
+            ),
+            utils.create_static_url(
+                "content_gallery/js/content-gallery-helpers.js"
+            ),
+            utils.create_static_url(
+                "content_gallery/admin/js/content-gallery-admin-view.js"
+            ),
+            utils.create_static_url(
+                "content_gallery/admin/js/content-gallery-inline-admin.js"
+            ),
         )
         css = {
-            "all": ("/static/content_gallery/admin/css/content-gallery-inline-admin.css",)
+            "all": (
+                utils.create_static_url(
+                    "content_gallery/admin/css/content-gallery-inline-admin.css"
+                ),
+            )
         }
 
     def get_queryset(self, request):

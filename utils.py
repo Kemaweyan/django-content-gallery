@@ -7,6 +7,7 @@ import magic
 
 from django.core import urlresolvers
 from django.core.files import uploadedfile
+from django.conf import settings as global_sett
 
 from . import settings
 
@@ -75,3 +76,7 @@ def create_image_data(image):
             "height": settings.GALLERY_SMALL_IMAGE_HEIGHT
         }
     }
+
+def create_static_url(url):
+    static = global_sett.STATIC_URL.rstrip("/")
+    return "/".join([static, url])
