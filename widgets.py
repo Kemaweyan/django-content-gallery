@@ -71,7 +71,7 @@ class ObjectIdSelect(forms.Select):
 
 
 class ImageWidget(forms.Widget):
-    template_name = 'gallery/edit_inline/image_widget.html'
+    template_name = 'content_gallery/edit_inline/image_widget.html'
 
     def render(self, name, image, attrs=None):
         if not image:
