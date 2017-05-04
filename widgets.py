@@ -70,7 +70,7 @@ class ObjectIdSelect(forms.Select):
         return super().render(name, value, attrs)
 
 
-class ImageWidget(forms.Widget):
+class ImageInlineWidget(forms.Widget):
     template_name = 'content_gallery/edit_inline/image_widget.html'
 
     def render(self, name, image, attrs=None):

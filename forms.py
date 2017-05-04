@@ -17,6 +17,7 @@ class ImageAdminForm(forms.ModelForm):
             self.fields['object_id'].widget = forms.HiddenInput()
         else:
             self.fields['object_id'].widget.model_class = model_class
+        print(type(self.fields['image'].widget))
 
     def clean(self):
         cleaned_data = super().clean()
@@ -42,5 +43,5 @@ class ImageAdminInlineForm(forms.ModelForm):
     class Meta:
         widgets = {
             'position': forms.HiddenInput(attrs={'class': 'image-position'}),
-            'image': widgets.ImageWidget()
+            'image': widgets.ImageInlineWidget()
         }
