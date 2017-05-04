@@ -70,6 +70,16 @@ class ObjectIdSelect(forms.Select):
         return super().render(name, value, attrs)
 
 
+class ImageWidget(forms.ClearableFileInput):
+    template_with_initial = (
+        '%(initial_text)s: <img src="%(initial_url)s">'
+        '%(clear_template)s<br />%(input_text)s: %(input)s'
+    )
+
+    def render(self, name, value, attrs=None):
+        return super().render(name, value, attrs)
+
+
 class ImageInlineWidget(forms.Widget):
     template_name = 'content_gallery/edit_inline/image_widget.html'
 

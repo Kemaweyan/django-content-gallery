@@ -17,7 +17,6 @@ class ImageAdminForm(forms.ModelForm):
             self.fields['object_id'].widget = forms.HiddenInput()
         else:
             self.fields['object_id'].widget.model_class = model_class
-        print(type(self.fields['image'].widget))
 
     def clean(self):
         cleaned_data = super().clean()
@@ -34,6 +33,7 @@ class ImageAdminForm(forms.ModelForm):
         model = models.Image
         fields = ('image', 'content_type', 'object_id')
         widgets = {
+            'image': widgets.ImageWidget,
             'content_type': widgets.ContentTypeSelect,
             'object_id': widgets.ObjectIdSelect,
         }

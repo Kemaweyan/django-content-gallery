@@ -74,6 +74,7 @@ class GalleryImageFieldFile(files.ImageFieldFile):
     @property
     def preview_url(self):
         return self.preview.url
+    url = preview_url
 
     @property
     def small_preview_url(self):
