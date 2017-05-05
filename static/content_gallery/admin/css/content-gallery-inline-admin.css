@@ -40,7 +40,7 @@
     cursor: pointer;
 }
 .content-gallery-images .images-container .add-new-image:hover {
-    background-image: url('../img/add-image-hover.png');
+    background-position: 0 -141px;
 }
 .content-gallery-images .images-to-delete-container h2 {
     background-color: #ba2121;
