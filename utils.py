@@ -7,6 +7,7 @@ import magic
 
 from django.core import urlresolvers
 from django.core.files import uploadedfile
+from django.conf import settings as global_sett
 
 from . import settings
 
@@ -61,3 +62,21 @@ def create_in_memory_image(image, name, size):
     mime = magic.from_buffer(output.getvalue(), mime=True)
     return uploadedfile.InMemoryUploadedFile(output, 'ImageField', name,
         mime, sys.getsizeof(output), None)
+
+def create_image_data(image):
+    return {
+        "image": {
+            "url": image.image_url,
+            "width": settings.GALLERY_IMAGE_WIDTH,
+            "height": settings.GALLERY_IMAGE_HEIGHT
+        },
+        "small_image":  {
+            "url": image.small_image_url,
+            "width": settings.GALLERY_SMALL_IMAGE_WIDTH,
+            "height": settings.GALLERY_SMALL_IMAGE_HEIGHT
+        }
+    }
+
+def create_static_url(url):
+    static = global_sett.STATIC_URL.rstrip("/")
+    return "/".join([static, url])

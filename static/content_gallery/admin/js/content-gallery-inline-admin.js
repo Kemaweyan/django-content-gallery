@@ -1,4 +1,9 @@
 (function ($) {
+
+    window.ContentGallery = window.ContentGallery || {};
+
+    galleryAdminView = ContentGallery.galleryAdminView;
+
     $(function () {
 
         $(".images-container").sortable({
@@ -10,18 +15,18 @@
             items: "> :not(.add-new-image)",
             placeholder: "placeholder",
             update: function (event, ui) {
-                $("#gallery-sorted-images").find(".image-position").each(function (i) {
+                $("#content-gallery-sorted-images").find(".image-position").each(function (i) {
                     $(this).val(i);
                 });
-                $("#gallery-sorted-images").find(".image-delete").find("input").removeAttr("value");
-                $("#gallery-images-to-delete").find(".image-delete").find("input").val(1);
+                $("#content-gallery-sorted-images").find(".image-delete").find("input").removeAttr("value");
+                $("#content-gallery-images-to-delete").find(".image-delete").find("input").val(1);
             }
         });
 
         $("#id_image").on("change", function () {
             var image_id = this.value;
 
-            var $group = $(".gallery-inline-formset");
+            var $group = $(".content-gallery-images");
 
             var opts = $group.attr("data-inline-formset");
             var obj = JSON.parse(opts);
@@ -44,7 +49,7 @@
                         xhr.overrideMimeType("application/json");
                 },
                 success: function (response) {
-                    $("#gallery-sorted-images").find(".add-new-image").before(
+                    $("#content-gallery-sorted-images").find(".add-new-image").before(
                         $("<div></div>")
                         .addClass("image-object")
                         .append(
@@ -65,10 +70,16 @@
                                 )
                             )
                             .append(
-                                $("<img>")
-                                .attr("src", response.preview_url)
-                            )
+                                $("<a></a>")
+                                .addClass("content-gallery-image-preview")
+                                .attr("href", "#")
+                                .attr("data-image", response.image_data)
                                 .append(
+                                    $("<img>")
+                                    .attr("src", response.preview_url)
+                                )
+                            )
+                            .append(
                                 $("<input>")
                                 .addClass("image-position")
                                 .attr("type", "hidden")

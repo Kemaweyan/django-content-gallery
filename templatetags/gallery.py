@@ -11,7 +11,7 @@ def get_first_image(obj):
         return None
     return images[0]
 
-@register.inclusion_tag('gallery/preview.html')
+@register.inclusion_tag('content_gallery/preview.html')
 def gallery_preview(obj):
     image = get_first_image(obj)
     context = {
@@ -33,6 +33,7 @@ def gallery_preview(obj):
     context.update({
         'preview_url': image.preview_url,
         'html_id': html_id,
+        'alt': str(image),
         'no_image': False
     })
     return context
@@ -44,9 +45,9 @@ def gallery_small_preview(obj):
     if not image:
         return "/".join([
             global_sett.STATIC_URL.rstrip("/"),
-            "images",
-            "gallery",
-            "no_image_small.png"
+            "content_gallery",
+            "img",
+            "no-image-small.png"
         ])
     return image.small_preview_url
     

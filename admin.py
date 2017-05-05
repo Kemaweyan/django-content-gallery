@@ -8,20 +8,38 @@ from django.http import HttpResponse
 
 from . import models
 from . import forms
+from . import utils
 
 class ImageAdminInline(GenericInlineModelAdmin):
     model = models.Image
     form = forms.ImageAdminInlineForm
-    template = "gallery/edit_inline/image_admin.html"
+    template = "content_gallery/edit_inline/image_admin_inline.html"
     extra = 0
 
     class Media:
         js = (
-            "/static/admin/js/jquery-ui.js",
-            "/static/admin/js/inline_admin.js",
+            utils.create_static_url(
+                "content_gallery/admin/js/jquery-ui.js"
+            ),
+            utils.create_static_url(
+                "content_gallery/js/content-gallery-helpers.js"
+            ),
+            utils.create_static_url(
+                "content_gallery/admin/js/content-gallery-admin-view.js"
+            ),
+            utils.create_static_url(
+                "content_gallery/admin/js/content-gallery-inline-admin.js"
+            ),
         )
         css = {
-            "all": ("/static/admin/css/inline_admin.css",)
+            "all": (
+                utils.create_static_url(
+                    "content_gallery/admin/css/content-gallery-admin.css"
+                ),
+                utils.create_static_url(
+                    "content_gallery/admin/css/content-gallery-inline-admin.css"
+                ),
+            )
         }
 
     def get_queryset(self, request):
@@ -31,6 +49,7 @@ class ImageAdminInline(GenericInlineModelAdmin):
 
 class ImageAdmin(admin.ModelAdmin):
     form = forms.ImageAdminForm
+    change_form_template = "content_gallery/admin/image_admin.html"
 
     def get_urls(self):
         urls = super().get_urls()
@@ -45,10 +64,32 @@ class ImageAdmin(admin.ModelAdmin):
 
     def preview(self, request, pk):
         image = get_object_or_404(models.Image, pk=pk)
+        data = utils.create_image_data(image)
         response = {
             "preview_url": image.preview_url,
             "position": image.position,
+            "image_data": json.dumps(data),
         }
         return HttpResponse(json.dumps(response), content_type='application/json')
+
+    class Media:
+        js = (
+            utils.create_static_url(
+                "content_gallery/admin/js/jquery-ui.js"
+            ),
+            utils.create_static_url(
+                "content_gallery/js/content-gallery-helpers.js"
+            ),
+            utils.create_static_url(
+                "content_gallery/admin/js/content-gallery-admin-view.js"
+            ),
+        )
+        css = {
+            "all": (
+                utils.create_static_url(
+                    "content_gallery/admin/css/content-gallery-admin.css"
+                ),
+            )
+        }
 
 admin.site.register(models.Image, ImageAdmin)
