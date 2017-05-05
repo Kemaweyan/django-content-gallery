@@ -34,6 +34,9 @@ class ImageAdminInline(GenericInlineModelAdmin):
         css = {
             "all": (
                 utils.create_static_url(
+                    "content_gallery/admin/css/content-gallery-admin.css"
+                ),
+                utils.create_static_url(
                     "content_gallery/admin/css/content-gallery-inline-admin.css"
                 ),
             )
@@ -46,6 +49,7 @@ class ImageAdminInline(GenericInlineModelAdmin):
 
 class ImageAdmin(admin.ModelAdmin):
     form = forms.ImageAdminForm
+    change_form_template = "content_gallery/admin/image_admin.html"
 
     def get_urls(self):
         urls = super().get_urls()
@@ -67,5 +71,25 @@ class ImageAdmin(admin.ModelAdmin):
             "image_data": json.dumps(data),
         }
         return HttpResponse(json.dumps(response), content_type='application/json')
+
+    class Media:
+        js = (
+            utils.create_static_url(
+                "content_gallery/admin/js/jquery-ui.js"
+            ),
+            utils.create_static_url(
+                "content_gallery/js/content-gallery-helpers.js"
+            ),
+            utils.create_static_url(
+                "content_gallery/admin/js/content-gallery-admin-view.js"
+            ),
+        )
+        css = {
+            "all": (
+                utils.create_static_url(
+                    "content_gallery/admin/css/content-gallery-admin.css"
+                ),
+            )
+        }
 
 admin.site.register(models.Image, ImageAdmin)

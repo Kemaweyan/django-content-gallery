@@ -6,8 +6,11 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils.safestring import mark_safe
 from django.template.loader import render_to_string
 from django.db.models import BLANK_CHOICE_DASH
+from django.contrib.admin import widgets
+from django.utils.html import escape
 
 from . import utils
+from . import settings
 
 class ContentTypeSelect(forms.Select):
 
@@ -70,14 +73,26 @@ class ObjectIdSelect(forms.Select):
         return super().render(name, value, attrs)
 
 
-class ImageWidget(forms.ClearableFileInput):
-    template_with_initial = (
-        '%(initial_text)s: <img src="%(initial_url)s">'
-        '%(clear_template)s<br />%(input_text)s: %(input)s'
+class ImageWidget(widgets.AdminFileWidget):
+    template = (
+        '<p class="file-upload">'
+        '<span class="content-gallery-admin-preview content-gallery-images" '
+        'style="width: {}px; height: {}px; line-height: {}px;">'
+        '<a href="#" data-image="{}" class="content-gallery-image-preview">'
+        '<img src="%(initial_url)s" alt="Image preview"></a></span>'
+        '%(clear_template)s<br />%(input_text)s: %(input)s</p>'
     )
 
-    def render(self, name, value, attrs=None):
-        return super().render(name, value, attrs)
+    def render(self, name, image, attrs=None):
+        if image:
+            data = utils.create_image_data(image)
+            self.template_with_initial = self.template.format(
+                settings.GALLERY_PREVIEW_WIDTH,
+                settings.GALLERY_PREVIEW_HEIGHT,
+                settings.GALLERY_PREVIEW_HEIGHT,
+                escape(json.dumps(data))
+            )
+        return super().render(name, image, attrs)
 
 
 class ImageInlineWidget(forms.Widget):
