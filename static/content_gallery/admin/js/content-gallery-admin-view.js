@@ -55,7 +55,7 @@
 
         var $adminImageView = $("#content-gallery-admin-preview");
 
-        $(".content-gallery-inline-formset").on("click", ".content-gallery-image-preview", function (e) {
+        $(".content-gallery-images").on("click", ".content-gallery-image-preview", function (e) {
             e.preventDefault();
 
             var data = JSON.parse($(this).attr("data-image"));
