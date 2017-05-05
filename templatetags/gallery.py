@@ -17,6 +17,7 @@ def gallery_preview(obj):
     context = {
         'image_width': settings.GALLERY_PREVIEW_WIDTH,
         'image_height': settings.GALLERY_PREVIEW_HEIGHT,
+        'line_height': settings.GALLERY_PREVIEW_HEIGHT - 2,
         'div_width': settings.GALLERY_PREVIEW_WIDTH + 14,
         'div_height': settings.GALLERY_PREVIEW_HEIGHT + 14,
         'zoom_left': settings.GALLERY_PREVIEW_WIDTH - 55
