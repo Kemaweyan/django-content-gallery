@@ -97,7 +97,7 @@
             $thumbnailsView.width(container_width + 60);
             $choices.width(thumbnailSize.width)
                     .height(thumbnailSize.height)
-                    .css("line-height", (thumbnailSize.height - 2) + "px");
+                    .css("line-height", thumbnailSize.height + "px");
             $thumbnailsView.height(thumbnailSize.height + 2);
             $thumbnailsContainer.width(container_width);
         }

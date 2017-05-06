@@ -21,6 +21,7 @@
     height: 114px;
     padding: 0px 3px 3px 3px;
     line-height: 114px;
+    font-size: 0;
 }
 .content-gallery-images .image-object .image-content img {
     vertical-align: middle;

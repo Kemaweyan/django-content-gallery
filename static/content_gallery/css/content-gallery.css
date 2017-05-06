@@ -95,6 +95,7 @@
     opacity: 1;
     border: 1px solid #777;
     margin: 0 3px;
+    font-size: 0;
 }
 #content-gallery-view #content-gallery-thumbnails-view li.choice {
     margin: 1px 4px;
@@ -132,6 +133,7 @@
     text-align: center;
     border-radius: 5px;
     margin: 5px;
+    font-size: 0;
 }
 .gallery-preview .middle-img {
     vertical-align: middle;
