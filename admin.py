@@ -13,7 +13,7 @@ from . import utils
 class ImageAdminInline(GenericInlineModelAdmin):
     model = models.Image
     form = forms.ImageAdminInlineForm
-    template = "content_gallery/edit_inline/image_admin_inline.html"
+    template = "content_gallery/admin/image_admin_inline.html"
     extra = 0
 
     class Media:

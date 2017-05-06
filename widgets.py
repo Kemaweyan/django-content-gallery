@@ -78,7 +78,7 @@ class ImageWidget(widgets.AdminFileWidget):
         '<p class="file-upload">'
         '<span class="content-gallery-admin-preview content-gallery-images" '
         'style="width: {}px; height: {}px; line-height: {}px;">'
-        '<a href="#" data-image="{}" class="content-gallery-image-preview">'
+        '<a href="#" data-image="{}" class="content-gallery-admin-open-view">'
         '<img src="%(initial_url)s" alt="Image preview"></a></span>'
         '%(clear_template)s<br />%(input_text)s: %(input)s</p>'
     )
@@ -96,7 +96,7 @@ class ImageWidget(widgets.AdminFileWidget):
 
 
 class ImageInlineWidget(forms.Widget):
-    template_name = 'content_gallery/edit_inline/image_widget.html'
+    template_name = 'content_gallery/admin/edit_inline/image_widget.html'
 
     def render(self, name, image, attrs=None):
         if not image:

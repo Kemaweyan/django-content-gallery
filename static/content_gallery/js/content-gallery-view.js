@@ -226,7 +226,7 @@
     $(window).resize(galleryView.resize);
 
     $(function () {
-        $(".open-gallery").click(function() {
+        $(".content-gallery-open-view").click(function() {
             matches = $(this).attr("id").match(/^gallery-(\w+)-(\w+)-(\d+)$/i);
             if (!matches) return;
             app_label = matches[1];
