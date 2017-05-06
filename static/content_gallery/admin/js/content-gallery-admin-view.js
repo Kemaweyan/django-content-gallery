@@ -53,7 +53,7 @@
         galleryAdminView.init();
         $(window).resize(galleryAdminView.resize);
 
-        var $adminImageView = $("#content-gallery-admin-preview");
+        var $adminImageView = $("#content-gallery-admin-view");
 
         $(".content-gallery-images").on("click", ".content-gallery-image-preview", function (e) {
             e.preventDefault();
@@ -64,7 +64,7 @@
             $adminImageView.show();
         });
 
-        $("#content-gallery-admin-preview").on("click", ".content-gallery-close", function () {
+        $adminImageView.on("click", ".content-gallery-close", function () {
             $adminImageView.hide();
         });
     });

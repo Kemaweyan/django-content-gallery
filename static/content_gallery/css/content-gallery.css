@@ -123,10 +123,10 @@
     height: 1000px;
 }
 
-.gallery-preview-container {
+.content-gallery-preview-container {
     overflow: hidden;
 }
-.gallery-preview {
+.content-gallery-preview {
     padding: 2px;
     box-shadow: 0 0 5px #888;
     display: block;
@@ -135,14 +135,14 @@
     margin: 5px;
     font-size: 0;
 }
-.gallery-preview .middle-img {
+.content-gallery-preview .middle-img {
     vertical-align: middle;
 }
-.gallery-preview-container .zoom {
+.content-gallery-preview-container .zoom {
     position: relative;
     top: -60px;
     visibility: hidden;
 }
-.gallery-preview-container:hover .zoom {
+.content-gallery-preview-container:hover .zoom {
     visibility: visible;
 }
