@@ -1,16 +1,5 @@
-#content-gallery-view {
-    padding: 10px 10px 10px 10px;
-    border-radius: 10px;
-    z-index: 60;
-    background-color: #fff;
-    position: fixed;
-}
-#content-gallery-view .content-gallery-top-panel {
-    height: 20px;
-}
 #content-gallery-view #content-gallery-image-view .content-gallery-image-container {
     margin: 0 100px;
-    text-align: center;
 }
 #content-gallery-view #content-gallery-image-view div {
     height: 100%;
@@ -25,14 +14,7 @@
     float: right;
     background-image: url('../img/right-arrow.png');
 }
-#content-gallery-view .content-gallery-top-panel div {
-    width: 20px;
-    height: 20px;
-    float: right;
-}
-#content-gallery-view .content-gallery-top-panel .content-gallery-close-button {
-    background-image: url('../img/close-button.png');
-}
+
 #content-gallery-view #content-gallery-thumbnails-view {
     margin: 10px auto;
 }
@@ -66,11 +48,9 @@
     float: left;
     display: block;
     margin: 0px 3px;
-    text-align: center;
     opacity: 1;
     border: 1px solid #777;
     margin: 0 3px;
-    font-size: 0;
 }
 #content-gallery-view #content-gallery-thumbnails-view li.choice {
     margin: 1px 4px;
@@ -82,7 +62,4 @@
     opacity: 0.8;
     border: 1px solid #777;
     margin: 0 3px;
-}
-#content-gallery-view img {
-    vertical-align: middle;
 }

@@ -53,7 +53,7 @@
         galleryAdminView.init();
         $(window).resize(galleryAdminView.resize);
 
-        var $adminImageView = $("#content-gallery-admin-view");
+        var $adminImageView = $("#content-gallery");
 
         $(".content-gallery-images").on("click", ".content-gallery-admin-open-view", function (e) {
             e.preventDefault();

@@ -2,11 +2,12 @@
 
 <div class="content-gallery-preview-container" style="width: {{ div_width }}px; height: {{ div_height }}px;">
 {% if no_image %}
-    <div id ="{{ html_id }}" class="content-gallery-preview" style="width: {{ image_width }}px; height: {{ image_height }}px; line-height: {{ image_height }}px;">
+    <div id ="{{ html_id }}" class="content-gallery-preview content-gallery-centered-image"
+            style="width: {{ image_width }}px; height: {{ image_height }}px; line-height: {{ image_height }}px;">
         <img src="{% static 'content_gallery/img/no-image.png' %}" class="middle-img">
     </div>
 {% else %}
-    <a href="#" id ="{{ html_id }}" class="content-gallery-open-view content-gallery-preview"
+    <a href="#" id ="{{ html_id }}" class="content-gallery-open-view content-gallery-preview content-gallery-centered-image"
             style="width: {{ image_width }}px; height: {{ image_height }}px; line-height: {{ image_height }}px;">
         <div><img src="{{ preview_url }}" class="middle-img" alt="{{ alt }}"></div>
     </a>

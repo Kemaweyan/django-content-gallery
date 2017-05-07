@@ -200,6 +200,7 @@
                 $.each(data, function (index, img) {
                     $thumbnails.append($("<li></li>")
                                 .addClass("choice")
+                                .addClass("content-gallery-centered-image")
                                 .append($("<img>")
                                     .attr("src", img.thumbnail)
                                     )

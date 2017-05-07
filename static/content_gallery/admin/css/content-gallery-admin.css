@@ -1,36 +1,11 @@
-#content-gallery-admin-view {
-    display: none;
-}
-#content-gallery-admin-view  #content-gallery-view {
-    padding: 10px 10px 10px 10px;
-    border-radius: 10px;
-    z-index: 60;
-    background-color: #fff;
-    position: fixed;
-}
-#content-gallery-admin-view .content-gallery-top-panel {
-    height: 20px;
-}
-#content-gallery-admin-view .content-gallery-close-button {
-    width: 20px;
-    height: 20px;
-    float: right;
-    background-image: url('../../img/close-button.png');
-}
-#content-gallery-admin-view .content-gallery-image-container {
+#content-gallery .content-gallery-image-container {
     text-align: center;
     margin-top: 5px;
 }
-#content-gallery-admin-view .content-gallery-image-container img {
+#content-gallery .content-gallery-image-container img {
     vertical-align: middle;
 }
 
-.content-gallery-admin-preview {
+.inline-box {
     display: inline-block;
-    padding: 2px;
-    box-shadow: 0 0 5px #888;
-    text-align: center;
-    border-radius: 5px;
-    margin: 5px;
-    font-size: 0;
 }
