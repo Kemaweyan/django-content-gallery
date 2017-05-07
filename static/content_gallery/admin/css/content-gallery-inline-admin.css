@@ -17,14 +17,11 @@
     background-color: #79aec8;
 }
 .content-gallery-images .image-object .image-content {
-    text-align: center;
     height: 114px;
     padding: 0px 3px 3px 3px;
     line-height: 114px;
-    font-size: 0;
 }
 .content-gallery-images .image-object .image-content img {
-    vertical-align: middle;
     max-width: 141px;
     max-height: 114px;
 }
