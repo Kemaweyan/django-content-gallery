@@ -34,6 +34,9 @@ class ImageAdminInline(GenericInlineModelAdmin):
         css = {
             "all": (
                 utils.create_static_url(
+                    "content_gallery/css/content-gallery.css"
+                ),
+                utils.create_static_url(
                     "content_gallery/admin/css/content-gallery-admin.css"
                 ),
                 utils.create_static_url(
@@ -86,6 +89,9 @@ class ImageAdmin(admin.ModelAdmin):
         )
         css = {
             "all": (
+                utils.create_static_url(
+                    "content_gallery/css/content-gallery.css"
+                ),
                 utils.create_static_url(
                     "content_gallery/admin/css/content-gallery-admin.css"
                 ),

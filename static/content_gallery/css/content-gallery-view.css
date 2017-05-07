@@ -15,28 +15,6 @@
 #content-gallery-view #content-gallery-image-view div {
     height: 100%;
 }
-#content-gallery-view .content-gallery-widget {
-    cursor: pointer;
-    background-repeat: no-repeat;
-    background-position: center center;
-    opacity: 0.5;
-}
-#content-gallery-view .content-gallery-widget:hover {
-    opacity: 1;
-}
-#content-gallery-view .content-gallery-hidden {
-    opacity: 0;
-}
-#content-gallery-view .content-gallery-hidden:hover {
-    opacity: 1;
-}
-#content-gallery-view .content-gallery-inactive {
-    cursor: default;
-    opacity: 0;
-}
-#content-gallery-view .content-gallery-inactive:hover {
-    opacity: 0;
-}
 #content-gallery-view #content-gallery-image-view div.content-gallery-prev-image {
     width: 100px;
     float: left;
