@@ -2,70 +2,58 @@
     window.ContentGallery = window.ContentGallery || {};
 
     var galleryAdminView = (function () {
-        var $galleryView,
-            $imageView,
+        var $imageView,
             $imageContainer,
             $img;
 
-        var imageData, image;
-
-        function isSmall() {
-            return ContentGallery.isSmallHelper(imageData.image.width + 40, imageData.image.height + 65);
-        }
+        var imageData, imageSize, small, image;
 
         function setViewSize() {
-            ContentGallery.setViewSizeHelper($galleryView, $imageView, $imageContainer, image.width, image.height, 0, 25);
+            $imageView.height(height);
+            $imageContainer.css({"line-height": height + "px"});
         }
 
-        function setViewPosition() {
-            ContentGallery.setViewPositionHelper($galleryView);
-        }
-
-        function init() {
-            $galleryView = $("#content-gallery-view");
+        function init(size) {
+            imageSize = size;
             $imageView = $("#content-gallery-image-view");
             $imageContainer = $imageView.find(".content-gallery-image-container");
             $img = $imageContainer.find("img");
         }
 
-        function resize() {
-            image = isSmall() ? imageData.small_image : imageData.image;
+        function resize(isSmall) {
+            var small = isSmall(imageSize.width, imageSize.height)
+            var image = small ? imageData.small_image : imageData.image;
             setViewSize();
             setViewPosition();
             $img.attr("src", image.url);
         }
 
-        function setImage(data) {
+        function setData(data) {
             imageData = data;
-            resize();
         }
 
         return {
             init: init,
             resize: resize,
-            setImage: setImage
+            setData: setData
         };
     })();
 
     ContentGallery.galleryAdminView = galleryAdminView;
 
     $(function () {
-        galleryAdminView.init();
-        $(window).resize(galleryAdminView.resize);
-
-        var $adminImageView = $("#content-gallery");
-
-        $(".content-gallery-images").on("click", ".content-gallery-admin-open-view", function (e) {
-            e.preventDefault();
-
-            var data = JSON.parse($(this).attr("data-image"));
-            galleryAdminView.setImage(data);
-
-            $adminImageView.show();
-        });
-
-        $adminImageView.on("click", ".content-gallery-close", function () {
-            $adminImageView.hide();
+        $.ajax({
+            url: "/gallery/ajax/gallery_sizes/",
+            dataType: "json",
+            beforeSend: function(xhr) {
+                if (xhr.overrideMimeType)
+                    xhr.overrideMimeType("application/json");
+            },
+            success: function (response) {
+                var size = response.image_size;
+                galleryAdminView.init(size);
+                ContentGallery.galleryView.init(galleryAdminView);
+            }
         });
     });
 })(django.jQuery);

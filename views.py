@@ -27,7 +27,7 @@ def choices(request, pk):
     return HttpResponse(json.dumps(response), content_type='application/json')
 
 
-def gallery_data(request, app_label, content_type, object_id):
+def gallery_sizes(request):
     image_size = {
         "width": settings.GALLERY_IMAGE_WIDTH,
         "height": settings.GALLERY_IMAGE_HEIGHT
@@ -40,6 +40,15 @@ def gallery_data(request, app_label, content_type, object_id):
         "width": settings.GALLERY_THUMBNAIL_WIDTH,
         "height": settings.GALLERY_THUMBNAIL_HEIGHT
     }
+    response = {
+        "image_size": image_size,
+        "small_image_size": small_image_size,
+        "thumbnail_size": thumbnail_size,
+    }
+    return HttpResponse(json.dumps(response), content_type='application/json')
+
+
+def gallery_data(request, app_label, content_type, object_id):
     images = []
 
     ctype = ContentType.objects.get(app_label=app_label, model=content_type)
@@ -67,9 +76,6 @@ def gallery_data(request, app_label, content_type, object_id):
         })
 
     response = {
-        "image_size": image_size,
-        "small_image_size": small_image_size,
-        "thumbnail_size": thumbnail_size,
         "images": images
     }
     return HttpResponse(json.dumps(response), content_type='application/json')
