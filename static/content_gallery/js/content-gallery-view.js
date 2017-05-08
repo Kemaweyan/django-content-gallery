@@ -16,14 +16,23 @@
             return winWidth < width + 40 || winHeight < height + 65;
         }
 
+        function setViewPosition() {
+            galLeft = (winWidth - $galleryView.outerWidth()) / 2;
+            galTop = (winHeight - $galleryView.outerHeight()) / 2;
+
+            $galleryView.css({"top": galTop, "left": galLeft});
+        }
+
         function resize() {
-            var size = contentView.resize(isSmall);
+            var size = contentView.getSize(isSmall);
             $galleryView.width(size.width);
             $galleryView.height(size.height + 25);
+            setViewPosition();
         }
 
         function show(data) {
             contentView.setData(data);
+            resize();
             $galleryViewBox.show();
         }
 
@@ -35,7 +44,6 @@
             contentView = view;
             $galleryViewBox = $("#content-gallery");
             $galleryView = $("#content-gallery-view");
-            resize();
         }
 
         return {

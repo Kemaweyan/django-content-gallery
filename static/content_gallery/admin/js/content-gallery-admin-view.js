@@ -6,25 +6,28 @@
             $imageContainer,
             $img;
 
-        var imageData, imageSize, small, image;
+        var imageData, image;
 
-        function setViewSize() {
+        function setImageHeight(height) {
             $imageView.height(height);
             $imageContainer.css({"line-height": height + "px"});
         }
 
-        function init(size) {
-            imageSize = size;
+        function init() {
             $imageView = $("#content-gallery-image-view");
             $imageContainer = $imageView.find(".content-gallery-image-container");
             $img = $imageContainer.find("img");
         }
 
-        function resize(isSmall) {
-            var small = isSmall(imageSize.width, imageSize.height)
-            var image = small ? imageData.small_image : imageData.image;
-            setViewSize();
-            setViewPosition();
+        function getSize(isSmall) {
+            var small = isSmall(imageData.image.width, imageData.image.height);
+            image = small ? imageData.small_image : imageData.image;
+            resize();
+            return {width: image.width, height: image.height};
+        }
+
+        function resize() {
+            setImageHeight(image.height);
             $img.attr("src", image.url);
         }
 
@@ -35,25 +38,15 @@
         return {
             init: init,
             resize: resize,
-            setData: setData
+            setData: setData,
+            getSize: getSize
         };
     })();
 
     ContentGallery.galleryAdminView = galleryAdminView;
 
     $(function () {
-        $.ajax({
-            url: "/gallery/ajax/gallery_sizes/",
-            dataType: "json",
-            beforeSend: function(xhr) {
-                if (xhr.overrideMimeType)
-                    xhr.overrideMimeType("application/json");
-            },
-            success: function (response) {
-                var size = response.image_size;
-                galleryAdminView.init(size);
-                ContentGallery.galleryView.init(galleryAdminView);
-            }
-        });
+        galleryAdminView.init();
+        ContentGallery.galleryView.init(galleryAdminView);
     });
 })(django.jQuery);
