@@ -32,8 +32,12 @@
             begin = thumbnailWidth * index;
             end = thumbnailWidth * (index + 1);
 
-            if (left + begin >= 0 && left + end <= $thumbnailsContainer.width())
-                return;
+            if (left + begin >= 0 && left + end <= $thumbnailsContainer.width()) {
+                if (left < maxOffset)
+                    newLeft = maxOffset;
+                else
+                    return;
+            }
 
             if (left + begin < 0)
                 newLeft = -begin;
