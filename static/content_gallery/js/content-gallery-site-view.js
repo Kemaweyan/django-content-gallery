@@ -120,9 +120,18 @@
             });
         }
 
+        function thumbnailsLeft() {
+            return parseInt($thumbnails.css("left"));
+        }
+
+        function thumbnailsReset() {
+            $thumbnails.empty();
+            $thumbnails.css("left", 0);
+        }
+
         function scrollLeft() {
             animateSync.safeRun(function () {
-                left = parseInt($thumbnails.css("left"));
+                left = thumbnailsLeft();
                 if (left < 0) {
                     animateSync.safeAnimate($thumbnails, {left: "+=" + thumbnailWidth}, null);
                     checkScrollButtons(left + thumbnailWidth);
@@ -132,7 +141,7 @@
 
         function scrollRight() {
             animateSync.safeRun(function () {
-                left = parseInt($thumbnails.css("left"));
+                left = thumbnailsLeft();
                 if (left > maxOffset) {
                     animateSync.safeAnimate($thumbnails, {left: "-=" + thumbnailWidth}, null);
                     checkScrollButtons(left - thumbnailWidth);
@@ -149,7 +158,7 @@
             index = gallery.current();
             setImageFast(index);
 
-            left = parseInt($thumbnails.css("left"));
+            left = thumbnailsLeft();
             checkScrollButtons(left);
         }
 
@@ -184,8 +193,7 @@
         }
 
         function setData(data, callback) {
-            $thumbnails.empty();
-            $thumbnails.css("left", 0);
+            thumbnailsReset();
 
             gallery.load(data.app_label, data.content_type, data.object_id, function (response) {
                 $.each(response, function (index, img) {
