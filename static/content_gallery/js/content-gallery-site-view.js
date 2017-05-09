@@ -157,6 +157,7 @@
 
             index = gallery.current();
             setImageFast(index);
+            scrollToImage(index);
 
             left = thumbnailsLeft();
             checkScrollButtons(left);
