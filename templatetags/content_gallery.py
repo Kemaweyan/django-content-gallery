@@ -32,10 +32,10 @@ def gallery_preview(obj):
         'content_type': image.content_type.model,
         'object_id': str(image.object_id)
     }
-    data_image = json.dumps(data)
+    data_json = json.dumps(data)
     context.update({
         'preview_url': image.preview_url,
-        'data_image': escape(data_image),
+        'data_image': escape(data_json),
         'alt': str(image),
         'no_image': False
     })
