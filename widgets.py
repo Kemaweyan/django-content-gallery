@@ -79,7 +79,7 @@ class ImageWidget(widgets.AdminFileWidget):
         '<span class="content-gallery-preview content-gallery-inline-box '
         'content-gallery-centered-image content-gallery-images" '
         'style="width: {}px; height: {}px; line-height: {}px;">'
-        '<a href="#" data-image="{}" class="content-gallery-admin-open-view">'
+        '<a href="#" data-image="{}" class="content-gallery-open-view">'
         '<img src="%(initial_url)s" alt="Image preview"></a></span>'
         '%(clear_template)s<br />%(input_text)s: %(input)s</p>'
     )
