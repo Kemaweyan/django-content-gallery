@@ -31,8 +31,9 @@
             $img.attr("src", image.url);
         }
 
-        function setData(data) {
+        function setData(data, callback) {
             imageData = data;
+            callback();
         }
 
         return {

@@ -2,9 +2,8 @@
 
     window.ContentGallery = window.ContentGallery || {};
 
-    var galleryView = (function (gallery, animateSync) {
-        var $galleryView,
-            $imageContainer,
+    var gallerySiteView = (function (gallery, animateSync) {
+        var $imageContainer,
             $image,
             $thumbnails,
             $scrollLeft,
@@ -14,13 +13,7 @@
             $imageView,
             $thumbnailsContainer;
 
-        var thumbnailWidth, maxOffset;
-        var ready = false;
-
-        function isSmall() {
-            return ContentGallery.isSmallHelper(gallery.getImageSize().width + 220,
-                gallery.getImageSize().height + gallery.getThumbnailSize().height + 85);
-        }
+        var thumbnailWidth, maxOffset, imgSize, thumbnailSize, small;
 
         function checkScrollButtons(left) {
             if (left < 0)
@@ -57,7 +50,7 @@
             if (!img) return;
             $choices.addClass("choice");
             $($choices[index]).removeClass("choice");
-            if (isSmall()) {
+            if (small) {
                 src = img.small_image;
                 size = img.small_image_size;
             } else {
@@ -102,13 +95,9 @@
             $thumbnailsContainer.width(container_width);
         }
 
-        function setGalleryViewSize(imgSize, thumbnailSize) {
-            ContentGallery.setViewSizeHelper($galleryView, $imageView, $imageContainer,
-                                            imgSize.width, imgSize.height, 200, thumbnailSize.height + 45);
-        }
-
-        function setGalleryViewPosition() {
-            ContentGallery.setViewPositionHelper($galleryView);
+        function setImageHeight(height) {
+            $imageView.height(height);
+            $imageContainer.css({"line-height": height + "px"});
         }
 
         function nextImage() {
@@ -152,28 +141,18 @@
         }
 
         function resize() {
-            if (!ready) return;
-
-            imgSize = isSmall() ? gallery.getSmallImageSize() : gallery.getImageSize();
-            thumbnailSize = gallery.getThumbnailSize()
-                
-            thumbnailWidth = thumbnailSize.width + 8;
-
             setThumbnailViewSize(imgSize, thumbnailSize);
-
             maxOffset = $thumbnailsContainer.width() - $thumbnails.width();
 
             checkScrollButtons(0);
 
-            setGalleryViewSize(imgSize, thumbnailSize);
-            setGalleryViewPosition();
+            setImageHeight(imgSize.height);
 
             index = gallery.current();
             setImageFast(index);
         }
 
-        function init(app_label, content_type, object_id) {
-            $galleryView = $("#content-gallery-view");
+        function init() {
             $imageView = $("#content-gallery-image-view");
             $imageContainer = $(".content-gallery-image-container");
             $image = $(".content-gallery-image-container > img");
@@ -183,21 +162,31 @@
             $thumbnailsContainer = $(".content-gallery-thumbnails-container");
             $thumbnails = $(".content-gallery-thumbnails-container > ul");
 
-            if (!ready) {
-                $thumbnails.on("click", "li.choice", function () {
-                    setImageByIndex($(this).index());
-                });
+            $thumbnails.on("click", "li.choice", function () {
+                setImageByIndex($(this).index());
+            });
 
-                $(".content-gallery-prev-image").click(previousImage)
-                $(".content-gallery-next-image").click(nextImage);
-                $scrollLeft.click(scrollLeft);
-                $scrollRight.click(scrollRight);
-            }
+            $(".content-gallery-prev-image").click(previousImage)
+            $(".content-gallery-next-image").click(nextImage);
+            $scrollLeft.click(scrollLeft);
+            $scrollRight.click(scrollRight);
+        }
 
+        function getSize(isSmall) {
+            var size = gallery.getImageSize();
+            thumbnailSize = gallery.getThumbnailSize();
+            small = isSmall(size.width + 200, size.height + thumbnailSize.height + 45);
+            imgSize = small ? gallery.getSmallImageSize() : gallery.getImageSize();
+            thumbnailWidth = thumbnailSize.width + 8;
+            resize();
+            return {width: imgSize.width + 200, height: imgSize.height + thumbnailSize.height + 45};
+        }
+
+        function setData(data, callback) {
             $thumbnails.empty();
 
-            gallery.load(app_label, content_type, object_id, function (data) {
-                $.each(data, function (index, img) {
+            gallery.load(data.app_label, data.content_type, data.object_id, function (response) {
+                $.each(response, function (index, img) {
                     $thumbnails.append($("<li></li>")
                                 .addClass("choice")
                                 .addClass("content-gallery-centered-image")
@@ -208,36 +197,22 @@
                 });
 
                 $choices = $thumbnails.children();
-
-                ready = true;
-                resize();
-
-                $("#content-gallery").show();
+                callback();
             });
         }
 
         return {
             init: init,
-            resize: resize
+            resize: resize,
+            setData: setData,
+            getSize: getSize
         };
     })(ContentGallery.gallery, ContentGallery.animateSync);
 
-    ContentGallery.galleryView = galleryView;
-
-    $(window).resize(galleryView.resize);
+    ContentGallery.gallerySiteView = gallerySiteView;
 
     $(function () {
-        $(".content-gallery-open-view").click(function() {
-            matches = $(this).attr("id").match(/^gallery-(\w+)-(\w+)-(\d+)$/i);
-            if (!matches) return;
-            app_label = matches[1];
-            content_type = matches[2];
-            object_id = matches[3];
-            galleryView.init(app_label, content_type, object_id);
-        });
-
-        $(".content-gallery-close").click(function() {
-            $("#content-gallery").hide();
-        });
+        gallerySiteView.init();
+        ContentGallery.galleryView.init(gallerySiteView);
     });
 })(jQuery);

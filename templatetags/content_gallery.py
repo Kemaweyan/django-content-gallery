@@ -1,5 +1,8 @@
+import json
+
 from django.template import Library
 from django.conf import settings as global_sett
+from django.utils.html import escape
 
 from .. import settings
 
@@ -24,15 +27,15 @@ def gallery_preview(obj):
     if not image:
         context.update({'no_image': True})
         return context
-    html_id = "-".join([
-        'gallery',
-        image.content_type.app_label,
-        image.content_type.model,
-        str(image.object_id)
-    ])
+    data = {
+        'app_label': image.content_type.app_label,
+        'content_type': image.content_type.model,
+        'object_id': str(image.object_id)
+    }
+    data_image = json.dumps(data)
     context.update({
         'preview_url': image.preview_url,
-        'html_id': html_id,
+        'data_image': escape(data_image),
         'alt': str(image),
         'no_image': False
     })

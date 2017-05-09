@@ -31,9 +31,10 @@
         }
 
         function show(data) {
-            contentView.setData(data);
-            resize();
-            $galleryViewBox.show();
+            contentView.setData(data, function () {
+                resize();
+                $galleryViewBox.show();
+            });
         }
 
         function hide() {
