@@ -14,7 +14,7 @@ def get_first_image(obj):
         return None
     return images[0]
 
-@register.inclusion_tag('content_gallery/preview.html')
+@register.inclusion_tag('content_gallery/templatetags/preview.html')
 def gallery_preview(obj):
     image = get_first_image(obj)
     context = {
