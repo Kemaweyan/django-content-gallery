@@ -144,12 +144,13 @@
             setThumbnailViewSize(imgSize, thumbnailSize);
             maxOffset = $thumbnailsContainer.width() - $thumbnails.width();
 
-            checkScrollButtons(0);
-
             setImageHeight(imgSize.height);
 
             index = gallery.current();
             setImageFast(index);
+
+            left = parseInt($thumbnails.css("left"));
+            checkScrollButtons(left);
         }
 
         function init() {
@@ -184,6 +185,7 @@
 
         function setData(data, callback) {
             $thumbnails.empty();
+            $thumbnails.css("left", 0);
 
             gallery.load(data.app_label, data.content_type, data.object_id, function (response) {
                 $.each(response, function (index, img) {
