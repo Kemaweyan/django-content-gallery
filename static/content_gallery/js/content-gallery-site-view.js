@@ -28,29 +28,33 @@
         }
 
         function scrollToImage(index) {
-            left = parseInt($thumbnails.css("left"));
-            begin = thumbnailWidth * index;
-            end = thumbnailWidth * (index + 1);
+            var left = thumbnailsLeft();
+            var begin = thumbnailWidth * index;
+            var end = thumbnailWidth * (index + 1);
+
+            var newLeft = left;
 
             if (left + begin >= 0 && left + end <= $thumbnailsContainer.width()) {
+
                 if (left < maxOffset)
                     newLeft = maxOffset;
-                else
-                    return;
+            } else {
+
+                if (left + begin < 0)
+                    newLeft = -begin;
+
+                if (left + end > $thumbnailsContainer.width())
+                    newLeft = $thumbnailsContainer.width() - end;
             }
 
-            if (left + begin < 0)
-                newLeft = -begin;
+            if (left != newLeft)
+                animateSync.safeAnimate($thumbnails, {left: newLeft}, null);
 
-            if (left + end > $thumbnailsContainer.width())
-                newLeft = $thumbnailsContainer.width() - end;
-
-            animateSync.safeAnimate($thumbnails, {left: newLeft}, null);
             checkScrollButtons(newLeft);
         }
 
         function setImage(index, callback) {
-            img = gallery.getImage(index);
+            var img = gallery.getImage(index);
             if (!img) return;
             $choices.addClass("choice");
             $($choices[index]).removeClass("choice");
@@ -87,7 +91,7 @@
         function setThumbnailViewSize(imgSize, thumbnailSize) {
             $thumbnails.width(thumbnailWidth * gallery.count());
 
-            container_width = Math.ceil(imgSize.width / thumbnailWidth) * thumbnailWidth;
+            var container_width = Math.ceil(imgSize.width / thumbnailWidth) * thumbnailWidth;
             if (container_width > imgSize.width + 140)
                 container_width -= thumbnailWidth;
 
@@ -159,12 +163,9 @@
 
             setImageHeight(imgSize.height);
 
-            index = gallery.current();
+            var index = gallery.current();
             setImageFast(index);
             scrollToImage(index);
-
-            left = thumbnailsLeft();
-            checkScrollButtons(left);
         }
 
         function init() {
