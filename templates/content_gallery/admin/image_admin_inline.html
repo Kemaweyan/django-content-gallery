@@ -1,8 +1,8 @@
 {% load i18n admin_urls static %}
 <div class="js-inline-admin-formset inline-group content-gallery-images"
-     id="{{ inline_admin_formset.formset.prefix }}-group"
-     data-inline-type="stacked"
-     data-inline-formset="{{ inline_admin_formset.inline_formset_data }}">
+   id="{{ inline_admin_formset.formset.prefix }}-group"
+   data-inline-type="stacked"
+   data-inline-formset="{{ inline_admin_formset.inline_formset_data }}">
 <fieldset class="module {{ inline_admin_formset.classes }}">
   <h2>{{ inline_admin_formset.opts.verbose_name_plural|capfirst }}. DRAG ITEMS TO SET THE ORDER</h2>
 {{ inline_admin_formset.formset.management_form }}
@@ -12,28 +12,28 @@
 <input type="hidden" id="id_image">
 {% if inline_admin_formset.formset.instance.pk %}
   {% for inline_admin_form in inline_admin_formset %}
-    {% if not forloop.last %}<div class="image-object">
-      <div class="image-header"></div>
-      <div class="image-content content-gallery-centered-image">
-        <span class="image-delete">{{ inline_admin_form.deletion_field.field.as_hidden }}</span>
-        {% for fieldset in inline_admin_form %}
-          {% for line in fieldset %}
-              {% for field in line %}
-                {{ field.field }}
-              {% endfor %}
-          {% endfor %}
+  {% if not forloop.last %}<div class="image-object">
+    <div class="image-header"></div>
+    <div class="image-content content-gallery-centered-image">
+    <span class="image-delete">{{ inline_admin_form.deletion_field.field.as_hidden }}</span>
+    {% for fieldset in inline_admin_form %}
+      {% for line in fieldset %}
+        {% for field in line %}
+        {{ field.field }}
         {% endfor %}
-        {% if inline_admin_form.needs_explicit_pk_field %}{{ inline_admin_form.pk_field.field }}{% endif %}
-      </div>
-    </div>{% endif %}
+      {% endfor %}
+    {% endfor %}
+    {% if inline_admin_form.needs_explicit_pk_field %}{{ inline_admin_form.pk_field.field }}{% endif %}
+    </div>
+  </div>{% endif %}
   {% endfor %}
-    <a id="add_id_image" 
-       href="/admin/gallery/image/add/?_to_field=id&_popup=1&object_id={{ inline_admin_formset.formset.instance.pk }}&content_type={{ inline_admin_formset.formset.instance.gallery.content_type.pk }}"
-       class="image-object add-new-image related-widget-wrapper-link" title="Add new image"></a>
+  <a id="add_id_image" 
+     href="/admin/gallery/image/add/?_to_field=id&_popup=1&object_id={{ inline_admin_formset.formset.instance.pk }}&content_type={{ inline_admin_formset.formset.instance.gallery.content_type.pk }}"
+     class="image-object add-new-image related-widget-wrapper-link" title="Add new image"></a>
   </div>
   <div class="images-to-delete-container">
-    <h2>THESE IMAGES WILL BE DELETED. DRAG HERE IMAGES YOU WANT TO DELETE</h2>
-    <div id="content-gallery-images-to-delete" class="images-container"></div>
+  <h2>THESE IMAGES WILL BE DELETED. DRAG HERE IMAGES YOU WANT TO DELETE</h2>
+  <div id="content-gallery-images-to-delete" class="images-container"></div>
   </div>
 {% else %}
   <h3>Can't attach images to non-existing object. First create the object and then add images.</h3>
