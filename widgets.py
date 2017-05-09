@@ -76,7 +76,7 @@ class ObjectIdSelect(forms.Select):
 class ImageWidget(widgets.AdminFileWidget):
     template = (
         '<p class="file-upload">'
-        '<span class="content-gallery-preview inline-box '
+        '<span class="content-gallery-preview content-gallery-inline-box '
         'content-gallery-centered-image content-gallery-images" '
         'style="width: {}px; height: {}px; line-height: {}px;">'
         '<a href="#" data-image="{}" class="content-gallery-admin-open-view">'
