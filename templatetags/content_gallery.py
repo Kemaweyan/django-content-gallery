@@ -14,9 +14,27 @@ def get_first_image(obj):
         return None
     return images[0]
 
+
+@register.simple_tag
+def gallery_image_data(obj):
+    image = get_first_image(obj)
+    try:
+        data = {
+            'app_label': image.content_type.app_label,
+            'content_type': image.content_type.model,
+            'object_id': str(image.object_id)
+        }
+    except AttributeError:
+        data = {}
+    data_json = json.dumps(data)
+    return {
+        'image': image,
+        'data_image': escape(data_json)
+    }
+
+
 @register.inclusion_tag('content_gallery/templatetags/preview.html')
 def gallery_preview(obj):
-    image = get_first_image(obj)
     context = {
         'image_width': settings.GALLERY_PREVIEW_WIDTH,
         'image_height': settings.GALLERY_PREVIEW_HEIGHT,
@@ -24,33 +42,6 @@ def gallery_preview(obj):
         'div_height': settings.GALLERY_PREVIEW_HEIGHT + 14,
         'zoom_left': settings.GALLERY_PREVIEW_WIDTH - 55
     }
-    if not image:
-        context.update({'no_image': True})
-        return context
-    data = {
-        'app_label': image.content_type.app_label,
-        'content_type': image.content_type.model,
-        'object_id': str(image.object_id)
-    }
-    data_json = json.dumps(data)
-    context.update({
-        'preview_url': image.preview_url,
-        'data_image': escape(data_json),
-        'alt': str(image),
-        'no_image': False
-    })
+    image_data = gallery_image_data(obj)
+    context.update(image_data)
     return context
-
-
-@register.simple_tag
-def gallery_small_preview(obj):
-    image = get_first_image(obj)
-    if not image:
-        return "/".join([
-            global_sett.STATIC_URL.rstrip("/"),
-            "content_gallery",
-            "img",
-            "no-image-small.png"
-        ])
-    return image.small_preview_url
-    
