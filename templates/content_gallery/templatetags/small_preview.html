@@ -1,0 +1,14 @@
+{% load static %}
+<div class="content-gallery-preview-container" style="width: {{ div_width }}px; height: {{ div_height }}px;">
+{% if image %}
+  <a href="#" data-image="{{ data_image }}" class="content-gallery-open-view content-gallery-preview content-gallery-centered-image"
+      style="width: {{ image_width }}px; height: {{ image_height }}px; line-height: {{ image_height }}px;">
+    <img src="{{ image.small_preview_url }}" alt="{{ image }}">
+  </a>
+{% else %}
+  <div class="content-gallery-preview content-gallery-centered-image"
+      style="width: {{ image_width }}px; height: {{ image_height }}px; line-height: {{ image_height }}px;">
+    <img src="{% static 'content_gallery/img/no-image-small.png' %}">
+  </div>
+{% endif %}
+</div>
