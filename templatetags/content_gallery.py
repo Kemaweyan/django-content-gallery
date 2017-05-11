@@ -52,8 +52,9 @@ def gallery_small_preview(obj):
     context = {
         'image_width': settings.GALLERY_SMALL_PREVIEW_WIDTH,
         'image_height': settings.GALLERY_SMALL_PREVIEW_HEIGHT,
-        'div_width': settings.GALLERY_SMALL_PREVIEW_WIDTH + 6,
-        'div_height': settings.GALLERY_SMALL_PREVIEW_HEIGHT + 6
+        'div_width': settings.GALLERY_SMALL_PREVIEW_WIDTH + 14,
+        'div_height': settings.GALLERY_SMALL_PREVIEW_HEIGHT + 14,
+        'zoom_left': settings.GALLERY_SMALL_PREVIEW_WIDTH - 15
     }
     image_data = gallery_image_data(obj)
     context.update(image_data)

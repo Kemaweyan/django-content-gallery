@@ -44,6 +44,12 @@
     top: -60px;
     visibility: hidden;
 }
+.content-gallery-preview-container .preview-zoom {
+    top: -60px;
+}
+.content-gallery-preview-container .small-preview-zoom {
+    top: -32px;
+}
 .content-gallery-preview-container:hover .zoom {
     visibility: visible;
 }
