@@ -1,8 +1,12 @@
 #content-gallery-view #content-gallery-image-view .content-gallery-image-container {
-    margin: 0 100px;
+    margin-right: 100px;
 }
 #content-gallery-view #content-gallery-image-view div {
     height: 100%;
+}
+#content-gallery-view #content-gallery-image-view .content-gallery-next-placeholder {
+    width: 100px;
+    float: right;
 }
 #content-gallery-view #content-gallery-image-view .content-gallery-prev-button {
     width: 100px;
@@ -10,8 +14,7 @@
     background-image: url('../img/left-arrow.png');
 }
 #content-gallery-view #content-gallery-image-view .content-gallery-next-button {
-    width: 100px;
-    float: right;
+    margin-left: 100px;
     background-image: url('../img/right-arrow.png');
 }
 

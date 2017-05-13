@@ -7,11 +7,13 @@
   <div id='content-gallery-view'>
     <div class="content-gallery-top-panel"><div class="content-gallery-widget content-gallery-close content-gallery-close-button"></div></div>
     <div id="content-gallery-image-view">
-      <div class="content-gallery-next-image content-gallery-next-button content-gallery-widget content-gallery-hidden"></div>
-      <div class="content-gallery-prev-image content-gallery-prev-button content-gallery-widget content-gallery-hidden"></div>
-      <div class="content-gallery-image-container content-gallery-centered-image content-gallery-next-image">
-        <img src="{% static 'content_gallery/img/0.gif' %}" alt="">
+      <div class="content-gallery-next-image content-gallery-next-button">
+        <div class="content-gallery-image-container content-gallery-centered-image content-gallery-next-image">
+          <img src="{% static 'content_gallery/img/0.gif' %}" alt="">
+        </div>
+        <div class="content-gallery-next-placeholder"></div>
       </div>
+      <div class="content-gallery-prev-image content-gallery-prev-button content-gallery-widget content-gallery-hidden"></div>
     </div>
     <div id="content-gallery-thumbnails-view">
       <div class="content-gallery-scroll-left content-gallery-widget content-gallery-inactive"></div>
