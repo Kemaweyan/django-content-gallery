@@ -4,12 +4,12 @@
 #content-gallery-view #content-gallery-image-view div {
     height: 100%;
 }
-#content-gallery-view #content-gallery-image-view div.content-gallery-prev-image {
+#content-gallery-view #content-gallery-image-view .content-gallery-prev-button {
     width: 100px;
     float: left;
     background-image: url('../img/left-arrow.png');
 }
-#content-gallery-view #content-gallery-image-view div.content-gallery-next-image {
+#content-gallery-view #content-gallery-image-view .content-gallery-next-button {
     width: 100px;
     float: right;
     background-image: url('../img/right-arrow.png');
