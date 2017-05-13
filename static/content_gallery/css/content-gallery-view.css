@@ -4,10 +4,6 @@
 #content-gallery-view #content-gallery-image-view div {
     height: 100%;
 }
-#content-gallery-view #content-gallery-image-view .content-gallery-next-placeholder {
-    width: 100px;
-    float: right;
-}
 #content-gallery-view #content-gallery-image-view .content-gallery-prev-button {
     width: 100px;
     float: left;
@@ -15,7 +11,15 @@
 }
 #content-gallery-view #content-gallery-image-view .content-gallery-next-button {
     margin-left: 100px;
+    cursor: pointer;
+}
+#content-gallery-view #content-gallery-image-view .content-gallery-next-widget {
+    width: 100px;
+    float: right;
     background-image: url('../img/right-arrow.png');
+}
+#content-gallery-view #content-gallery-image-view .content-gallery-next-button:hover .content-gallery-next-widget {
+    opacity: 1;
 }
 
 #content-gallery-view #content-gallery-thumbnails-view {
