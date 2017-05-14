@@ -1,9 +1,5 @@
 #content-gallery .content-gallery-image-container {
-    text-align: center;
     margin-top: 5px;
-}
-#content-gallery .content-gallery-image-container img {
-    vertical-align: middle;
 }
 
 .content-gallery-inline-box {
