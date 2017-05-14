@@ -6,20 +6,20 @@
 
     $(function () {
 
-        $(".images-container").sortable({
+        $(".content-gallery-images-container").sortable({
             cursor: "move",
             revert: 200,
             tolerance: "pointer",
-            connectWith: ".images-container",
-            handle: ".image-header",
-            items: "> :not(.add-new-image)",
-            placeholder: "placeholder",
+            connectWith: ".content-gallery-images-container",
+            handle: ".content-gallery-image-header",
+            items: "> :not(.content-gallery-add-new-image)",
+            placeholder: "content-gallery-placeholder",
             update: function (event, ui) {
-                $("#content-gallery-sorted-images").find(".image-position").each(function (i) {
+                $("#content-gallery-sorted-images").find(".content-gallery-image-position").each(function (i) {
                     $(this).val(i);
                 });
-                $("#content-gallery-sorted-images").find(".image-delete").find("input").removeAttr("value");
-                $("#content-gallery-images-to-delete").find(".image-delete").find("input").val(1);
+                $("#content-gallery-sorted-images").find(".content-gallery-image-delete").find("input").removeAttr("value");
+                $("#content-gallery-images-to-delete").find(".content-gallery-image-delete").find("input").val(1);
             }
         });
 
@@ -49,19 +49,19 @@
                         xhr.overrideMimeType("application/json");
                 },
                 success: function (response) {
-                    $("#content-gallery-sorted-images").find(".add-new-image").before(
+                    $("#content-gallery-sorted-images").find(".content-gallery-add-new-image").before(
                         $("<div></div>")
-                        .addClass("image-object")
+                        .addClass("content-gallery-image-object")
                         .append(
                             $("<div></div>")
-                            .addClass("image-header")
+                            .addClass("content-gallery-image-header")
                         )
                         .append(
                             $("<div></div>")
-                            .addClass("image-content")
+                            .addClass("content-gallery-image-content")
                             .append(
                                 $("<span></span>")
-                                .addClass("image-delete")
+                                .addClass("content-gallery-image-delete")
                                 .append(
                                     $("<input>")
                                     .attr("type", "hidden")
@@ -74,7 +74,7 @@
                                 .addClass("content-gallery-preview-container")
                                 .append(
                                     $("<a></a>")
-                                    .addClass("image-content-link")
+                                    .addClass("content-gallery-image-content-link")
                                     .addClass("content-gallery-open-view")
                                     .addClass("content-gallery-block-box")
                                     .addClass("content-gallery-centered-image")
@@ -82,20 +82,20 @@
                                     .attr("data-image", response.image_data)
                                     .append(
                                         $("<img>")
-                                        .addClass("preview")
+                                        .addClass("content-gallery-image-preview")
                                         .attr("src", response.small_preview_url)
                                     )
                                 )
                                 .append(
                                     $("<img>")
                                     .addClass("zoom")
-                                    .addClass("inline-admin-preview-zoom")
+                                    .addClass("content-gallery-inline-preview-zoom")
                                     .attr("src", response.zoom_url)
                                 )
                             )
                             .append(
                                 $("<input>")
-                                .addClass("image-position")
+                                .addClass("content-gallery-image-position")
                                 .attr("type", "hidden")
                                 .attr("id", "id_" + new_prefix + "-position")
                                 .attr("name", new_prefix + "-position")
