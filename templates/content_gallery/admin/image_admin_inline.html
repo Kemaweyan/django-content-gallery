@@ -14,7 +14,7 @@
   {% for inline_admin_form in inline_admin_formset %}
   {% if not forloop.last %}<div class="image-object">
     <div class="image-header"></div>
-    <div class="image-content content-gallery-centered-image">
+    <div class="image-content">
     <span class="image-delete">{{ inline_admin_form.deletion_field.field.as_hidden }}</span>
     {% for fieldset in inline_admin_form %}
       {% for line in fieldset %}

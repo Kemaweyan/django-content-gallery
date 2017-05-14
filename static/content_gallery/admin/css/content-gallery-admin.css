@@ -5,3 +5,6 @@
 .content-gallery-inline-box {
     display: inline-block;
 }
+.content-gallery-block-box {
+    display: block;
+}
