@@ -30,6 +30,7 @@
 
 .content-gallery-preview-container {
     overflow: hidden;
+    display: block;
 }
 .content-gallery-preview {
     padding: 2px;

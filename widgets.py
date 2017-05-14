@@ -76,11 +76,15 @@ class ObjectIdSelect(forms.Select):
 class ImageWidget(widgets.AdminFileWidget):
     template = (
         '<p class="file-upload">'
-        '<span class="content-gallery-preview content-gallery-inline-box '
-        'content-gallery-centered-image content-gallery-images" '
-        'style="width: {}px; height: {}px; line-height: {}px;">'
-        '<a href="#" data-image="{}" class="content-gallery-open-view">'
-        '<img src="%(initial_url)s" alt="Image preview"></a></span>'
+        '<span class="content-gallery-preview-container" '
+        'style="width: {}px; height: {}px;">'
+        '<a class="content-gallery-preview content-gallery-inline-box '
+        'content-gallery-centered-image content-gallery-images '
+        'content-gallery-open-view" style="width: {}px; height: {}px; '
+        'line-height: {}px;" href="#" data-image="{}">'
+        '<img src="%(initial_url)s" alt="Image preview"></a>'
+        '<img src="{}" class="zoom preview-zoom" '
+        'style="left: {}px;" alt="zoom"></span>'
         '%(clear_template)s<br />%(input_text)s: %(input)s</p>'
     )
 
@@ -88,10 +92,14 @@ class ImageWidget(widgets.AdminFileWidget):
         if image:
             data = utils.create_image_data(image)
             self.template_with_initial = self.template.format(
+                settings.GALLERY_PREVIEW_WIDTH + 14,
+                settings.GALLERY_PREVIEW_HEIGHT + 14,
                 settings.GALLERY_PREVIEW_WIDTH,
                 settings.GALLERY_PREVIEW_HEIGHT,
                 settings.GALLERY_PREVIEW_HEIGHT,
-                escape(json.dumps(data))
+                escape(json.dumps(data)),
+                utils.create_static_url("content_gallery/img/zoom.png"),
+                settings.GALLERY_PREVIEW_WIDTH - 55
             )
         return super().render(name, image, attrs)
 
