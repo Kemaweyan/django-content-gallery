@@ -5,7 +5,8 @@
     var galleryView = (function () {
         var contentView,
             $galleryViewBox,
-            $galleryView;
+            $galleryView,
+            $galleryBlackBox;
 
         var winWidth, winHeight;
 
@@ -28,6 +29,7 @@
             $galleryView.width(size.width);
             $galleryView.height(size.height + 25);
             setViewPosition();
+            $galleryBlackBox.height(winHeight);
         }
 
         function show(data) {
@@ -45,6 +47,7 @@
             contentView = view;
             $galleryViewBox = $("#content-gallery");
             $galleryView = $("#content-gallery-view");
+            $galleryBlackBox = $("#content-gallery-black-box");
         }
 
         return {
