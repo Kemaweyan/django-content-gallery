@@ -63,7 +63,7 @@
     $(function () {
         $(window).resize(galleryView.resize);
 
-        $(".content-gallery-open-view").click(function(e) {
+        $(".content-gallery-images").on("click", ".content-gallery-open-view", function(e) {
             e.preventDefault();
 
             var data = JSON.parse($(this).attr("data-image"));

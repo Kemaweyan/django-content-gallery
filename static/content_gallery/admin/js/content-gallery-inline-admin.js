@@ -70,13 +70,27 @@
                                 )
                             )
                             .append(
-                                $("<a></a>")
-                                .addClass("content-gallery-image-preview")
-                                .attr("href", "#")
-                                .attr("data-image", response.image_data)
+                                $("<span></span>")
+                                .addClass("content-gallery-preview-container")
+                                .append(
+                                    $("<a></a>")
+                                    .addClass("image-content-link")
+                                    .addClass("content-gallery-open-view")
+                                    .addClass("content-gallery-block-box")
+                                    .addClass("content-gallery-centered-image")
+                                    .attr("href", "#")
+                                    .attr("data-image", response.image_data)
+                                    .append(
+                                        $("<img>")
+                                        .addClass("preview")
+                                        .attr("src", response.small_preview_url)
+                                    )
+                                )
                                 .append(
                                     $("<img>")
-                                    .attr("src", response.small_preview_url)
+                                    .addClass("zoom")
+                                    .addClass("inline-admin-preview-zoom")
+                                    .attr("src", response.zoom_url)
                                 )
                             )
                             .append(
