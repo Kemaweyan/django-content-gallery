@@ -5,7 +5,7 @@
       style="width: {{ image_width }}px; height: {{ image_height }}px; line-height: {{ image_height }}px;">
     <div><img src="{{ image.preview_url }}" alt="{{ image }}"></div>
   </a>
-  <img src="{% static 'content_gallery/img/zoom.png' %}" class="zoom preview-zoom" style="left: {{ zoom_left }}px;" alt="zoom">
+  <img src="{% static 'content_gallery/img/zoom.png' %}" class="content-gallery-zoom content-gallery-preview-zoom" style="left: {{ zoom_left }}px;" alt="zoom">
 {% else %}
   <div class="content-gallery-preview content-gallery-centered-image"
       style="width: {{ image_width }}px; height: {{ image_height }}px; line-height: {{ image_height }}px;">

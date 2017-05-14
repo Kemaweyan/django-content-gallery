@@ -39,17 +39,17 @@
     border-radius: 5px;
     margin: 5px;
 }
-.content-gallery-preview-container .zoom {
+.content-gallery-preview-container .content-gallery-zoom {
     position: relative;
     visibility: hidden;
 }
-.content-gallery-preview-container .preview-zoom {
+.content-gallery-preview-container .content-gallery-preview-zoom {
     top: -60px;
 }
-.content-gallery-preview-container .small-preview-zoom {
+.content-gallery-preview-container .content-gallery-small-preview-zoom {
     top: -32px;
 }
-.content-gallery-preview-container:hover .zoom {
+.content-gallery-preview-container:hover .content-gallery-zoom {
     visibility: visible;
 }
 

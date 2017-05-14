@@ -83,8 +83,8 @@ class ImageWidget(widgets.AdminFileWidget):
         'content-gallery-open-view" style="width: {}px; height: {}px; '
         'line-height: {}px;" href="#" data-image="{}">'
         '<img src="%(initial_url)s" alt="Image preview"></a>'
-        '<img src="{}" class="zoom preview-zoom" '
-        'style="left: {}px;" alt="zoom"></span>'
+        '<img src="{}" class="content-gallery-zoom '
+        'content-gallery-preview-zoom" style="left: {}px;" alt="zoom"></span>'
         '%(clear_template)s<br />%(input_text)s: %(input)s</p>'
     )
 

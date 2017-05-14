@@ -88,7 +88,7 @@
                                 )
                                 .append(
                                     $("<img>")
-                                    .addClass("zoom")
+                                    .addClass("content-gallery-zoom")
                                     .addClass("content-gallery-inline-preview-zoom")
                                     .attr("src", response.zoom_url)
                                 )
