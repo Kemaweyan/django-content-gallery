@@ -76,7 +76,7 @@
                                 .attr("data-image", response.image_data)
                                 .append(
                                     $("<img>")
-                                    .attr("src", response.preview_url)
+                                    .attr("src", response.small_preview_url)
                                 )
                             )
                             .append(

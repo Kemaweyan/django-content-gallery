@@ -66,7 +66,7 @@ class ImageAdmin(admin.ModelAdmin):
         image = get_object_or_404(models.Image, pk=pk)
         data = utils.create_image_data(image)
         response = {
-            "preview_url": image.preview_url,
+            "small_preview_url": image.small_preview_url,
             "position": image.position,
             "image_data": json.dumps(data),
         }
