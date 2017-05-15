@@ -1,6 +1,6 @@
 from io import BytesIO
 from PIL import Image
-import sys
+import sys, tempfile, shutil
 
 from django.core.files.base import File
 from django.test import TestCase, mock
@@ -8,10 +8,11 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from .. import models
+from .. import settings
 
 from .models import TestModel
 
-class BaseTestCase(TestCase):
+class ImageTestCase(TestCase):
 
     @staticmethod
     def get_image_file():
@@ -41,7 +42,7 @@ class BaseTestCase(TestCase):
         self.object.delete()
 
 
-class TestUniqueSlugCheck(BaseTestCase):
+class TestUniqueSlugCheck(ImageTestCase):
 
     @mock.patch('gallery.utils.name_in_db', return_value='gallery/foo.jpg')
     def test_name_exisits(self, name_in_db):
