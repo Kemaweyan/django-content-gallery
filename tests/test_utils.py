@@ -1,6 +1,6 @@
 from django.test import TestCase, mock
 
-from . import utils
+from .. import utils
 
 class TestGetChoicesUrlPattern(TestCase):
 
