@@ -1,5 +1,4 @@
 import os
-
 from abc import ABCMeta, abstractmethod
 
 from . import utils

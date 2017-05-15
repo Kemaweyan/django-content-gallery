@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models.fields import files
 
 from . import settings
-from . import image_files
+from . import image_data
 
 # the size of image
 IMG_W = settings.GALLERY_IMAGE_WIDTH
@@ -28,14 +28,14 @@ class GalleryImageFieldFile(files.ImageFieldFile):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.thumbnail = image_files.ImageFile(self, THUMB_W, THUMB_H,
+        self.thumbnail = image_data.ImageFile(self, THUMB_W, THUMB_H,
             'thumbnail')
-        self.image_data = image_files.InMemoryImageData(self, IMG_W, IMG_H)
-        self.small_image = image_files.ImageFile(self, SMALL_W, SMALL_H,
+        self.image_data = image_data.InMemoryImageData(self, IMG_W, IMG_H)
+        self.small_image = image_data.ImageFile(self, SMALL_W, SMALL_H,
             'small')
-        self.preview = image_files.ImageFile(self, PREVIEW_W, PREVIEW_H,
+        self.preview = image_data.ImageFile(self, PREVIEW_W, PREVIEW_H,
             'preview')
-        self.small_preview = image_files.ImageFile(self, SMALL_PREVIEW_W,
+        self.small_preview = image_data.ImageFile(self, SMALL_PREVIEW_W,
             SMALL_PREVIEW_H, 'small_preview')
 
     def save_files(self, slug, name):
