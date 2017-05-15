@@ -69,7 +69,7 @@ class ImageAdmin(admin.ModelAdmin):
             "small_preview_url": image.small_preview_url,
             "position": image.position,
             "image_data": json.dumps(data),
-            "zoom_url": utils.create_static_url("content_gallery/img/small-zoom.png"),
+            "zoom_url": utils.create_static_url("content_gallery/img/zoom-small.png"),
         }
         return HttpResponse(json.dumps(response), content_type='application/json')
 
