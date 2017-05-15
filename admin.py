@@ -37,7 +37,8 @@ class ImageAdminInline(GenericInlineModelAdmin):
                     "content_gallery/admin/css/content-gallery-admin.css"
                 ),
                 utils.create_static_url(
-                    "content_gallery/admin/css/content-gallery-inline-admin.css"
+                    "content_gallery/admin/css/"
+                    "content-gallery-inline-admin.css"
                 ),
             )
         }
@@ -69,9 +70,14 @@ class ImageAdmin(admin.ModelAdmin):
             "small_preview_url": image.small_preview_url,
             "position": image.position,
             "image_data": json.dumps(data),
-            "zoom_url": utils.create_static_url("content_gallery/img/zoom-small.png"),
+            "zoom_url": utils.create_static_url(
+                "content_gallery/img/zoom-small.png"
+            ),
         }
-        return HttpResponse(json.dumps(response), content_type='application/json')
+        return HttpResponse(
+            json.dumps(response),
+            content_type='application/json'
+        )
 
     class Media:
         js = (

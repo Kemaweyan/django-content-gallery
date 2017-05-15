@@ -42,6 +42,10 @@ class ImageAdminForm(forms.ModelForm):
 class ImageAdminInlineForm(forms.ModelForm):
     class Meta:
         widgets = {
-            'position': forms.HiddenInput(attrs={'class': 'content-gallery-image-position'}),
+            'position': forms.HiddenInput(
+                attrs={
+                    'class': 'content-gallery-image-position'
+                }
+            ),
             'image': widgets.ImageInlineWidget()
         }
