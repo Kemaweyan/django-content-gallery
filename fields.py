@@ -1,3 +1,5 @@
+import os
+
 from django.db import models
 from django.db.models.fields import files
 
@@ -38,7 +40,13 @@ class GalleryImageFieldFile(files.ImageFieldFile):
         self.small_preview = image_data.ImageFile(self, SMALL_PREVIEW_W,
             SMALL_PREVIEW_H, 'small_preview')
 
+    def _check_dir(self):
+        path = os.path.join(settings.MEDIA_ROOT, settings.GALLERY_PATH)
+        if not os.path.isdir(path):
+            os.mkdir(path)
+
     def save_files(self, slug, name):
+        self._check_dir()
         self.image_data.save(self, slug, name)
         self.thumbnail.save(self, slug, name)
         self.small_image.save(self, slug, name)
