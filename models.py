@@ -68,13 +68,16 @@ class Image(models.Model):
         title = str(self.content_object)
         return slugify_unique(title)
 
-    def save(self, *args, **kwargs):
+    def _save_data(self):
         if not self.pk or self._object_changed():
             self._get_position()
             slug = self._get_slug()
         else:
             slug = ''
         self.image.save_files(slug, self.image_name)
+
+    def save(self, *args, **kwargs):
+        self._save_data()
         super().save(*args, **kwargs)
 
     def delete_files(self):
