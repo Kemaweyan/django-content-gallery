@@ -52,9 +52,9 @@ def name_in_db(name):
     return os.path.join(settings.GALLERY_PATH, name)
 
 def image_resize(src, dst, size):
-    img = Image.open(src)
-    img.thumbnail(size)
-    img.save(dst, img.format)
+    with Image.open(src) as img:
+        img.thumbnail(size)
+        img.save(dst, img.format)
 
 def create_in_memory_image(image, name, size):
     output = io.BytesIO()
