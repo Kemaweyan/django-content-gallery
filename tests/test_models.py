@@ -1,29 +1,15 @@
-from io import BytesIO
-from PIL import Image
-import sys, tempfile, shutil
+import tempfile, shutil
 
-from django.core.files.base import File
 from django.test import TestCase, mock
 from django.contrib.contenttypes.models import ContentType
-from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from .. import models
 from .. import settings
 
 from .models import TestModel, AnotherTestModel
+from .utils import get_image_in_memory_data
 
 class ImageTestCase(TestCase):
-
-    @staticmethod
-    def get_image_file():
-        io = BytesIO()
-        size = (200,200)
-        color = (255,0,0,0)
-        image = Image.new("RGBA", size, color)
-        image.save(io, format='JPEG')
-        image_file = InMemoryUploadedFile(io, None, 'foo.jpg', 'jpeg', sys.getsizeof(io), None)
-        image_file.seek(0)
-        return image_file
 
     @mock.patch('gallery.models.slugify_unique', return_value='foo')
     def setUp(self, slugify_unique):
@@ -34,7 +20,7 @@ class ImageTestCase(TestCase):
         self.another_object = AnotherTestModel(name="AnotherTestObject")
         self.another_object.save()
         self.image = models.Image(
-            image=self.get_image_file(),
+            image=get_image_in_memory_data(),
             position=0,
             content_type=ContentType.objects.get_for_model(TestModel),
             object_id=self.object.id
@@ -96,7 +82,7 @@ class TestImage(ImageTestCase):
 
     def test_get_position_with_existing_images(self):
         image = models.Image(
-            image=self.get_image_file(),
+            image=get_image_in_memory_data(),
             position=0,
             content_type=ContentType.objects.get_for_model(TestModel),
             object_id=self.object.id
@@ -106,7 +92,7 @@ class TestImage(ImageTestCase):
 
     def test_get_position_with_new_object_id(self):
         image = models.Image(
-            image=self.get_image_file(),
+            image=get_image_in_memory_data(),
             position=0,
             content_type=ContentType.objects.get_for_model(TestModel),
             object_id=self.second_object.id
@@ -116,7 +102,7 @@ class TestImage(ImageTestCase):
 
     def test_get_position_with_new_content_type(self):
         image = models.Image(
-            image=self.get_image_file(),
+            image=get_image_in_memory_data(),
             position=0,
             content_type=ContentType.objects.get_for_model(TestModel),
             object_id=self.another_object.id
@@ -144,7 +130,7 @@ class TestImage(ImageTestCase):
 
     def test_save_data_new_image(self):
         image = models.Image(
-            image=self.get_image_file(),
+            image=get_image_in_memory_data(),
             position=0,
             content_type=ContentType.objects.get_for_model(TestModel),
             object_id=self.object.id
@@ -169,3 +155,17 @@ class TestImage(ImageTestCase):
         self.image._get_slug.assert_not_called()
         name = self.get_name('foo.jpg')
         self.image.image.save_files.assert_called_once_with('', name)
+
+    def test_save_data_changed_image(self):
+        self.image._get_slug = mock.MagicMock(return_value='foo')
+        self.image.image.save_files = mock.MagicMock()
+        self.image._object_changed = mock.MagicMock(return_value=True)
+        self.image._save_data()
+        self.image._get_slug.assert_called_once()
+        name = self.get_name('foo.jpg')
+        self.image.image.save_files.assert_called_once_with('foo', name)
+
+    def test_delete_files_image(self):
+        self.image.image.delete_files = mock.MagicMock()
+        self.image.delete_files()
+        self.image.image.delete_files.assert_called_once()
