@@ -40,7 +40,8 @@ class GalleryImageFieldFile(files.ImageFieldFile):
         self.small_preview = image_data.ImageFile(self, SMALL_PREVIEW_W,
             SMALL_PREVIEW_H, 'small_preview')
 
-    def _check_dir(self):
+    @staticmethod
+    def _check_dir():
         path = os.path.join(settings.MEDIA_ROOT, settings.GALLERY_PATH)
         if not os.path.isdir(path):
             os.mkdir(path)
