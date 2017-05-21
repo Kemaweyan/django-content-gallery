@@ -27,10 +27,6 @@ class ImageTestCase(TestCase):
     def setUp(self, slugify_unique):
         self.object = TestModel(name="TestObject")
         self.object.save()
-        self.second_object = TestModel(name="SecondTestObject")
-        self.second_object.save()
-        self.another_object = AnotherTestModel(name="AnotherTestObject")
-        self.another_object.save()
         self.image = models.Image(
             image=get_image_in_memory_data(),
             position=0,
@@ -43,8 +39,6 @@ class ImageTestCase(TestCase):
     def tearDown(self):
         self.image.delete()
         self.object.delete()
-        self.second_object.delete()
-        self.another_object.delete()
 
     @staticmethod
     def get_image():
@@ -53,3 +47,18 @@ class ImageTestCase(TestCase):
     @staticmethod
     def get_name(name):
         return "/".join([settings.GALLERY_PATH, name])
+
+
+class MultipleObjectsImageTestCase(ImageTestCase):
+
+    def setUp(self):
+        super().setUp()
+        self.second_object = TestModel(name="SecondTestObject")
+        self.second_object.save()
+        self.another_object = AnotherTestModel(name="AnotherTestObject")
+        self.another_object.save()
+
+    def tearDown(self):
+        super().tearDown()
+        self.second_object.delete()
+        self.another_object.delete()

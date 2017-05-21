@@ -3,7 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 
 from .. import models
 
-from .models import TestModel, AnotherTestModel, ImageTestCase
+from .models import *
 from .utils import get_image_in_memory_data
 
 
@@ -22,7 +22,7 @@ class TestUniqueSlugCheck(ImageTestCase):
         name_in_db.assert_called_once_with("bar.jpg")
 
 
-class TestImage(ImageTestCase):
+class TestImage(MultipleObjectsImageTestCase):
 
     def test_create_empty_image(self):
         image = models.Image()
