@@ -14,9 +14,6 @@ class TestImageFile(TestCase):
             'bar'
         )
 
-    def tearDown(self):
-        self.image_file.delete()
-
     def test_init(self):
         self.assertEqual(self.image_file.name, 'foo.jpg')
         self.assertEqual(self.image_file.word, 'bar')
@@ -159,3 +156,41 @@ class TestImageFile(TestCase):
         image_file.size = (100, 50)
         image_data.ImageFile._create_image(image_file, self.image)
         image_resize.assert_called_with(self.image, 'foo.jpg', (100, 50))
+
+
+class TestInMemoryImageData(TestCase):
+
+    def setUp(self):
+        self.image = mock.MagicMock()
+        self.image.name = 'gallery/foo.jpg'
+        self.memory_data = image_data.InMemoryImageData(
+            self.image,
+            100,
+            50
+        )
+
+    def test_init(self):
+        self.assertEqual(self.memory_data.name, 'foo.jpg')
+        self.assertEqual(self.memory_data.size[0], 100)
+        self.assertEqual(self.memory_data.size[1], 50)
+        self.assertIsNone(self.memory_data.data)
+
+    def test_create_filename_without_path(self):
+        name = self.memory_data._create_filename('foo.jpg')
+        self.assertEqual(name, 'foo.jpg')
+
+    def test_create_filename_with_path(self):
+        name = self.memory_data._create_filename('gallery/foo.jpg')
+        self.assertEqual(name, 'gallery/foo.jpg')
+
+    @mock.patch('gallery.utils.create_in_memory_image', return_value='data')
+    def test_create_image(self, create_func):
+        self.memory_data._create_image(self.image)
+        self.assertEqual(self.memory_data.data, 'data')
+        create_func.assert_called_with(self.image, 'foo.jpg', (100, 50))
+
+    @mock.patch('gallery.utils.name_in_db', return_value='gallery/foo.jpg')
+    def test_name_in_db(self, name_in_db):
+        name = self.memory_data.name_in_db
+        self.assertEqual(name, 'gallery/foo.jpg')
+        name_in_db.assert_called_with('foo.jpg')
