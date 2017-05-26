@@ -1,5 +1,6 @@
 import os
 import json
+import copy
 
 from django import forms
 from django.contrib.contenttypes.models import ContentType
@@ -61,7 +62,7 @@ class ContentTypeSelect(forms.Select):
 class ObjectIdSelect(forms.Select):
 
     def _create_choices(self):
-        choices = BLANK_CHOICE_DASH
+        choices = copy.copy(BLANK_CHOICE_DASH)
         if self.model_class:
             items = self.model_class.objects.all()
             for item in items:
