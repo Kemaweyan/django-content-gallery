@@ -108,13 +108,7 @@ class TestImage(MultipleObjectsImageTestCase):
     def test_save_data_unchanged_image(self):
         self.image._get_slug = mock.MagicMock()
         self.image.image.save_files = mock.MagicMock()
-        self.image._save_data()
-        self.image._get_slug.assert_not_called()
-        self.image.image.save_files.assert_called_once_with('', 'foo.jpg')
-
-    def test_save_data_unchanged_image(self):
-        self.image._get_slug = mock.MagicMock()
-        self.image.image.save_files = mock.MagicMock()
+        self.image._object_changed = mock.MagicMock(return_value=False)
         self.image._save_data()
         self.image._get_slug.assert_not_called()
         name = self.get_name('foo.jpg')
