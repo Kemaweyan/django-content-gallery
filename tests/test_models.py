@@ -127,3 +127,33 @@ class TestImage(MultipleObjectsImageTestCase):
         self.image.image.delete_files = mock.MagicMock()
         self.image.delete_files()
         self.image.image.delete_files.assert_called_once()
+
+    def test_thumbnail_url_property(self):
+        image_mock = mock.MagicMock()
+        image_mock.thumbnail_url = 'foo'
+        with mock.patch.object(self.image, 'image', image_mock):
+            self.assertEqual(self.image.thumbnail_url, 'foo')
+
+    def test_image_url_property(self):
+        image_mock = mock.MagicMock()
+        image_mock.image_url = 'foo'
+        with mock.patch.object(self.image, 'image', image_mock):
+            self.assertEqual(self.image.image_url, 'foo')
+
+    def test_preview_url_property(self):
+        image_mock = mock.MagicMock()
+        image_mock.preview_url = 'foo'
+        with mock.patch.object(self.image, 'image', image_mock):
+            self.assertEqual(self.image.preview_url, 'foo')
+
+    def test_small_image_url_property(self):
+        image_mock = mock.MagicMock()
+        image_mock.small_image_url = 'foo'
+        with mock.patch.object(self.image, 'image', image_mock):
+            self.assertEqual(self.image.small_image_url, 'foo')
+
+    def test_small_preview_url_property(self):
+        image_mock = mock.MagicMock()
+        image_mock.small_preview_url = 'foo'
+        with mock.patch.object(self.image, 'image', image_mock):
+            self.assertEqual(self.image.small_preview_url, 'foo')
