@@ -1,5 +1,4 @@
 from django.test import mock, TestCase
-from unittest import skip
 
 from .. import image_data
 
