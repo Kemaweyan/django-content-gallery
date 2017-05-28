@@ -22,7 +22,7 @@ def choices(request, pk):
                 response.append({"id": str(product.id), "name": str(product)})
         else:
             raise PermissionDenied
-    except:
+    except AttributeError:
         raise Http404
     return HttpResponse(json.dumps(response), content_type='application/json')
 
