@@ -40,12 +40,6 @@ def gallery_data(request, app_label, content_type, object_id):
         "width": settings.GALLERY_THUMBNAIL_WIDTH,
         "height": settings.GALLERY_THUMBNAIL_HEIGHT
     }
-    response = {
-        "image_size": image_size,
-        "small_image_size": small_image_size,
-        "thumbnail_size": thumbnail_size,
-    }
-    images = []
 
     ctype = ContentType.objects.get(app_label=app_label, model=content_type)
     qs = models.Image.objects.filter(content_type__exact=ctype,
@@ -54,6 +48,8 @@ def gallery_data(request, app_label, content_type, object_id):
         settings.GALLERY_SMALL_IMAGE_WIDTH,
         settings.GALLERY_SMALL_IMAGE_HEIGHT
     )
+
+    images = []
     for img in qs:
         size = (img.image.width, img.image.height)
         small_width, small_height = utils.calculate_image_size(size, max_size)

@@ -22,6 +22,7 @@ class TestChoices(TestCase):
         )
         cls.wrong_obj = WrongTestModel.objects.create(name='Wrong object')
         ctype = ContentType.objects.get_for_model(TestModel)
+        print(ctype.app_label)
         cls.url = cls.create_url(ctype.pk)
 
     @classmethod
@@ -73,3 +74,7 @@ class TestChoices(TestCase):
         }
         self.assertIn(obj1, choices)
         self.assertIn(obj2, choices)
+
+
+class TestGalleryData(TestCase):
+    pass
