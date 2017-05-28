@@ -4,9 +4,21 @@ from django.test import TestCase
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 
-from .models import TestModel, AnotherTestModel, WrongTestModel
+from .. import models
 
-class TestChoices(TestCase):
+from .models import TestModel, AnotherTestModel, WrongTestModel
+from .utils import get_image_in_memory_data
+
+class AjaxRequestMixin:
+
+    def send_ajax_request(self, url):
+        return self.client.get(
+            url,
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest'
+        )
+
+
+class TestChoices(AjaxRequestMixin, TestCase):
 
     @staticmethod
     def create_url(pk):
@@ -14,7 +26,6 @@ class TestChoices(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        print('created')
         cls.obj1 = TestModel.objects.create(name='Test object 1')
         cls.obj2 = TestModel.objects.create(name='Test object 2')
         cls.another_obj = AnotherTestModel.objects.create(
@@ -22,7 +33,6 @@ class TestChoices(TestCase):
         )
         cls.wrong_obj = WrongTestModel.objects.create(name='Wrong object')
         ctype = ContentType.objects.get_for_model(TestModel)
-        print(ctype.app_label)
         cls.url = cls.create_url(ctype.pk)
 
     @classmethod
@@ -31,12 +41,6 @@ class TestChoices(TestCase):
         cls.obj2.delete()
         cls.another_obj.delete()
         cls.wrong_obj.delete()
-
-    def send_ajax_request(self, url):
-        return self.client.get(
-            url,
-            HTTP_X_REQUESTED_WITH='XMLHttpRequest'
-        )
 
     def test_not_ajax(self):
         resp = self.client.get(self.url)
@@ -76,5 +80,51 @@ class TestChoices(TestCase):
         self.assertIn(obj2, choices)
 
 
-class TestGalleryData(TestCase):
-    pass
+class TestGalleryData(AjaxRequestMixin, TestCase):
+
+    @staticmethod
+    def create_url(**kwargs):
+        return reverse('gallery:gallery_data', kwargs=kwargs)
+
+    @classmethod
+    def setUpClass(cls):
+        cls.ctype = ContentType.objects.get_for_model(TestModel)
+        cls.object = TestModel.objects.create(name="Test object")
+        cls.image1 = models.Image.objects.create(
+            image=get_image_in_memory_data(),
+            position=0,
+            content_type=cls.ctype,
+            object_id=cls.object.id
+        )
+        cls.image2 = models.Image.objects.create(
+            image=get_image_in_memory_data(),
+            position=1,
+            content_type=cls.ctype,
+            object_id=cls.object.id
+        )
+        cls.another_object = TestModel.objects.create(
+            name="Another test object"
+        )
+        cls.another_image = models.Image.objects.create(
+            image=get_image_in_memory_data(),
+            position=0,
+            content_type=cls.ctype,
+            object_id=cls.another_object.id
+        )
+        cls.url = cls.create_url(
+            app_label='tests',
+            content_type=cls.ctype.model,
+            object_id=cls.object.pk
+        )
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.image1.delete()
+        cls.image2.delete()
+        cls.object.delete()
+        cls.another_image.delete()
+        cls.another_object.delete()
+
+    def test_not_ajax(self):
+        resp = self.client.get(self.url)
+        self.assertEqual(resp.status_code, 403)
