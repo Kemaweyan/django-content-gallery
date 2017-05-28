@@ -82,7 +82,7 @@ class TestImage(MultipleObjectsImageTestCase):
         self.image.save()
         self.assertTrue(self.image._object_changed())
 
-    def test_object_changed_object_id_changed(self):
+    def test_object_changed_object_ctype_changed(self):
         self.image.content_object = self.another_object
         self.image.save()
         self.assertTrue(self.image._object_changed())
