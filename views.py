@@ -51,8 +51,8 @@ def gallery_data(request, app_label, content_type, object_id):
     except:
         raise Http404
     else:
-        qs = models.Image.objects.filter(content_type__exact=ctype,
-                object_id__exact=object_id).order_by('position')
+        obj = get_object_or_404(ctype.model_class(), pk=object_id)
+        qs = obj.gallery.order_by('position')
         max_size = (
             settings.GALLERY_SMALL_IMAGE_WIDTH,
             settings.GALLERY_SMALL_IMAGE_HEIGHT
@@ -61,7 +61,10 @@ def gallery_data(request, app_label, content_type, object_id):
         images = []
         for img in qs:
             size = (img.image.width, img.image.height)
-            small_width, small_height = utils.calculate_image_size(size, max_size)
+            small_width, small_height = utils.calculate_image_size(
+                size,
+                max_size
+            )
             images.append({
                 "image": img.image_url,
                 "image_size": {
@@ -82,4 +85,7 @@ def gallery_data(request, app_label, content_type, object_id):
             "small_image_size": small_image_size,
             "thumbnail_size": thumbnail_size,
         }
-        return HttpResponse(json.dumps(response), content_type='application/json')
+        return HttpResponse(
+            json.dumps(response),
+            content_type='application/json'
+        )

@@ -137,3 +137,12 @@ class TestGalleryData(AjaxRequestMixin, TestCase):
         )
         resp = self.send_ajax_request(url)
         self.assertEqual(resp.status_code, 404)
+
+    def test_not_existing_object(self):
+        url = self.create_url(
+            app_label='tests',
+            content_type=self.ctype.model,
+            object_id=0
+        )
+        resp = self.send_ajax_request(url)
+        self.assertEqual(resp.status_code, 404)
