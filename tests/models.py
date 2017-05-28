@@ -23,12 +23,15 @@ class AnotherTestModel(django_models.Model):
 
 class ImageTestCase(TestCase):
 
-    @mock.patch('gallery.models.slugify_unique', return_value='foo')
-    def setUp(self, slugify_unique):
-        self.object = TestModel.objects.create(
+    @classmethod
+    def setUpClass(cls):
+        cls.object = TestModel.objects.create(
             name="TestObject"
         )
-        self.object.save()
+        cls.object.save()        
+
+    @mock.patch('gallery.models.slugify_unique', return_value='foo')
+    def setUp(self, slugify_unique):
         self.image = models.Image.objects.create(
             image=get_image_in_memory_data(),
             position=0,
@@ -40,7 +43,10 @@ class ImageTestCase(TestCase):
 
     def tearDown(self):
         self.image.delete()
-        self.object.delete()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.object.delete()
 
     @staticmethod
     def get_image():
@@ -53,18 +59,20 @@ class ImageTestCase(TestCase):
 
 class MultipleObjectsImageTestCase(ImageTestCase):
 
-    def setUp(self):
-        super().setUp()
-        self.second_object = TestModel.objects.create(
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.second_object = TestModel.objects.create(
             name="SecondTestObject"
         )
-        self.second_object.save()
-        self.another_object = AnotherTestModel.objects.create(
+        cls.second_object.save()
+        cls.another_object = AnotherTestModel.objects.create(
             name="AnotherTestObject"
         )
-        self.another_object.save()
+        cls.another_object.save()
 
-    def tearDown(self):
-        super().tearDown()
-        self.second_object.delete()
-        self.another_object.delete()
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
+        cls.second_object.delete()
+        cls.another_object.delete()
