@@ -7,27 +7,26 @@ from .. import settings
 
 from .utils import get_image_in_memory_data
 
-class TestModel(models.ContentGalleryMixin, django_models.Model):
+class BaseTestModel(django_models.Model):
     name = django_models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
 
+    class Meta:
+        abstract = True
 
-class AnotherTestModel(models.ContentGalleryMixin, django_models.Model):
-    name = django_models.CharField(max_length=100)
 
+class TestModel(models.ContentGalleryMixin, BaseTestModel):
+    pass
+
+
+class AnotherTestModel(models.ContentGalleryMixin, BaseTestModel):
     gallery_visible = False
 
-    def __str__(self):
-        return self.name
 
-
-class WrongTestModel(django_models.Model):
-    name = django_models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
+class WrongTestModel(BaseTestModel):
+    pass
 
 
 class ImageTestCase(TestCase):
