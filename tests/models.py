@@ -25,9 +25,11 @@ class ImageTestCase(TestCase):
 
     @mock.patch('gallery.models.slugify_unique', return_value='foo')
     def setUp(self, slugify_unique):
-        self.object = TestModel(name="TestObject")
+        self.object = TestModel.objects.create(
+            name="TestObject"
+        )
         self.object.save()
-        self.image = models.Image(
+        self.image = models.Image.objects.create(
             image=get_image_in_memory_data(),
             position=0,
             content_type=ContentType.objects.get_for_model(TestModel),
@@ -53,9 +55,13 @@ class MultipleObjectsImageTestCase(ImageTestCase):
 
     def setUp(self):
         super().setUp()
-        self.second_object = TestModel(name="SecondTestObject")
+        self.second_object = TestModel.objects.create(
+            name="SecondTestObject"
+        )
         self.second_object.save()
-        self.another_object = AnotherTestModel(name="AnotherTestObject")
+        self.another_object = AnotherTestModel.objects.create(
+            name="AnotherTestObject"
+        )
         self.another_object.save()
 
     def tearDown(self):
