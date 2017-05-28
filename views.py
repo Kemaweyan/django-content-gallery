@@ -28,6 +28,8 @@ def choices(request, pk):
 
 
 def gallery_data(request, app_label, content_type, object_id):
+    if not request.is_ajax():
+        raise PermissionDenied
     image_size = {
         "width": settings.GALLERY_IMAGE_WIDTH,
         "height": settings.GALLERY_IMAGE_HEIGHT
