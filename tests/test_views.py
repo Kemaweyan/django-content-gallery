@@ -128,3 +128,12 @@ class TestGalleryData(AjaxRequestMixin, TestCase):
     def test_not_ajax(self):
         resp = self.client.get(self.url)
         self.assertEqual(resp.status_code, 403)
+
+    def test_not_existing_content_type(self):
+        url = self.create_url(
+            app_label='ajdsksajdjas',
+            content_type=self.ctype.model,
+            object_id=self.object.pk
+        )
+        resp = self.send_ajax_request(url)
+        self.assertEqual(resp.status_code, 404)
