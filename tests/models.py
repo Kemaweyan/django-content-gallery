@@ -7,14 +7,23 @@ from .. import settings
 
 from .utils import get_image_in_memory_data
 
-class TestModel(django_models.Model):
+class TestModel(models.ContentGalleryMixin, django_models.Model):
     name = django_models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
 
 
-class AnotherTestModel(django_models.Model):
+class AnotherTestModel(models.ContentGalleryMixin, django_models.Model):
+    name = django_models.CharField(max_length=100)
+
+    gallery_visible = False
+
+    def __str__(self):
+        return self.name
+
+
+class WrongTestModel(django_models.Model):
     name = django_models.CharField(max_length=100)
 
     def __str__(self):
@@ -27,8 +36,7 @@ class ImageTestCase(TestCase):
     def setUpClass(cls):
         cls.object = TestModel.objects.create(
             name="TestObject"
-        )
-        cls.object.save()        
+        )     
 
     @mock.patch('gallery.models.slugify_unique', return_value='foo')
     def setUp(self, slugify_unique):
@@ -65,11 +73,9 @@ class MultipleObjectsImageTestCase(ImageTestCase):
         cls.second_object = TestModel.objects.create(
             name="SecondTestObject"
         )
-        cls.second_object.save()
         cls.another_object = AnotherTestModel.objects.create(
             name="AnotherTestObject"
         )
-        cls.another_object.save()
 
     @classmethod
     def tearDownClass(cls):
