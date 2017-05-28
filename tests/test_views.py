@@ -1,10 +1,11 @@
 import json
 
-from django.test import TestCase
+from django.test import TestCase, mock
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 
 from .. import models
+from .. import settings
 
 from .models import TestModel, AnotherTestModel, WrongTestModel
 from .utils import get_image_in_memory_data
@@ -131,7 +132,7 @@ class TestGalleryData(AjaxRequestMixin, TestCase):
 
     def test_not_existing_content_type(self):
         url = self.create_url(
-            app_label='ajdsksajdjas',
+            app_label='asjfdasfdsa',
             content_type=self.ctype.model,
             object_id=self.object.pk
         )
@@ -146,3 +147,63 @@ class TestGalleryData(AjaxRequestMixin, TestCase):
         )
         resp = self.send_ajax_request(url)
         self.assertEqual(resp.status_code, 404)
+
+    @mock.patch('gallery.utils.calculate_image_size', return_value=(100, 100))
+    def test_correct_response(self, calc_size):
+        resp = self.send_ajax_request(self.url)
+        self.assertEqual(resp.status_code, 200)
+        data = json.loads(resp.content.decode("utf-8"))
+        self.assertDictEqual(
+            data['image_size'],
+            {
+                "width": settings.GALLERY_IMAGE_WIDTH,
+                "height": settings.GALLERY_IMAGE_HEIGHT
+            }
+        )
+        self.assertDictEqual(
+            data['small_image_size'],
+            {
+                "width": settings.GALLERY_SMALL_IMAGE_WIDTH,
+                "height": settings.GALLERY_SMALL_IMAGE_HEIGHT
+            }
+        )
+        self.assertDictEqual(
+            data['thumbnail_size'],
+            {
+                "width": settings.GALLERY_THUMBNAIL_WIDTH,
+                "height": settings.GALLERY_THUMBNAIL_HEIGHT
+            }
+        )
+        images = data['images']
+        self.assertEqual(len(images), 2)
+        self.assertListEqual(
+            images,
+            [
+                {
+                    "image": self.image1.image_url,
+                    "image_size": {
+                        "width": self.image1.image.width,
+                        "height": self.image1.image.height
+                    },
+                    "small_image_size": {
+                        "width": 100,
+                        "height": 100
+                    },
+                    "small_image": self.image1.small_image_url,
+                    "thumbnail": self.image1.thumbnail_url
+                },
+                {
+                    "image": self.image2.image_url,
+                    "image_size": {
+                        "width": self.image2.image.width,
+                        "height": self.image2.image.height
+                    },
+                    "small_image_size": {
+                        "width": 100,
+                        "height": 100
+                    },
+                    "small_image": self.image2.small_image_url,
+                    "thumbnail": self.image2.thumbnail_url
+                }
+            ]
+        )
