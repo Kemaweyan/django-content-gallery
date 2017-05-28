@@ -34,9 +34,7 @@ class ImageTestCase(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.object = TestModel.objects.create(
-            name="TestObject"
-        )     
+        cls.object = TestModel.objects.create(name="TestObject")
 
     @mock.patch('gallery.models.slugify_unique', return_value='foo')
     def setUp(self, slugify_unique):
