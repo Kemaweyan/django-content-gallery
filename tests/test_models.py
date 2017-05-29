@@ -1,5 +1,6 @@
-from django.test import mock
+from django.test import mock, TestCase
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import QuerySet
 
 from .. import models
 
@@ -157,3 +158,17 @@ class TestImage(MultipleObjectsImageTestCase):
         image_mock.small_preview_url = 'foo'
         with mock.patch.object(self.image, 'image', image_mock):
             self.assertEqual(self.image.small_preview_url, 'foo')
+
+
+class TestImageQuerySet(TestCase):
+
+    def test_delete(self):
+        obj1 = mock.MagicMock()
+        obj2 = mock.MagicMock()
+        query_set = mock.MagicMock(spec=models.ImageQuerySet)
+        query_set.__iter__.return_value = [obj1, obj2]
+        with mock.patch.object(QuerySet, 'delete') as delete:
+            models.ImageQuerySet.delete(query_set)
+            delete.assert_called()
+        obj1.delete_files.assert_called()
+        obj2.delete_files.assert_called()
