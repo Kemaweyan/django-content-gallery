@@ -7,7 +7,7 @@ from ..templatetags import content_gallery
 from .. import models
 from .. import settings
 
-from .models import TestModel, ViewsTestCase, mock_decorator
+from .models import ViewsTestCase
 from .utils import get_image_in_memory_data
 
 class TestGetFirstImage(ViewsTestCase):
@@ -29,11 +29,6 @@ class TestGetFirstImage(ViewsTestCase):
 
 class TestGalleryImageData(ViewsTestCase):
 
-    @mock.patch.object(
-        content_gallery.register,
-        'simple_tag',
-        mock_decorator
-    )
     def test_object_without_images(self):
         with mock.patch.object(
                 content_gallery,
@@ -46,11 +41,6 @@ class TestGalleryImageData(ViewsTestCase):
         data = json.loads(result['data_image'])
         self.assertDictEqual(data, {})
 
-    @mock.patch.object(
-        content_gallery.register,
-        'simple_tag',
-        mock_decorator
-    )
     def test_object_with_image(self):
         with mock.patch.object(
                 content_gallery,
@@ -64,11 +54,6 @@ class TestGalleryImageData(ViewsTestCase):
             json.loads(result['data_image'])
 
     @mock.patch('django.utils.html.escape', lambda x: x)
-    @mock.patch.object(
-        content_gallery.register,
-        'simple_tag',
-        mock_decorator
-    )
     def test_object_with_image_unescaped(self):
         with mock.patch.object(
                 content_gallery,
@@ -85,5 +70,51 @@ class TestGalleryImageData(ViewsTestCase):
                 'app_label': self.image1.content_type.app_label,
                 'content_type': self.image1.content_type.model,
                 'object_id': str(self.image1.object_id)
+            }
+        )
+
+
+class TestGalleryPreview(ViewsTestCase):
+
+    def test_get_context(self):
+        with mock.patch.object(
+                content_gallery,
+                'gallery_image_data',
+                return_value={'foo': 'bar'}
+        ) as gallery_image_data:
+            context = content_gallery.gallery_preview(self.object)
+            gallery_image_data.assert_called_with(self.object)
+        self.assertDictEqual(
+            context,
+            {
+                'foo': 'bar',
+                'image_width': settings.GALLERY_PREVIEW_WIDTH,
+                'image_height': settings.GALLERY_PREVIEW_HEIGHT,
+                'div_width': settings.GALLERY_PREVIEW_WIDTH + 14,
+                'div_height': settings.GALLERY_PREVIEW_HEIGHT + 14,
+                'zoom_left': settings.GALLERY_PREVIEW_WIDTH - 55
+            }
+        )
+
+
+class TestGallerySmallPreview(ViewsTestCase):
+
+    def test_get_context(self):
+        with mock.patch.object(
+                content_gallery,
+                'gallery_image_data',
+                return_value={'foo': 'bar'}
+        ) as gallery_image_data:
+            context = content_gallery.gallery_small_preview(self.object)
+            gallery_image_data.assert_called_with(self.object)
+        self.assertDictEqual(
+            context,
+            {
+                'foo': 'bar',
+                'image_width': settings.GALLERY_SMALL_PREVIEW_WIDTH,
+                'image_height': settings.GALLERY_SMALL_PREVIEW_HEIGHT,
+                'div_width': settings.GALLERY_SMALL_PREVIEW_WIDTH + 14,
+                'div_height': settings.GALLERY_SMALL_PREVIEW_HEIGHT + 14,
+                'zoom_left': settings.GALLERY_SMALL_PREVIEW_WIDTH - 15
             }
         )
