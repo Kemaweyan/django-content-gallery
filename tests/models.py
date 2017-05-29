@@ -43,7 +43,6 @@ class ImageTestCase(TestCase):
             content_type=ContentType.objects.get_for_model(TestModel),
             object_id=self.object.id
         )
-        self.image.save()
         self.image = self.get_image()
 
     def tearDown(self):
@@ -79,3 +78,33 @@ class MultipleObjectsImageTestCase(ImageTestCase):
         super().tearDownClass()
         cls.second_object.delete()
         cls.another_object.delete()
+
+
+class ViewsTestCase(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.ctype = ContentType.objects.get_for_model(TestModel)
+        cls.object = TestModel.objects.create(name="Test object")
+        cls.image1 = models.Image.objects.create(
+            image=get_image_in_memory_data(),
+            position=0,
+            content_type=cls.ctype,
+            object_id=cls.object.id
+        )
+        cls.image2 = models.Image.objects.create(
+            image=get_image_in_memory_data(),
+            position=1,
+            content_type=cls.ctype,
+            object_id=cls.object.id
+        )
+        cls.alone_object = TestModel.objects.create(
+            name="Alone test object"
+        )
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.image1.delete()
+        cls.image2.delete()
+        cls.object.delete()
+        cls.alone_object.delete()

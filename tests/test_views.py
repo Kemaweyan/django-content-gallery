@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from .. import models
 from .. import settings
 
-from .models import TestModel, AnotherTestModel, WrongTestModel
+from .models import *
 from .utils import get_image_in_memory_data
 
 class AjaxRequestMixin:
@@ -81,7 +81,7 @@ class TestChoices(AjaxRequestMixin, TestCase):
         self.assertIn(obj2, choices)
 
 
-class TestGalleryData(AjaxRequestMixin, TestCase):
+class TestGalleryData(AjaxRequestMixin, ViewsTestCase):
 
     @staticmethod
     def create_url(**kwargs):
@@ -89,28 +89,12 @@ class TestGalleryData(AjaxRequestMixin, TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.ctype = ContentType.objects.get_for_model(TestModel)
-        cls.object = TestModel.objects.create(name="Test object")
-        cls.image1 = models.Image.objects.create(
-            image=get_image_in_memory_data(),
-            position=0,
-            content_type=cls.ctype,
-            object_id=cls.object.id
-        )
-        cls.image2 = models.Image.objects.create(
-            image=get_image_in_memory_data(),
-            position=1,
-            content_type=cls.ctype,
-            object_id=cls.object.id
-        )
-        cls.another_object = TestModel.objects.create(
-            name="Another test object"
-        )
+        super().setUpClass()
         cls.another_image = models.Image.objects.create(
             image=get_image_in_memory_data(),
             position=0,
             content_type=cls.ctype,
-            object_id=cls.another_object.id
+            object_id=cls.alone_object.id
         )
         cls.url = cls.create_url(
             app_label='tests',
@@ -120,11 +104,8 @@ class TestGalleryData(AjaxRequestMixin, TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls.image1.delete()
-        cls.image2.delete()
-        cls.object.delete()
         cls.another_image.delete()
-        cls.another_object.delete()
+        super().tearDownClass()
 
     def test_not_ajax(self):
         resp = self.client.get(self.url)

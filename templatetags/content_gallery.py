@@ -1,15 +1,15 @@
 import json
 
-from django.template import Library
+from django import template
 from django.conf import settings as global_sett
 from django.utils.html import escape
 
 from .. import settings
 
-register = Library()
+register = template.Library()
 
 def get_first_image(obj):
-    images = obj.gallery.all().order_by('position')
+    images = obj.gallery.all().order_by('position')[:1]
     if not images:
         return None
     return images[0]
