@@ -2,7 +2,7 @@ import json
 
 from django import template
 from django.conf import settings as global_sett
-from django.utils.html import escape
+from django.utils import html
 
 from .. import settings
 
@@ -29,7 +29,7 @@ def gallery_image_data(obj):
     data_json = json.dumps(data)
     return {
         'image': image,
-        'data_image': escape(data_json)
+        'data_image': html.escape(data_json)
     }
 
 

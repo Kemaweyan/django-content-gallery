@@ -108,3 +108,8 @@ class ViewsTestCase(TestCase):
         cls.image2.delete()
         cls.object.delete()
         cls.alone_object.delete()
+
+def mock_decorator(func):
+    def wrapper(*args, **kwargs):
+        return func(*args, **kwargs)
+    return wrapper
