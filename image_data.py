@@ -26,11 +26,11 @@ class BaseImageData(metaclass=ABCMeta):
 
     @abstractmethod
     def _create_image(self, image):
-        pass
+        """Creates image using data of uploaded file"""
 
     @abstractmethod
     def _create_filename(self, filename):
-        pass
+        """Creates name of the file"""
 
     def _change_ext(self, filename):
         name = utils.get_name(self.name)
