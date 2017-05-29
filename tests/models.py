@@ -113,3 +113,10 @@ def mock_decorator(func):
     def wrapper(*args, **kwargs):
         return func(*args, **kwargs)
     return wrapper
+
+def mock_decorator_arg(arg):
+    def real_decorator(func):
+        def wrapper(*args, **kwargs):
+            return func(*args, **kwargs)
+        return wrapper
+    return real_decorator
