@@ -148,3 +148,23 @@ class TestGalleryImageFieldFile(ImageTestCase):
         self.field_file.preview.delete.assert_called()
         self.field_file.small_preview.delete.assert_called()
         self.field_file.small_image.delete.assert_called()
+
+    def test_thumbnail_url(self):
+        url = self.field_file.thumbnail_url
+        self.assertEqual(url, self.field_file.thumbnail.url)
+
+    def test_image_url(self):
+        url = self.field_file.image_url
+        self.assertEqual(url, self.field_file.image_data.url)
+
+    def test_smal_image_url(self):
+        url = self.field_file.small_image_url
+        self.assertEqual(url, self.field_file.small_image.url)
+
+    def test_preview_url(self):
+        url = self.field_file.preview_url
+        self.assertEqual(url, self.field_file.preview.url)
+
+    def test_small_preview_url(self):
+        url = self.field_file.small_preview_url
+        self.assertEqual(url, self.field_file.small_preview.url)
