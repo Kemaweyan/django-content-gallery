@@ -4,7 +4,7 @@ import copy
 
 from django import forms
 from django.contrib.contenttypes.models import ContentType
-from django.utils.safestring import mark_safe
+from django.utils import safestring
 from django.template.loader import render_to_string
 from django.db.models import BLANK_CHOICE_DASH
 from django.contrib.admin import widgets
@@ -14,6 +14,29 @@ from . import utils
 from . import settings
 
 class ContentTypeSelect(forms.Select):
+
+    js = '''<script type="text/javascript">
+        (function($) {
+            $(function() {
+                $("#id_content_type").change(function() {
+                    $("#id_object_id option:gt(0)").remove();
+                    if (!this.value) return
+                    $.ajax({
+                        url: "%s" + this.value,
+                        dataType: "json",
+                        success: function (result) {
+                            var $el = $("#id_object_id");
+                            $.each(result, function (i, product) {
+                                $el.append($("<option></option>")
+                                    .attr("value", product.id)
+                                    .text(product.name));
+                            });
+                        }
+                    });
+                });
+            });
+        })(django.jQuery);
+    </script>'''
 
     def _filter_choices(self):
         filtered_choices = []
@@ -33,30 +56,8 @@ class ContentTypeSelect(forms.Select):
     def render(self, name, value, attrs=None):
         self._filter_choices()
         output = super().render(name, value, attrs)
-        js = '''<script type="text/javascript">
-            (function($) {
-                $(function() {
-                    $("#id_content_type").change(function() {
-                        $("#id_object_id option:gt(0)").remove();
-                        if (!this.value) return
-                        $.ajax({
-                            url: "%s" + this.value,
-                            dataType: "json",
-                            success: function (result) {
-                                var $el = $("#id_object_id");
-                                $.each(result, function (i, product) {
-                                    $el.append($("<option></option>")
-                                        .attr("value", product.id)
-                                        .text(product.name));
-                                });
-                            }
-                        });
-                    });
-                });
-            })(django.jQuery);
-        </script>'''
-        output += js % utils.get_choices_url_pattern()
-        return mark_safe(output)
+        output += self.js % utils.get_choices_url_pattern()
+        return safestring.mark_safe(output)
 
 
 class ObjectIdSelect(forms.Select):
