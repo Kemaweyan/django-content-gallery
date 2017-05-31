@@ -5,6 +5,7 @@ from django.contrib.contenttypes.admin import GenericInlineModelAdmin
 from django.conf.urls import url
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
+from django.core.exceptions import PermissionDenied
 
 from . import models
 from . import forms
@@ -64,12 +65,14 @@ class ImageAdmin(admin.ModelAdmin):
         return extra_urls + urls
 
     def preview(self, request, pk):
+        if not request.is_ajax():
+            raise PermissionDenied
         image = get_object_or_404(models.Image, pk=pk)
         data = utils.create_image_data(image)
         response = {
             "small_preview_url": image.small_preview_url,
             "position": image.position,
-            "image_data": json.dumps(data),
+            "image_data": data,
             "zoom_url": utils.create_static_url(
                 "content_gallery/img/zoom-small.png"
             ),

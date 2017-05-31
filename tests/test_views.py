@@ -10,15 +10,6 @@ from .. import settings
 from .models import *
 from .utils import get_image_in_memory_data
 
-class AjaxRequestMixin:
-
-    def send_ajax_request(self, url):
-        return self.client.get(
-            url,
-            HTTP_X_REQUESTED_WITH='XMLHttpRequest'
-        )
-
-
 class TestChoices(AjaxRequestMixin, TestCase):
 
     @staticmethod

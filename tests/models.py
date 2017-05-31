@@ -108,3 +108,12 @@ class ViewsTestCase(TestCase):
         cls.image2.delete()
         cls.object.delete()
         cls.alone_object.delete()
+
+
+class AjaxRequestMixin:
+
+    def send_ajax_request(self, url):
+        return self.client.get(
+            url,
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest'
+        )
