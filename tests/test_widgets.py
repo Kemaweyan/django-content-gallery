@@ -1,10 +1,14 @@
+import json
+
 from django.test import mock, TestCase
 from django.contrib.contenttypes.models import ContentType
 from django.forms import Select
 from django.db.models import BLANK_CHOICE_DASH
+from django.contrib.admin.widgets import AdminFileWidget
 
 from .. import widgets
 from .. import utils
+from .. import settings
 
 from .models import *
 
@@ -106,3 +110,86 @@ class TestObjectIdSelect(TestCase):
             render.assert_called_with('name', 'value', None)
         self.assertEqual(result, 'foo')
         widget._create_choices.assert_called()
+
+
+class TestImageWidget(TestCase):
+
+    def test_render_without_image(self):
+        widget = mock.MagicMock(spec=widgets.ImageWidget)
+        widget.template_with_initial = "bar"
+        with mock.patch.object(
+            AdminFileWidget,
+            'render',
+            return_value='foo'
+        ) as render:
+            result = widgets.ImageWidget.render(widget, 'name', None)
+            render.assert_called_with('name', None, None)
+        self.assertEqual(result, 'foo')
+        self.assertEqual(widget.template_with_initial, 'bar')
+
+    @mock.patch('django.utils.html.escape', return_value='escaped data')
+    def test_render_with_image(self, escape):
+        widget = mock.MagicMock(spec=widgets.ImageWidget)
+        widget.template = "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}"
+        with mock.patch.object(
+            utils,
+            'create_image_data',
+            return_value='data'
+        ) as create_data, mock.patch.object(
+            utils,
+            'create_static_url',
+            return_value='url'
+        ) as create_url, mock.patch.object(
+            AdminFileWidget,
+            'render',
+            return_value='foo'
+        ) as render:
+            result = widgets.ImageWidget.render(widget, 'name', 'image')
+            render.assert_called_with('name', 'image', None)
+            create_url.assert_called_with("content_gallery/img/zoom.png")
+            create_data.assert_called_with('image')
+        escape.assert_called_with(json.dumps('data'))
+        self.assertEqual(result, 'foo')
+        self.assertEqual(
+            widget.template_with_initial,
+            "\n".join([
+                str(settings.GALLERY_PREVIEW_WIDTH + 14),
+                str(settings.GALLERY_PREVIEW_HEIGHT + 14),
+                str(settings.GALLERY_PREVIEW_WIDTH),
+                str(settings.GALLERY_PREVIEW_HEIGHT),
+                str(settings.GALLERY_PREVIEW_HEIGHT),
+                "escaped data",
+                "url",
+                str(settings.GALLERY_PREVIEW_WIDTH - 55)
+            ])
+        )
+
+
+class TestImageInlineWidget(TestCase):
+
+    def test_render_without_image(self):
+        widget = mock.MagicMock(spec=widgets.ImageInlineWidget)
+        result = widgets.ImageInlineWidget.render(widget, 'name', None)
+        self.assertEqual(result, "")
+
+    @mock.patch('django.template.loader.render_to_string', return_value="foo")
+    def test_render_with_image(self, render_to_string):
+        widget = mock.MagicMock(spec=widgets.ImageInlineWidget)
+        widget.template_name = "bar"
+        image = mock.MagicMock()
+        image.small_preview_url = 'url'
+        with mock.patch.object(
+            utils,
+            'create_image_data',
+            return_value='data'
+        ) as create_data:
+            result = widgets.ImageInlineWidget.render(widget, 'name', image)
+            create_data.assert_called_with(image)
+        self.assertEqual(result, "foo")
+        render_to_string.assert_called_with(
+            'bar',
+            {
+                'preview_src': 'url',
+                'image_data': json.dumps('data')
+            }
+        )

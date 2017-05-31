@@ -5,10 +5,10 @@ import copy
 from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.utils import safestring
-from django.template.loader import render_to_string
+from django.template import loader
 from django.db.models import BLANK_CHOICE_DASH
 from django.contrib.admin import widgets
-from django.utils.html import escape
+from django.utils import html
 
 from . import utils
 from . import settings
@@ -99,7 +99,7 @@ class ImageWidget(widgets.AdminFileWidget):
                 settings.GALLERY_PREVIEW_WIDTH,
                 settings.GALLERY_PREVIEW_HEIGHT,
                 settings.GALLERY_PREVIEW_HEIGHT,
-                escape(json.dumps(data)),
+                html.escape(json.dumps(data)),
                 utils.create_static_url("content_gallery/img/zoom.png"),
                 settings.GALLERY_PREVIEW_WIDTH - 55
             )
@@ -117,4 +117,4 @@ class ImageInlineWidget(forms.Widget):
             "preview_src": image.small_preview_url,
             "image_data": json.dumps(data)
         }
-        return render_to_string(self.template_name, context)
+        return loader.render_to_string(self.template_name, context)
