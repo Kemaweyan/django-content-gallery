@@ -3,6 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import QuerySet
 
 from .. import models
+from .. import utils
 
 from .models import *
 from .utils import get_image_in_memory_data
@@ -10,17 +11,25 @@ from .utils import get_image_in_memory_data
 
 class TestUniqueSlugCheck(ImageTestCase):
 
-    @mock.patch('gallery.utils.name_in_db', return_value='gallery/foo.jpg')
-    def test_name_exisits(self, name_in_db):
-        result = models._unique_slug_check("foo.jpg", [])
-        self.assertEqual(result, False)
-        name_in_db.assert_called_once_with("foo.jpg")
+    def test_name_exisits(self):
+        with mock.patch.object(
+            utils,
+            'name_in_db',
+            return_value='gallery/foo.jpg'
+        ) as name_in_db:
+            result = models._unique_slug_check("foo.jpg", [])
+            self.assertEqual(result, False)
+            name_in_db.assert_called_once_with("foo.jpg")
 
-    @mock.patch('gallery.utils.name_in_db', return_value='gallery/bar.jpg')
-    def test_name_does_not_exisit(self, name_in_db):
-        result = models._unique_slug_check("bar.jpg", [])
-        self.assertEqual(result, True)
-        name_in_db.assert_called_once_with("bar.jpg")
+    def test_name_does_not_exisit(self):
+        with mock.patch.object(
+            utils,
+            'name_in_db',
+            return_value='gallery/bar.jpg'
+        ) as name_in_db:
+            result = models._unique_slug_check("bar.jpg", [])
+            self.assertEqual(result, True)
+            name_in_db.assert_called_once_with("bar.jpg")
 
 
 class TestImage(MultipleObjectsImageTestCase):
@@ -88,10 +97,14 @@ class TestImage(MultipleObjectsImageTestCase):
         self.image.save()
         self.assertTrue(self.image._object_changed())
 
-    @mock.patch('gallery.models.slugify_unique', return_value='foo')
-    def test_get_slug(self, slugify_unique):
-        self.assertEqual('foo', self.image._get_slug())
-        slugify_unique.assert_called_once_with('TestObject')
+    def test_get_slug(self):
+        with mock.patch.object(
+            models,
+            'slugify_unique',
+            return_value='foo'
+        ) as slugify_unique:
+            self.assertEqual('foo', self.image._get_slug())
+            slugify_unique.assert_called_once_with('TestObject')
 
     def test_save_data_new_image(self):
         image = models.Image(

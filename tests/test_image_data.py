@@ -1,6 +1,7 @@
 from django.test import mock, TestCase
 
 from .. import image_data
+from .. import utils
 
 class MockImageTestCase(TestCase):
 
@@ -61,107 +62,132 @@ class TestImageFile(MockImageTestCase):
         )
         mock_func.assert_called_with('bar')
 
-    @mock.patch('gallery.utils.create_path', return_value='foo')
-    def test_path_property(self, create_path):
+    def test_path_property(self):
         self.image_file.filename = 'bar'
-        self.assertEqual(
-            image_data.ImageFile.path.fget(self.image_file),
-            'foo'
-        )
-        create_path.assert_called_with('bar')
+        with mock.patch.object(
+            utils,
+            'create_path',
+            return_value='foo'
+        ) as create_path:
+            self.assertEqual(
+                image_data.ImageFile.path.fget(self.image_file),
+                'foo'
+            )
+            create_path.assert_called_with('bar')
 
-    @mock.patch('gallery.utils.create_url', return_value='foo')
-    def test_url_property(self, create_url):
+    def test_url_property(self):
         self.image_file.filename = 'bar'
-        self.assertEqual(
-            image_data.ImageFile.url.fget(self.image_file),
-            'foo'
-        )
-        create_url.assert_called_with('bar')
+        with mock.patch.object(
+            utils,
+            'create_url',
+            return_value='foo'
+        ) as create_url:
+            self.assertEqual(
+                image_data.ImageFile.url.fget(self.image_file),
+                'foo'
+            )
+            create_url.assert_called_with('bar')
 
     def test_change_ext(self):
         self.image_file.name = 'foo.jpg'
         image_data.ImageFile._change_ext(self.image_file, 'bar.png')
         self.assertEqual(self.image_file.name, 'foo.png')
 
-    @mock.patch('gallery.utils.get_ext', return_value='.jpg')
-    def test_save_new_image(self, get_ext):
+    def test_save_new_image(self):
         self.image.name = 'foo.jpg'
         self.image_file.name = self.image.name
-        image_data.ImageFile.save(self.image_file, self.image, 'bar', '')
+        with mock.patch.object(
+            utils,
+            'get_ext',
+            return_value='.jpg'
+        ) as get_ext:
+            image_data.ImageFile.save(self.image_file, self.image, 'bar', '')
+            get_ext.assert_called_with('foo.jpg')
         self.image_file._set_name.assert_called_with('')
         self.image_file.delete.assert_not_called()
-        get_ext.assert_called_with('foo.jpg')
         self.assertEqual(self.image_file.name, 'bar.jpg')
         self.image_file._rename_file.assert_not_called()
         self.image_file._change_ext.assert_not_called()
         self.image_file._create_image.assert_called_with(self.image)
 
-    @mock.patch('gallery.utils.get_ext', return_value='.jpg')
-    def test_save_image_with_new_file(self, get_ext):
+    def test_save_image_with_new_file(self):
         self.image.name = 'foo.jpg'
         self.image_file.name = 'gallery/bar.jpg'
-        image_data.ImageFile.save(
-            self.image_file,
-            self.image,
-            '',
-            self.image.name
-        )
+        with mock.patch.object(
+            utils,
+            'get_ext',
+            return_value='.jpg'
+        ) as get_ext:
+            image_data.ImageFile.save(
+                self.image_file,
+                self.image,
+                '',
+                self.image.name
+            )
+            get_ext.assert_not_called()
         self.image_file._set_name.assert_called_with(self.image.name)
         self.image_file.delete.assert_called()
-        get_ext.assert_not_called()
         self.assertEqual(self.image_file.name, 'gallery/bar.jpg')
         self.image_file._rename_file.assert_not_called()
         self.image_file._change_ext.assert_called_with(self.image.name)
         self.image_file._create_image.assert_called_with(self.image)
 
-    @mock.patch('gallery.utils.get_ext', return_value='.jpg')
-    def test_save_image_change_content_object(self, get_ext):
+    def test_save_image_change_content_object(self):
         self.image_file.name = 'gallery/foo.jpg'
-        image_data.ImageFile.save(
-            self.image_file,
-            self.image,
-            'bar',
-            self.image.name
-        )
+        with mock.patch.object(
+            utils,
+            'get_ext',
+            return_value='.jpg'
+        ) as get_ext:
+            image_data.ImageFile.save(
+                self.image_file,
+                self.image,
+                'bar',
+                self.image.name
+            )
+            get_ext.assert_called_with(self.image.name)
         self.image_file._set_name.assert_called_with(self.image.name)
         self.image_file.delete.assert_not_called()
-        get_ext.assert_called_with(self.image.name)
         self.assertEqual(self.image_file.name, 'bar.jpg')
         self.image_file._rename_file.assert_called_with('bar.jpg')
         self.image_file._change_ext.assert_not_called()
         self.image_file._create_image.assert_not_called()
 
-    @mock.patch('gallery.utils.get_ext', return_value='.jpg')
-    def test_save_image_with_new_file_change_content_object(self, get_ext):
+    def test_save_image_with_new_file_change_content_object(self):
         self.image.name = 'foo.jpg'
         self.image_file.name = 'gallery/bar.jpg'
-        image_data.ImageFile.save(
-            self.image_file,
-            self.image,
-            'baz',
-            self.image.name
-        )
+        with mock.patch.object(
+            utils,
+            'get_ext',
+            return_value='.jpg'
+        ) as get_ext:
+            image_data.ImageFile.save(
+                self.image_file,
+                self.image,
+                'baz',
+                self.image.name
+            )
+            get_ext.assert_not_called()
         self.image_file._set_name.assert_called_with(self.image.name)
         self.image_file.delete.assert_called()
-        get_ext.assert_not_called()
         self.assertEqual(self.image_file.name, 'baz.jpg')
         self.image_file._rename_file.assert_not_called()
         self.image_file._change_ext.assert_not_called()
         self.image_file._create_image.assert_called_with(self.image)
 
     @mock.patch('os.rename')
-    @mock.patch(
-        'gallery.utils.create_path', 
-        return_value='gallery/baz_bar.jpg'
-    )
-    def test_rename_file(self, create_path, rename):
+    def test_rename_file(self, rename):
         mock_func = mock.MagicMock(return_value='baz_bar.jpg')
         self.image_file._create_filename = mock_func
         self.image_file.path = 'gallery/foo_bar.jpg'
-        image_data.ImageFile._rename_file(self.image_file, 'baz.jpg')
+        with mock.patch.object(
+            utils,
+            'create_path', 
+            return_value='gallery/baz_bar.jpg'
+        ) as create_path:
+            image_data.ImageFile._rename_file(self.image_file, 'baz.jpg')
+            create_path.assert_called_with('baz_bar.jpg')
         mock_func.assert_called_with('baz.jpg')
-        create_path.assert_called_with('baz_bar.jpg')
         rename.assert_called_with(
             'gallery/foo_bar.jpg',
             'gallery/baz_bar.jpg'
@@ -179,12 +205,12 @@ class TestImageFile(MockImageTestCase):
         image_data.ImageFile.delete(self.image_file)
         remove.assert_called_with('foo.jpg')
 
-    @mock.patch('gallery.utils.image_resize')
-    def test_create_image(self, image_resize):
+    def test_create_image(self):
         self.image_file.path = 'foo.jpg'
         self.image_file.size = (100, 50)
-        image_data.ImageFile._create_image(self.image_file, self.image)
-        image_resize.assert_called_with(self.image, 'foo.jpg', (100, 50))
+        with mock.patch.object(utils, 'image_resize') as image_resize:
+            image_data.ImageFile._create_image(self.image_file, self.image)
+            image_resize.assert_called_with(self.image, 'foo.jpg', (100, 50))
 
 
 class TestInMemoryImageData(MockImageTestCase):
@@ -218,20 +244,28 @@ class TestInMemoryImageData(MockImageTestCase):
         )
         self.assertEqual(name, 'gallery/foo.jpg')
 
-    @mock.patch('gallery.utils.create_in_memory_image', return_value='data')
-    def test_create_image(self, create_func):
+    def test_create_image(self):
         self.memory_data.name = 'foo.jpg'
         self.memory_data.size = (100, 50)
-        image_data.InMemoryImageData._create_image(
-            self.memory_data,
-            self.image
-        )
+        with mock.patch.object(
+            utils,
+            'create_in_memory_image',
+            return_value='data'
+        ) as create_func:
+            image_data.InMemoryImageData._create_image(
+                self.memory_data,
+                self.image
+            )
+            create_func.assert_called_with(self.image, 'foo.jpg', (100, 50))
         self.assertEqual(self.memory_data.data, 'data')
-        create_func.assert_called_with(self.image, 'foo.jpg', (100, 50))
 
-    @mock.patch('gallery.utils.name_in_db', return_value='gallery/foo.jpg')
-    def test_name_in_db(self, name_in_db):
+    def test_name_in_db(self):
         self.memory_data.name = 'foo.jpg'
-        name = image_data.InMemoryImageData.name_in_db.fget(self.memory_data)
+        with mock.patch.object(
+            utils,
+            'name_in_db',
+            return_value='gallery/foo.jpg'
+        ) as name_in_db:
+            name = image_data.InMemoryImageData.name_in_db.fget(self.memory_data)
+            name_in_db.assert_called_with('foo.jpg')
         self.assertEqual(name, 'gallery/foo.jpg')
-        name_in_db.assert_called_with('foo.jpg')

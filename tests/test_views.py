@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 
 from .. import models
 from .. import settings
+from .. import utils
 
 from .models import *
 from .utils import get_image_in_memory_data
@@ -120,9 +121,13 @@ class TestGalleryData(AjaxRequestMixin, ViewsTestCase):
         resp = self.send_ajax_request(url)
         self.assertEqual(resp.status_code, 404)
 
-    @mock.patch('gallery.utils.calculate_image_size', return_value=(100, 100))
-    def test_correct_response(self, calc_size):
-        resp = self.send_ajax_request(self.url)
+    def test_correct_response(self):
+        with mock.patch.object(
+            utils,
+            'calculate_image_size',
+            return_value=(100, 100)
+        ):
+            resp = self.send_ajax_request(self.url)
         self.assertEqual(resp.status_code, 200)
         data = json.loads(resp.content.decode("utf-8"))
         self.assertDictEqual(

@@ -5,6 +5,7 @@ from django.test import mock
 from .. import fields
 from .. import models
 from .. import settings
+from .. import image_data
 
 from .models import ImageTestCase
 
@@ -12,8 +13,8 @@ class TestGalleryImageFieldFile(ImageTestCase):
 
     def setUp(self):
         super().setUp()
-        with mock.patch('gallery.image_data.ImageFile') as f:
-            with mock.patch('gallery.image_data.InMemoryImageData') as m:
+        with mock.patch.object(image_data, 'ImageFile') as f:
+            with mock.patch.object(image_data, 'InMemoryImageData') as m:
                 self.field_file = fields.GalleryImageFieldFile(
                     self.image,
                     mock.MagicMock(),
@@ -53,23 +54,23 @@ class TestGalleryImageFieldFile(ImageTestCase):
             settings.GALLERY_IMAGE_HEIGHT
         )
 
-    @mock.patch('gallery.settings.MEDIA_ROOT', '/media')
-    @mock.patch('gallery.settings.GALLERY_PATH', 'gallery')
     @mock.patch('os.mkdir')
     @mock.patch('os.path.isdir', return_value=True)
     def test_check_dir_exists(self, isdir, mkdir):
         path = '/media' + os.sep + 'gallery'
-        self.field_file._check_dir()
+        with mock.patch.object(settings, 'MEDIA_ROOT', '/media'):
+            with mock.patch.object(settings, 'GALLERY_PATH', 'gallery'):
+                self.field_file._check_dir()
         isdir.assert_called_width(path)
         mkdir.assert_not_called()
 
-    @mock.patch('gallery.settings.MEDIA_ROOT', '/media')
-    @mock.patch('gallery.settings.GALLERY_PATH', 'gallery')
     @mock.patch('os.mkdir')
     @mock.patch('os.path.isdir', return_value=False)
     def test_check_dir_does_not_exist(self, isdir, mkdir):
         path = '/media' + os.sep + 'gallery'
-        self.field_file._check_dir()
+        with mock.patch.object(settings, 'MEDIA_ROOT', '/media'):
+            with mock.patch.object(settings, 'GALLERY_PATH', 'gallery'):
+                self.field_file._check_dir()
         isdir.assert_called_width(path)
         mkdir.assert_called()
 
