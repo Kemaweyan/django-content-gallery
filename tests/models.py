@@ -36,14 +36,18 @@ class ImageTestCase(TestCase):
         clean_db()
         cls.object = TestModel.objects.create(name="TestObject")
 
-    @mock.patch('gallery.models.slugify_unique', return_value='foo')
-    def setUp(self, slugify_unique):
-        self.image = models.Image.objects.create(
-            image=get_image_in_memory_data(),
-            position=0,
-            content_type=ContentType.objects.get_for_model(TestModel),
-            object_id=self.object.id
-        )
+    def setUp(self):
+        with mock.patch.object(
+            models,
+            'slugify_unique',
+            return_value='foo'
+        ):
+            self.image = models.Image.objects.create(
+                image=get_image_in_memory_data(),
+                position=0,
+                content_type=ContentType.objects.get_for_model(TestModel),
+                object_id=self.object.id
+            )
         self.image = self.get_image()
 
     def tearDown(self):
