@@ -25,6 +25,13 @@ class TestImageAdminForm(TestCase):
     def tearDownClass(cls):
         os.remove(cls.image_path)
 
+    def setUp(self):
+        self.form = mock.MagicMock(spec=forms.ImageAdminForm)
+        self.form.fields = {}
+        field = mock.MagicMock()
+        field.widget.model_class = None
+        self.form.fields['object_id'] = field
+
     def test_valid_form(self):
         upload_file = open(self.image_path, 'rb')
         post_dict = {
@@ -121,3 +128,43 @@ class TestImageAdminForm(TestCase):
         )
         image.delete()
         obj.delete()
+
+    def test_clean_unbounded(self):
+        self.form.is_bound = False
+        with mock.patch.object(
+            django_forms.ModelForm,
+            'clean',
+            return_value='foo'
+        ) as clean:
+            result = forms.ImageAdminForm.clean(self.form)
+            clean.assert_called()
+            self.assertEqual(result, 'foo')
+        self.assertIsNone(self.form.fields['object_id'].widget.model_class)
+
+    def test_clean_bounded_without_content_type(self):
+        self.form.is_bound = True
+        with mock.patch.object(
+            django_forms.ModelForm,
+            'clean',
+            return_value={}
+        ) as clean:
+            result = forms.ImageAdminForm.clean(self.form)
+            clean.assert_called()
+            self.assertEqual(result, {})
+        self.assertIsNone(self.form.fields['object_id'].widget.model_class)
+
+    def test_clean_bounded_with_content_type(self):
+        self.form.is_bound = True
+        data = {'content_type': self.ctype}
+        with mock.patch.object(
+            django_forms.ModelForm,
+            'clean',
+            return_value=data
+        ) as clean:
+            result = forms.ImageAdminForm.clean(self.form)
+            clean.assert_called()
+            self.assertEqual(result, data)
+        self.assertEqual(
+            self.form.fields['object_id'].widget.model_class,
+            TestModel
+        )
