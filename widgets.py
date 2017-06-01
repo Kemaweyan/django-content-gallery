@@ -12,6 +12,7 @@ from django.utils import html
 
 from . import utils
 from . import settings
+from . import fields
 
 class ContentTypeSelect(forms.Select):
 
@@ -91,7 +92,7 @@ class ImageWidget(widgets.AdminFileWidget):
     )
 
     def render(self, name, image, attrs=None):
-        if image:
+        if isinstance(image, fields.GalleryImageFieldFile):
             data = utils.create_image_data(image)
             self.template_with_initial = self.template.format(
                 settings.GALLERY_PREVIEW_WIDTH + 14,

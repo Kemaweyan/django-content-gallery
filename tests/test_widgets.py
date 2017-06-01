@@ -5,10 +5,12 @@ from django.contrib.contenttypes.models import ContentType
 from django.forms import Select
 from django.db.models import BLANK_CHOICE_DASH
 from django.contrib.admin.widgets import AdminFileWidget
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from .. import widgets
 from .. import utils
 from .. import settings
+from .. import fields
 
 from .models import *
 
@@ -131,6 +133,7 @@ class TestImageWidget(TestCase):
     def test_render_with_image(self, escape):
         widget = mock.MagicMock(spec=widgets.ImageWidget)
         widget.template = "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}"
+        image = mock.MagicMock(spec=fields.GalleryImageFieldFile)
         with mock.patch.object(
             utils,
             'create_image_data',
@@ -144,10 +147,10 @@ class TestImageWidget(TestCase):
             'render',
             return_value='foo'
         ) as render:
-            result = widgets.ImageWidget.render(widget, 'name', 'image')
-            render.assert_called_with('name', 'image', None)
+            result = widgets.ImageWidget.render(widget, 'name', image)
+            render.assert_called_with('name', image, None)
             create_url.assert_called_with("content_gallery/img/zoom.png")
-            create_data.assert_called_with('image')
+            create_data.assert_called_with(image)
         escape.assert_called_with(json.dumps('data'))
         self.assertEqual(result, 'foo')
         self.assertEqual(
@@ -163,6 +166,20 @@ class TestImageWidget(TestCase):
                 str(settings.GALLERY_PREVIEW_WIDTH - 55)
             ])
         )
+
+    def test_render_with_uploaded_image(self):
+        widget = mock.MagicMock(spec=widgets.ImageWidget)
+        widget.template_with_initial = "bar"
+        image = mock.MagicMock(spec=InMemoryUploadedFile)
+        with mock.patch.object(
+            AdminFileWidget,
+            'render',
+            return_value='foo'
+        ) as render:
+            result = widgets.ImageWidget.render(widget, 'name', image)
+            render.assert_called_with('name', image, None)
+        self.assertEqual(result, 'foo')
+        self.assertEqual(widget.template_with_initial, 'bar')
 
 
 class TestImageInlineWidget(TestCase):
