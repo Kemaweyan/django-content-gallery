@@ -33,6 +33,7 @@ class ImageTestCase(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        clean_db()
         cls.object = TestModel.objects.create(name="TestObject")
 
     @mock.patch('gallery.models.slugify_unique', return_value='foo')
@@ -84,6 +85,7 @@ class ViewsTestCase(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        clean_db()
         cls.ctype = ContentType.objects.get_for_model(TestModel)
         cls.object = TestModel.objects.create(name="Test object")
         cls.image1 = models.Image.objects.create(
@@ -117,3 +119,10 @@ class AjaxRequestMixin:
             url,
             HTTP_X_REQUESTED_WITH='XMLHttpRequest'
         )
+
+
+def clean_db():
+    TestModel.objects.all().delete()
+    AnotherTestModel.objects.all().delete()
+    WrongTestModel.objects.all().delete()
+    models.Image.objects.all().delete()
