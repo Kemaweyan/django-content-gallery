@@ -12,6 +12,7 @@ from .. import utils
 from .. import fields
 
 from .models import *
+from .base_test_cases import *
 from .utils import patch_settings
 
 class TestContentTypeSelect(TestCase):

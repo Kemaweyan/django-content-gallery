@@ -6,7 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from ..templatetags import content_gallery
 from .. import models
 
-from .models import ViewsTestCase
+from .base_test_cases import ViewsTestCase
 from .utils import get_image_in_memory_data, patch_settings
 
 class TestGetFirstImage(ViewsTestCase):

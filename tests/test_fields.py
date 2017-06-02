@@ -6,7 +6,7 @@ from .. import fields
 from .. import models
 from .. import image_data
 
-from .models import ImageTestCase
+from .base_test_cases import ImageTestCase
 from .utils import patch_settings
 
 class TestGalleryImageFieldFile(ImageTestCase):

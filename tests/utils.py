@@ -6,6 +6,9 @@ from PIL import Image
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from .. import settings
+from .. import models
+
+from .models import *
 
 def get_image_data():
     io = BytesIO()
@@ -41,3 +44,9 @@ def patch_settings(settings_dict):
     yield
     for key, value in saved_settings.items():
         settings.CONF[key] = value
+
+def clean_db():
+    TestModel.objects.all().delete()
+    AnotherTestModel.objects.all().delete()
+    WrongTestModel.objects.all().delete()
+    models.Image.objects.all().delete()

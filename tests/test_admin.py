@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from .. import admin
 from .. import utils
 
-from .models import ViewsTestCase, AjaxRequestMixin
+from .base_test_cases import ViewsTestCase, AjaxRequestMixin
 
 class ImageAdminInline(TestCase):
 

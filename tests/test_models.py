@@ -6,6 +6,7 @@ from .. import models
 from .. import utils
 
 from .models import *
+from .base_test_cases import *
 from .utils import get_image_in_memory_data
 
 
