@@ -31,16 +31,16 @@ def gallery_data(request, app_label, content_type, object_id):
     if not request.is_ajax():
         raise PermissionDenied
     image_size = {
-        "width": settings.GALLERY_IMAGE_WIDTH,
-        "height": settings.GALLERY_IMAGE_HEIGHT
+        "width": settings.CONF['image_width'],
+        "height": settings.CONF['image_height']
     }
     small_image_size = {
-        "width": settings.GALLERY_SMALL_IMAGE_WIDTH,
-        "height": settings.GALLERY_SMALL_IMAGE_HEIGHT
+        "width": settings.CONF['small_image_width'],
+        "height": settings.CONF['small_image_height']
     }
     thumbnail_size = {
-        "width": settings.GALLERY_THUMBNAIL_WIDTH,
-        "height": settings.GALLERY_THUMBNAIL_HEIGHT
+        "width": settings.CONF['thumbnail_width'],
+        "height": settings.CONF['thumbnail_height']
     }
 
     try:
@@ -54,8 +54,8 @@ def gallery_data(request, app_label, content_type, object_id):
         obj = get_object_or_404(ctype.model_class(), pk=object_id)
         qs = obj.gallery.order_by('position')
         max_size = (
-            settings.GALLERY_SMALL_IMAGE_WIDTH,
-            settings.GALLERY_SMALL_IMAGE_HEIGHT
+            settings.CONF['small_image_width'],
+            settings.CONF['small_image_height']
         )
 
         images = []

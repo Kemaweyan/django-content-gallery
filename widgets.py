@@ -95,14 +95,14 @@ class ImageWidget(widgets.AdminFileWidget):
         if isinstance(image, fields.GalleryImageFieldFile):
             data = utils.create_image_data(image)
             self.template_with_initial = self.template.format(
-                settings.GALLERY_PREVIEW_WIDTH + 14,
-                settings.GALLERY_PREVIEW_HEIGHT + 14,
-                settings.GALLERY_PREVIEW_WIDTH,
-                settings.GALLERY_PREVIEW_HEIGHT,
-                settings.GALLERY_PREVIEW_HEIGHT,
+                settings.CONF['preview_width'] + 14,
+                settings.CONF['preview_height'] + 14,
+                settings.CONF['preview_width'],
+                settings.CONF['preview_height'],
+                settings.CONF['preview_height'],
                 html.escape(json.dumps(data)),
                 utils.create_static_url("content_gallery/img/zoom.png"),
-                settings.GALLERY_PREVIEW_WIDTH - 55
+                settings.CONF['preview_width'] - 55
             )
         return super().render(name, image, attrs)
 

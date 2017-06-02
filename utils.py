@@ -7,7 +7,7 @@ import magic
 
 from django.core import urlresolvers
 from django.core.files import uploadedfile
-from django.conf import settings as global_sett
+from django.conf import settings as django_settings
 
 from . import settings
 
@@ -41,15 +41,19 @@ def get_name(filename):
     return name
 
 def create_path(filename):
-    return os.path.join(settings.MEDIA_ROOT, settings.GALLERY_PATH, filename)
+    return os.path.join(
+        django_settings.MEDIA_ROOT,
+        settings.CONF['path'],
+        filename
+    )
 
 def create_url(filename):
-    media_url = settings.MEDIA_URL.rstrip('/')
-    gallery_path = settings.GALLERY_PATH.strip('/')
+    media_url = django_settings.MEDIA_URL.rstrip('/')
+    gallery_path = settings.CONF['path'].strip('/')
     return '/'.join([media_url, gallery_path, filename])
 
 def name_in_db(name):
-    return os.path.join(settings.GALLERY_PATH, name)
+    return os.path.join(settings.CONF['path'], name)
 
 def image_resize(src, dst, size):
     with Image.open(src) as img:
@@ -67,16 +71,16 @@ def create_image_data(image):
     return {
         "image": {
             "url": image.image_url,
-            "width": settings.GALLERY_IMAGE_WIDTH,
-            "height": settings.GALLERY_IMAGE_HEIGHT
+            "width": settings.CONF['image_width'],
+            "height": settings.CONF['image_height']
         },
         "small_image":  {
             "url": image.small_image_url,
-            "width": settings.GALLERY_SMALL_IMAGE_WIDTH,
-            "height": settings.GALLERY_SMALL_IMAGE_HEIGHT
+            "width": settings.CONF['small_image_width'],
+            "height": settings.CONF['small_image_height']
         }
     }
 
 def create_static_url(url):
-    static = global_sett.STATIC_URL.rstrip("/")
+    static = django_settings.STATIC_URL.rstrip("/")
     return "/".join([static, url])

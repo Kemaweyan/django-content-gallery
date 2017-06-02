@@ -1,7 +1,6 @@
 import json
 
 from django import template
-from django.conf import settings as global_sett
 from django.utils import html
 
 from .. import settings
@@ -36,11 +35,11 @@ def gallery_image_data(obj):
 @register.inclusion_tag('content_gallery/templatetags/preview.html')
 def gallery_preview(obj):
     context = {
-        'image_width': settings.GALLERY_PREVIEW_WIDTH,
-        'image_height': settings.GALLERY_PREVIEW_HEIGHT,
-        'div_width': settings.GALLERY_PREVIEW_WIDTH + 14,
-        'div_height': settings.GALLERY_PREVIEW_HEIGHT + 14,
-        'zoom_left': settings.GALLERY_PREVIEW_WIDTH - 55
+        'image_width': settings.CONF['preview_width'],
+        'image_height': settings.CONF['preview_height'],
+        'div_width': settings.CONF['preview_width'] + 14,
+        'div_height': settings.CONF['preview_height'] + 14,
+        'zoom_left': settings.CONF['preview_width'] - 55
     }
     image_data = gallery_image_data(obj)
     context.update(image_data)
@@ -50,11 +49,11 @@ def gallery_preview(obj):
 @register.inclusion_tag('content_gallery/templatetags/small_preview.html')
 def gallery_small_preview(obj):
     context = {
-        'image_width': settings.GALLERY_SMALL_PREVIEW_WIDTH,
-        'image_height': settings.GALLERY_SMALL_PREVIEW_HEIGHT,
-        'div_width': settings.GALLERY_SMALL_PREVIEW_WIDTH + 14,
-        'div_height': settings.GALLERY_SMALL_PREVIEW_HEIGHT + 14,
-        'zoom_left': settings.GALLERY_SMALL_PREVIEW_WIDTH - 15
+        'image_width': settings.CONF['small_preview_width'],
+        'image_height': settings.CONF['small_preview_height'],
+        'div_width': settings.CONF['small_preview_width'] + 14,
+        'div_height': settings.CONF['small_preview_height'] + 14,
+        'zoom_left': settings.CONF['small_preview_width'] - 15
     }
     image_data = gallery_image_data(obj)
     context.update(image_data)

@@ -2,29 +2,30 @@ import os
 
 from django.db import models
 from django.db.models.fields import files
+from django.conf import settings as django_settings
 
 from . import settings
 from . import image_data
 
 # the size of image
-IMG_W = settings.GALLERY_IMAGE_WIDTH
-IMG_H = settings.GALLERY_IMAGE_HEIGHT
+IMG_W = settings.CONF['image_width']
+IMG_H = settings.CONF['image_height']
 
 # the size of small image
-SMALL_W = settings.GALLERY_SMALL_IMAGE_WIDTH
-SMALL_H = settings.GALLERY_SMALL_IMAGE_HEIGHT
+SMALL_W = settings.CONF['small_image_width']
+SMALL_H = settings.CONF['small_image_height']
 
 # the size of thumbnail
-THUMB_W = settings.GALLERY_THUMBNAIL_WIDTH
-THUMB_H = settings.GALLERY_THUMBNAIL_HEIGHT
+THUMB_W = settings.CONF['thumbnail_width']
+THUMB_H = settings.CONF['thumbnail_height']
 
 # the size of preview
-PREVIEW_W = settings.GALLERY_PREVIEW_WIDTH
-PREVIEW_H = settings.GALLERY_PREVIEW_HEIGHT
+PREVIEW_W = settings.CONF['preview_width']
+PREVIEW_H = settings.CONF['preview_height']
 
 # the size of small preview
-SMALL_PREVIEW_W = settings.GALLERY_SMALL_PREVIEW_WIDTH
-SMALL_PREVIEW_H = settings.GALLERY_SMALL_PREVIEW_HEIGHT
+SMALL_PREVIEW_W = settings.CONF['small_preview_width']
+SMALL_PREVIEW_H = settings.CONF['small_preview_height']
 
 class GalleryImageFieldFile(files.ImageFieldFile):
 
@@ -42,7 +43,7 @@ class GalleryImageFieldFile(files.ImageFieldFile):
 
     @staticmethod
     def _check_dir():
-        path = os.path.join(settings.MEDIA_ROOT, settings.GALLERY_PATH)
+        path = os.path.join(django_settings.MEDIA_ROOT, settings.CONF['path'])
         if not os.path.isdir(path):
             os.mkdir(path)
 
