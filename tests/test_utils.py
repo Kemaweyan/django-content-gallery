@@ -4,7 +4,6 @@ from django.test import TestCase, mock, override_settings
 from django.conf import settings as django_settings
 
 from .. import utils
-from .. import settings
 
 from .utils import create_image_file, get_image_size, patch_settings
 

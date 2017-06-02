@@ -5,11 +5,10 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 
 from .. import models
-from .. import settings
 from .. import utils
 
 from .models import *
-from .utils import get_image_in_memory_data
+from .utils import get_image_in_memory_data, patch_settings
 
 class TestChoices(AjaxRequestMixin, TestCase):
 
@@ -122,33 +121,43 @@ class TestGalleryData(AjaxRequestMixin, ViewsTestCase):
         self.assertEqual(resp.status_code, 404)
 
     def test_correct_response(self):
-        with mock.patch.object(
-            utils,
-            'calculate_image_size',
-            return_value=(100, 100)
+        with patch_settings(
+            {
+                'image_width': 1024,
+                'image_height': 768,
+                'small_image_width': 800,
+                'small_image_height': 600,
+                'thumbnail_width': 120,
+                'thumbnail_height': 80
+            }
         ):
-            resp = self.send_ajax_request(self.url)
+            with mock.patch.object(
+                utils,
+                'calculate_image_size',
+                return_value=(100, 50)
+            ):
+                resp = self.send_ajax_request(self.url)
         self.assertEqual(resp.status_code, 200)
         data = json.loads(resp.content.decode("utf-8"))
         self.assertDictEqual(
             data['image_size'],
             {
-                "width": settings.CONF['image_width'],
-                "height": settings.CONF['image_height']
+                "width": 1024,
+                "height": 768
             }
         )
         self.assertDictEqual(
             data['small_image_size'],
             {
-                "width": settings.CONF['small_image_width'],
-                "height": settings.CONF['small_image_height']
+                "width": 800,
+                "height": 600
             }
         )
         self.assertDictEqual(
             data['thumbnail_size'],
             {
-                "width": settings.CONF['thumbnail_width'],
-                "height": settings.CONF['thumbnail_height']
+                "width": 120,
+                "height": 80
             }
         )
         images = data['images']
@@ -164,7 +173,7 @@ class TestGalleryData(AjaxRequestMixin, ViewsTestCase):
                     },
                     "small_image_size": {
                         "width": 100,
-                        "height": 100
+                        "height": 50
                     },
                     "small_image": self.image1.small_image_url,
                     "thumbnail": self.image1.thumbnail_url
@@ -177,7 +186,7 @@ class TestGalleryData(AjaxRequestMixin, ViewsTestCase):
                     },
                     "small_image_size": {
                         "width": 100,
-                        "height": 100
+                        "height": 50
                     },
                     "small_image": self.image2.small_image_url,
                     "thumbnail": self.image2.thumbnail_url

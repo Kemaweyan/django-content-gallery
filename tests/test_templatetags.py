@@ -5,10 +5,9 @@ from django.contrib.contenttypes.models import ContentType
 
 from ..templatetags import content_gallery
 from .. import models
-from .. import settings
 
 from .models import ViewsTestCase
-from .utils import get_image_in_memory_data
+from .utils import get_image_in_memory_data, patch_settings
 
 class TestGetFirstImage(ViewsTestCase):
 
@@ -77,7 +76,12 @@ class TestGalleryImageData(ViewsTestCase):
 class TestGalleryPreview(ViewsTestCase):
 
     def test_get_context(self):
-        with mock.patch.object(
+        with patch_settings(
+            {
+                'preview_width': 400,
+                'preview_height': 300
+            }
+        ), mock.patch.object(
                 content_gallery,
                 'gallery_image_data',
                 return_value={'foo': 'bar'}
@@ -88,11 +92,11 @@ class TestGalleryPreview(ViewsTestCase):
             context,
             {
                 'foo': 'bar',
-                'image_width': settings.CONF['preview_width'],
-                'image_height': settings.CONF['preview_height'],
-                'div_width': settings.CONF['preview_width'] + 14,
-                'div_height': settings.CONF['preview_height'] + 14,
-                'zoom_left': settings.CONF['preview_width'] - 55
+                'image_width': 400,
+                'image_height': 300,
+                'div_width': 400 + 14,
+                'div_height': 300 + 14,
+                'zoom_left': 400 - 55
             }
         )
 
@@ -100,7 +104,12 @@ class TestGalleryPreview(ViewsTestCase):
 class TestGallerySmallPreview(ViewsTestCase):
 
     def test_get_context(self):
-        with mock.patch.object(
+        with patch_settings(
+            {
+                'small_preview_width': 200,
+                'small_preview_height': 150
+            }
+        ), mock.patch.object(
                 content_gallery,
                 'gallery_image_data',
                 return_value={'foo': 'bar'}
@@ -111,10 +120,10 @@ class TestGallerySmallPreview(ViewsTestCase):
             context,
             {
                 'foo': 'bar',
-                'image_width': settings.CONF['small_preview_width'],
-                'image_height': settings.CONF['small_preview_height'],
-                'div_width': settings.CONF['small_preview_width'] + 14,
-                'div_height': settings.CONF['small_preview_height'] + 14,
-                'zoom_left': settings.CONF['small_preview_width'] - 15
+                'image_width': 200,
+                'image_height': 150,
+                'div_width': 200 + 14,
+                'div_height': 150 + 14,
+                'zoom_left': 200 - 15
             }
         )

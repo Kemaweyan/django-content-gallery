@@ -7,39 +7,39 @@ from django.conf import settings as django_settings
 from . import settings
 from . import image_data
 
-# the size of image
-IMG_W = settings.CONF['image_width']
-IMG_H = settings.CONF['image_height']
-
-# the size of small image
-SMALL_W = settings.CONF['small_image_width']
-SMALL_H = settings.CONF['small_image_height']
-
-# the size of thumbnail
-THUMB_W = settings.CONF['thumbnail_width']
-THUMB_H = settings.CONF['thumbnail_height']
-
-# the size of preview
-PREVIEW_W = settings.CONF['preview_width']
-PREVIEW_H = settings.CONF['preview_height']
-
-# the size of small preview
-SMALL_PREVIEW_W = settings.CONF['small_preview_width']
-SMALL_PREVIEW_H = settings.CONF['small_preview_height']
-
 class GalleryImageFieldFile(files.ImageFieldFile):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.thumbnail = image_data.ImageFile(self, THUMB_W, THUMB_H,
-            'thumbnail')
-        self.image_data = image_data.InMemoryImageData(self, IMG_W, IMG_H)
-        self.small_image = image_data.ImageFile(self, SMALL_W, SMALL_H,
-            'small')
-        self.preview = image_data.ImageFile(self, PREVIEW_W, PREVIEW_H,
-            'preview')
-        self.small_preview = image_data.ImageFile(self, SMALL_PREVIEW_W,
-            SMALL_PREVIEW_H, 'small_preview')
+        self.image_data = image_data.InMemoryImageData(
+            self,
+            settings.CONF['image_width'],
+            settings.CONF['image_height'],
+        )
+        self.small_image = image_data.ImageFile(
+            self,
+            settings.CONF['small_image_width'],
+            settings.CONF['small_image_height'],
+            'small'
+        )
+        self.preview = image_data.ImageFile(
+            self,
+            settings.CONF['preview_width'],
+            settings.CONF['preview_height'],
+            'preview'
+        )
+        self.small_preview = image_data.ImageFile(
+            self,
+            settings.CONF['small_preview_width'],
+            settings.CONF['small_preview_height'],
+            'small_preview'
+        )
+        self.thumbnail = image_data.ImageFile(
+            self,
+            settings.CONF['thumbnail_width'],
+            settings.CONF['thumbnail_height'],
+            'thumbnail'
+        )
 
     @staticmethod
     def _check_dir():

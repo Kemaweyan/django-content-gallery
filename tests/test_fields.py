@@ -4,7 +4,6 @@ from django.test import mock, override_settings
 
 from .. import fields
 from .. import models
-from .. import settings
 from .. import image_data
 
 from .models import ImageTestCase
@@ -14,45 +13,59 @@ class TestGalleryImageFieldFile(ImageTestCase):
 
     def setUp(self):
         super().setUp()
-        with mock.patch.object(image_data, 'ImageFile') as f:
-            with mock.patch.object(image_data, 'InMemoryImageData') as m:
-                self.field_file = fields.GalleryImageFieldFile(
-                    self.image,
-                    mock.MagicMock(),
-                    str(self.image)
-                )
+        with mock.patch.object(image_data, 'InMemoryImageData') as m:
+            with mock.patch.object(image_data, 'ImageFile') as f:
+                with patch_settings(
+                    {
+                        'image_width': 1024,
+                        'image_height': 768,
+                        'small_image_width': 800,
+                        'small_image_height': 600,
+                        'preview_width': 400,
+                        'preview_height': 300,
+                        'small_preview_width': 200,
+                        'small_preview_height': 150,
+                        'thumbnail_width': 120,
+                        'thumbnail_height': 80
+                    }
+                ):
+                    self.field_file = fields.GalleryImageFieldFile(
+                        self.image,
+                        mock.MagicMock(),
+                        str(self.image)
+                    )
             self.image_file = f
             self.in_memory_data = m
 
     def test_init(self):
-        self.image_file.assert_any_call(
+        self.in_memory_data.assert_any_call(
             self.field_file,
-            settings.CONF['thumbnail_width'],
-            settings.CONF['thumbnail_height'],
-            'thumbnail'
+            1024,
+            768
         )
         self.image_file.assert_any_call(
             self.field_file,
-            settings.CONF['small_image_width'],
-            settings.CONF['small_image_height'],
+            800,
+            600,
             'small'
         )
         self.image_file.assert_any_call(
             self.field_file,
-            settings.CONF['small_preview_width'],
-            settings.CONF['small_preview_height'],
+            200,
+            150,
             'small_preview'
         )
         self.image_file.assert_any_call(
             self.field_file,
-            settings.CONF['preview_width'],
-            settings.CONF['preview_height'],
-            'preview'
+            120,
+            80,
+            'thumbnail'
         )
-        self.in_memory_data.assert_any_call(
+        self.image_file.assert_any_call(
             self.field_file,
-            settings.CONF['image_width'],
-            settings.CONF['image_height']
+            400,
+            300,
+            'preview'
         )
 
     @override_settings(MEDIA_ROOT='/media')

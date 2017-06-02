@@ -9,10 +9,10 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from .. import widgets
 from .. import utils
-from .. import settings
 from .. import fields
 
 from .models import *
+from .utils import patch_settings
 
 class TestContentTypeSelect(TestCase):
 
@@ -134,7 +134,12 @@ class TestImageWidget(TestCase):
         widget = mock.MagicMock(spec=widgets.ImageWidget)
         widget.template = "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}"
         image = mock.MagicMock(spec=fields.GalleryImageFieldFile)
-        with mock.patch.object(
+        with patch_settings(
+            {
+                'preview_width': 400,
+                'preview_height': 300,
+            }
+        ), mock.patch.object(
             utils,
             'create_image_data',
             return_value='data'
@@ -156,14 +161,14 @@ class TestImageWidget(TestCase):
         self.assertEqual(
             widget.template_with_initial,
             "\n".join([
-                str(settings.CONF['preview_width'] + 14),
-                str(settings.CONF['preview_height'] + 14),
-                str(settings.CONF['preview_width']),
-                str(settings.CONF['preview_height']),
-                str(settings.CONF['preview_height']),
+                str(400 + 14),
+                str(300 + 14),
+                str(400),
+                str(300),
+                str(300),
                 "escaped data",
                 "url",
-                str(settings.CONF['preview_width'] - 55)
+                str(400 - 55)
             ])
         )
 

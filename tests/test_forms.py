@@ -8,7 +8,6 @@ from django.conf import settings as django_settings
 
 from .. import forms
 from .. import models
-from .. import settings
 
 from .models import TestModel
 from .utils import get_image_in_memory_data, create_image_file
