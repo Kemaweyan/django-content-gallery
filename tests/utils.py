@@ -1,8 +1,11 @@
 import sys
 from io import BytesIO
+from contextlib import contextmanager
 from PIL import Image
 
 from django.core.files.uploadedfile import InMemoryUploadedFile
+
+from .. import settings
 
 def get_image_data():
     io = BytesIO()
@@ -28,3 +31,13 @@ def create_image_file(name):
 def get_image_size(path):
     with Image.open(path) as img:
         return img.size
+
+@contextmanager
+def patch_settings(settings_dict):
+    saved_settings = {}
+    for key, value in settings_dict.items():
+        saved_settings[key] = settings.CONF[key]
+        settings.CONF[key] = value
+    yield
+    for key, value in saved_settings.items():
+        settings.CONF[key] = value
