@@ -1,51 +1,24 @@
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 
-try:
-    GALLERY_IMAGE_WIDTH = settings.GALLERY_IMAGE_WIDTH
-    GALLERY_IMAGE_HEIGHT = settings.GALLERY_IMAGE_HEIGHT
-except AttributeError:
-    GALLERY_IMAGE_WIDTH = 752
-    GALLERY_IMAGE_HEIGHT = 608
+DEFAULTS = {
+    'image_width': 752,
+    'image_height': 608,
+    'small_image_width': 564,
+    'small_image_height': 456,
+    'thumbnail_width': 94,
+    'thumbnail_height': 76,
+    'preview_width': 376,
+    'preview_height': 304,
+    'small_preview_width': 141,
+    'small_preview_height': 114,
+    'path': 'gallery',
+}
 
-try:
-    GALLERY_SMALL_IMAGE_WIDTH = settings.GALLERY_SMALL_IMAGE_WIDTH
-    GALLERY_SMALL_IMAGE_HEIGHT = settings.GALLERY_SMALL_IMAGE_HEIGHT
-except AttributeError:
-    GALLERY_SMALL_IMAGE_WIDTH = 564
-    GALLERY_SMALL_IMAGE_HEIGHT = 456
+CONFIG = DEFAULTS.update(getattr(settings, 'CONTENT_GALLERY', {}))
 
-try:
-    GALLERY_THUMBNAIL_WIDTH = settings.GALLERY_THUMBNAIL_WIDTH
-    GALLERY_THUMBNAIL_HEIGHT = settings.GALLERY_THUMBNAIL_HEIGHT
-except AttributeError:
-    GALLERY_THUMBNAIL_WIDTH = 94
-    GALLERY_THUMBNAIL_HEIGHT = 76
+if getattr(settings, 'MEDIA_ROOT', None) is None:
+    raise ImproperlyConfigured("'MEDIA_ROOT' variable is not defined")
 
-try:
-    GALLERY_PREVIEW_WIDTH = settings.GALLERY_PREVIEW_WIDTH
-    GALLERY_PREVIEW_HEIGHT = settings.GALLERY_PREVIEW_HEIGHT
-except AttributeError:
-    GALLERY_PREVIEW_WIDTH = 376
-    GALLERY_PREVIEW_HEIGHT = 304
-
-try:
-    GALLERY_SMALL_PREVIEW_WIDTH = settings.GALLERY_SMALL_PREVIEW_WIDTH
-    GALLERY_SMALL_PREVIEW_HEIGHT = settings.GALLERY_SMALL_PREVIEW_HEIGHT
-except AttributeError:
-    GALLERY_SMALL_PREVIEW_WIDTH = 141
-    GALLERY_SMALL_PREVIEW_HEIGHT = 114
-
-try:
-    GALLERY_PATH = settings.GALLERY_PATH
-except AttributeError:
-    GALLERY_PATH = 'gallery'
-
-try:
-    MEDIA_ROOT = settings.MEDIA_ROOT
-except AttributeError:
-    MEDIA_ROOT = os.path.join(settings.BASE_DIR, 'media')
-
-try:
-    MEDIA_URL = settings.MEDIA_URL
-except AttributeError:
-    MEDIA_URL = '/media/'
+if getattr(settings, 'MEDIA_URL', None) is None:
+    raise ImproperlyConfigured("'MEDIA_URL' variable is not defined")
