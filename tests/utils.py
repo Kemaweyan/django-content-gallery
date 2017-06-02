@@ -42,8 +42,7 @@ def patch_settings(settings_dict):
         saved_settings[key] = settings.CONF[key]
         settings.CONF[key] = value
     yield
-    for key, value in saved_settings.items():
-        settings.CONF[key] = value
+    settings.CONF.update(saved_settings)
 
 def clean_db():
     TestModel.objects.all().delete()
