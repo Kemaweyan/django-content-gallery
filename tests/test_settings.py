@@ -66,3 +66,8 @@ class TestSettings(TestCase):
     def test_thumbnail_height(self):
         imp.reload(settings)
         self.assertEqual(settings.CONF['thumbnail_height'], 80)
+
+    @override_settings(CONTENT_GALLERY={'path': 'custom_path'})
+    def test_path_setting(self):
+        imp.reload(settings)
+        self.assertEqual(settings.CONF['path'], 'custom_path')
