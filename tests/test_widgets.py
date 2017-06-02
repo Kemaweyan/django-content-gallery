@@ -156,14 +156,14 @@ class TestImageWidget(TestCase):
         self.assertEqual(
             widget.template_with_initial,
             "\n".join([
-                str(settings.GALLERY_PREVIEW_WIDTH + 14),
-                str(settings.GALLERY_PREVIEW_HEIGHT + 14),
-                str(settings.GALLERY_PREVIEW_WIDTH),
-                str(settings.GALLERY_PREVIEW_HEIGHT),
-                str(settings.GALLERY_PREVIEW_HEIGHT),
+                str(settings.CONF['preview_width'] + 14),
+                str(settings.CONF['preview_height'] + 14),
+                str(settings.CONF['preview_width']),
+                str(settings.CONF['preview_height']),
+                str(settings.CONF['preview_height']),
                 "escaped data",
                 "url",
-                str(settings.GALLERY_PREVIEW_WIDTH - 55)
+                str(settings.CONF['preview_width'] - 55)
             ])
         )
 

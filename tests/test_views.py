@@ -133,22 +133,22 @@ class TestGalleryData(AjaxRequestMixin, ViewsTestCase):
         self.assertDictEqual(
             data['image_size'],
             {
-                "width": settings.GALLERY_IMAGE_WIDTH,
-                "height": settings.GALLERY_IMAGE_HEIGHT
+                "width": settings.CONF['image_width'],
+                "height": settings.CONF['image_height']
             }
         )
         self.assertDictEqual(
             data['small_image_size'],
             {
-                "width": settings.GALLERY_SMALL_IMAGE_WIDTH,
-                "height": settings.GALLERY_SMALL_IMAGE_HEIGHT
+                "width": settings.CONF['small_image_width'],
+                "height": settings.CONF['small_image_height']
             }
         )
         self.assertDictEqual(
             data['thumbnail_size'],
             {
-                "width": settings.GALLERY_THUMBNAIL_WIDTH,
-                "height": settings.GALLERY_THUMBNAIL_HEIGHT
+                "width": settings.CONF['thumbnail_width'],
+                "height": settings.CONF['thumbnail_height']
             }
         )
         images = data['images']

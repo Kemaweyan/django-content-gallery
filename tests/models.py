@@ -63,7 +63,7 @@ class ImageTestCase(TestCase):
 
     @staticmethod
     def get_name(name):
-        return "/".join([settings.GALLERY_PATH, name])
+        return "/".join([settings.CONF['path'], name])
 
 
 class MultipleObjectsImageTestCase(ImageTestCase):

@@ -4,6 +4,7 @@ from django.test import mock, TestCase
 from django.contrib.contenttypes.models import ContentType
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django import forms as django_forms
+from django.conf import settings as django_settings
 
 from .. import forms
 from .. import models
@@ -14,7 +15,7 @@ from .utils import get_image_in_memory_data, create_image_file
 
 class TestImageAdminForm(TestCase):
 
-    image_path = os.path.join(settings.MEDIA_ROOT, 'foo.jpg')
+    image_path = os.path.join(django_settings.MEDIA_ROOT, 'foo.jpg')
 
     @classmethod
     def setUpClass(cls):

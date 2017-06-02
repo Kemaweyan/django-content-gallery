@@ -1,11 +1,12 @@
 import os
 
 from django.test import TestCase, mock, override_settings
+from django.conf import settings as django_settings
 
 from .. import utils
 from .. import settings
 
-from .utils import create_image_file, get_image_size
+from .utils import create_image_file, get_image_size, patch_settings
 
 class TestGetChoicesUrlPattern(TestCase):
 
@@ -78,67 +79,67 @@ class TestFilenameUtils(TestCase):
         name = utils.get_name('/path/to/foo.jpg')
         self.assertEqual(name, '/path/to/foo')
 
+    @override_settings(MEDIA_ROOT='/media')
     def test_create_path(self):
-        with mock.patch.object(settings, 'GALLERY_PATH', 'gallery'):
-            with mock.patch.object(settings, 'MEDIA_ROOT', '/media'):
-                path = utils.create_path('foo.jpg')
+        with patch_settings({'path': 'gallery'}):
+            path = utils.create_path('foo.jpg')
         self.assertEqual(path, '/media/gallery/foo.jpg')
 
+    @override_settings(MEDIA_ROOT='/media/')
     def test_create_path_right_slash_in_media_root(self):
-        with mock.patch.object(settings, 'GALLERY_PATH', 'gallery'):
-            with mock.patch.object(settings, 'MEDIA_ROOT', '/media/'):
-                path = utils.create_path('foo.jpg')
+        with patch_settings({'path': 'gallery'}):
+            path = utils.create_path('foo.jpg')
         self.assertEqual(path, '/media/gallery/foo.jpg')
 
+    @override_settings(MEDIA_ROOT='/media')
     def test_create_path_slash_in_gallery_path(self):
-        with mock.patch.object(settings, 'GALLERY_PATH', 'gallery/'):
-            with mock.patch.object(settings, 'MEDIA_ROOT', '/media'):
-                path = utils.create_path('foo.jpg')
+        with patch_settings({'path': 'gallery/'}):
+            path = utils.create_path('foo.jpg')
         self.assertEqual(path, '/media/gallery/foo.jpg')
 
+    @override_settings(MEDIA_ROOT='/media/')
     def test_create_path_slash_in_both(self):
-        with mock.patch.object(settings, 'GALLERY_PATH', 'gallery/'):
-            with mock.patch.object(settings, 'MEDIA_ROOT', '/media/'):
-                path = utils.create_path('foo.jpg')
+        with patch_settings({'path': 'gallery/'}):
+            path = utils.create_path('foo.jpg')
         self.assertEqual(path, '/media/gallery/foo.jpg')
 
+    @override_settings(MEDIA_ROOT='/media/')
     def test_create_url(self):
-        with mock.patch.object(settings, 'GALLERY_PATH', 'gallery'):
-            with mock.patch.object(settings, 'MEDIA_ROOT', '/media/'):
-                url = utils.create_url('foo.jpg')
+        with patch_settings({'path': 'gallery'}):
+            url = utils.create_url('foo.jpg')
         self.assertEqual(url, '/media/gallery/foo.jpg')
 
+    @override_settings(MEDIA_ROOT='/media/')
     def test_create_url_left_slash_in_gallery_path(self):
-        with mock.patch.object(settings, 'GALLERY_PATH', '/gallery'):
-            with mock.patch.object(settings, 'MEDIA_ROOT', '/media/'):
-                url = utils.create_url('foo.jpg')
+        with patch_settings({'path': '/gallery'}):
+            url = utils.create_url('foo.jpg')
         self.assertEqual(url, '/media/gallery/foo.jpg')
 
+    @override_settings(MEDIA_ROOT='/media/')
     def test_create_url_right_slash_in_gallery_path(self):
-        with mock.patch.object(settings, 'GALLERY_PATH', 'gallery/'):
-            with mock.patch.object(settings, 'MEDIA_ROOT', '/media/'):
-                url = utils.create_url('foo.jpg')
+        with patch_settings({'path': 'gallery/'}):
+            url = utils.create_url('foo.jpg')
         self.assertEqual(url, '/media/gallery/foo.jpg')
 
+    @override_settings(MEDIA_ROOT='/media/')
     def test_create_url_slashes_in_gallery_path(self):
-        with mock.patch.object(settings, 'GALLERY_PATH', '/gallery/'):
-            with mock.patch.object(settings, 'MEDIA_ROOT', '/media/'):
-                url = utils.create_url('foo.jpg')
+        with patch_settings({'path': '/gallery/'}):
+            url = utils.create_url('foo.jpg')
         self.assertEqual(url, '/media/gallery/foo.jpg')
 
+    @override_settings(MEDIA_ROOT='/media')
     def test_create_url_no_right_slash_in_media_url(self):
-        with mock.patch.object(settings, 'GALLERY_PATH', '/gallery'):
-            with mock.patch.object(settings, 'MEDIA_ROOT', '/media'):
-                url = utils.create_url('foo.jpg')
+        with patch_settings({'path': '/gallery'}):
+            url = utils.create_url('foo.jpg')
         self.assertEqual(url, '/media/gallery/foo.jpg')
 
     def test_create_name_in_db(self):
-        with mock.patch.object(settings, 'GALLERY_PATH', 'gallery'):
+        with patch_settings({'path': 'gallery'}):
             name = utils.name_in_db('foo.jpg')
         self.assertEqual(name, 'gallery/foo.jpg')
 
     def test_create_name_in_db_right_slash(self):
-        with mock.patch.object(settings, 'GALLERY_PATH', 'gallery/'):
+        with patch_settings({'path': 'gallery/'}):
             name = utils.name_in_db('foo.jpg')
         self.assertEqual(name, 'gallery/foo.jpg')
 
@@ -150,7 +151,7 @@ class TestFilenameUtils(TestCase):
 
 class TestImageUtils(TestCase):
 
-    image_path = os.path.join(settings.MEDIA_ROOT, 'foo.jpg')
+    image_path = os.path.join(django_settings.MEDIA_ROOT, 'foo.jpg')
 
     def setUp(self):
         create_image_file(self.image_path)
@@ -197,22 +198,13 @@ class TestCreateImageData(TestCase):
         image = mock.MagicMock()
         image.image_url = 'foo'
         image.small_image_url = 'bar'
-        with mock.patch.object(
-            settings,
-            'GALLERY_IMAGE_WIDTH',
-            1024
-        ), mock.patch.object(
-            settings,
-            'GALLERY_IMAGE_HEIGHT',
-            768
-        ), mock.patch.object(
-            settings,
-            'GALLERY_SMALL_IMAGE_WIDTH',
-            800
-        ), mock.patch.object(
-            settings,
-            'GALLERY_SMALL_IMAGE_HEIGHT',
-            600
+        with patch_settings(
+            {
+                'image_width': 1024,
+                'image_height': 768,
+                'small_image_width': 800,
+                'small_image_height': 600
+            }
         ):
             data = utils.create_image_data(image)
         self.assertEqual(data['image']['url'], 'foo')

@@ -1,6 +1,6 @@
 import os
 
-from django.test import mock
+from django.test import mock, override_settings
 
 from .. import fields
 from .. import models
@@ -8,6 +8,7 @@ from .. import settings
 from .. import image_data
 
 from .models import ImageTestCase
+from .utils import patch_settings
 
 class TestGalleryImageFieldFile(ImageTestCase):
 
@@ -26,51 +27,51 @@ class TestGalleryImageFieldFile(ImageTestCase):
     def test_init(self):
         self.image_file.assert_any_call(
             self.field_file,
-            settings.GALLERY_THUMBNAIL_WIDTH,
-            settings.GALLERY_THUMBNAIL_HEIGHT,
+            settings.CONF['thumbnail_width'],
+            settings.CONF['thumbnail_height'],
             'thumbnail'
         )
         self.image_file.assert_any_call(
             self.field_file,
-            settings.GALLERY_SMALL_IMAGE_WIDTH,
-            settings.GALLERY_SMALL_IMAGE_HEIGHT,
+            settings.CONF['small_image_width'],
+            settings.CONF['small_image_height'],
             'small'
         )
         self.image_file.assert_any_call(
             self.field_file,
-            settings.GALLERY_SMALL_PREVIEW_WIDTH,
-            settings.GALLERY_SMALL_PREVIEW_HEIGHT,
+            settings.CONF['small_preview_width'],
+            settings.CONF['small_preview_height'],
             'small_preview'
         )
         self.image_file.assert_any_call(
             self.field_file,
-            settings.GALLERY_PREVIEW_WIDTH,
-            settings.GALLERY_PREVIEW_HEIGHT,
+            settings.CONF['preview_width'],
+            settings.CONF['preview_height'],
             'preview'
         )
         self.in_memory_data.assert_any_call(
             self.field_file,
-            settings.GALLERY_IMAGE_WIDTH,
-            settings.GALLERY_IMAGE_HEIGHT
+            settings.CONF['image_width'],
+            settings.CONF['image_height']
         )
 
+    @override_settings(MEDIA_ROOT='/media')
     @mock.patch('os.mkdir')
     @mock.patch('os.path.isdir', return_value=True)
     def test_check_dir_exists(self, isdir, mkdir):
         path = '/media' + os.sep + 'gallery'
-        with mock.patch.object(settings, 'MEDIA_ROOT', '/media'):
-            with mock.patch.object(settings, 'GALLERY_PATH', 'gallery'):
-                self.field_file._check_dir()
+        with patch_settings({'path': 'gallery'}):
+            self.field_file._check_dir()
         isdir.assert_called_width(path)
         mkdir.assert_not_called()
 
+    @override_settings(MEDIA_ROOT='/media')
     @mock.patch('os.mkdir')
     @mock.patch('os.path.isdir', return_value=False)
     def test_check_dir_does_not_exist(self, isdir, mkdir):
         path = '/media' + os.sep + 'gallery'
-        with mock.patch.object(settings, 'MEDIA_ROOT', '/media'):
-            with mock.patch.object(settings, 'GALLERY_PATH', 'gallery'):
-                self.field_file._check_dir()
+        with patch_settings({'path': 'gallery'}):
+            self.field_file._check_dir()
         isdir.assert_called_width(path)
         mkdir.assert_called()
 
