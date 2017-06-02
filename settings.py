@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
-DEFAULTS = {
+CONF = {
     'image_width': 752,
     'image_height': 608,
     'small_image_width': 564,
@@ -15,7 +15,7 @@ DEFAULTS = {
     'path': 'gallery',
 }
 
-CONFIG = DEFAULTS.update(getattr(settings, 'CONTENT_GALLERY', {}))
+CONF.update(getattr(settings, 'CONTENT_GALLERY', {}))
 
 if getattr(settings, 'MEDIA_ROOT', None) is None:
     raise ImproperlyConfigured("'MEDIA_ROOT' variable is not defined")
