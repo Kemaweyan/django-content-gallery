@@ -1,7 +1,7 @@
 {% load i18n admin_urls static %}
 <div class="js-inline-admin-formset inline-group content-gallery-images"
    id="{{ inline_admin_formset.formset.prefix }}-group"
-   data-inline-type="stacked"
+   data-inline-type="stacked" data-preview-url-pattern="{{ inline_admin_formset.formset.preview_url_pattern }}"
    data-inline-formset="{{ inline_admin_formset.inline_formset_data }}">
 <fieldset class="module {{ inline_admin_formset.classes }}">
   <h2>{{ inline_admin_formset.opts.verbose_name_plural|capfirst }}. DRAG ITEMS TO SET THE ORDER</h2>

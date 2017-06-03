@@ -40,7 +40,7 @@
             $totla_forms.val(new_forms_count);
             $group.find("#id_" + prefix + "-INITIAL_FORMS").val(new_forms_count);
 
-            var url = "/admin/gallery/image/ajax/preview/" + image_id;
+            var url = $group.attr("data-preview-url-pattern") + image_id;
             $.ajax({
                 url: url,
                 dataType: "json",
