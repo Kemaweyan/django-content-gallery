@@ -11,7 +11,7 @@ class TestGetChoicesUrlPattern(TestCase):
 
     def test_removing_pk(self):
         url = utils.get_choices_url_pattern()
-        self.assertEqual(url, '/gallery/ajax/choices/')
+        self.assertRegex(url, r'/\w+/ajax/choices/')
 
 
 class TestCalculateImageSize(TestCase):
