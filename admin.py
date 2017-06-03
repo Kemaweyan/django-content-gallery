@@ -48,6 +48,12 @@ class ImageAdminInline(GenericInlineModelAdmin):
         qs = super().get_queryset(request)
         return qs.order_by('position')
 
+    def get_formset(self, request, obj=None, **kwargs):
+        formset = super().get_formset(request, obj, **kwargs)
+        url = utils.get_admin_new_image_preview_url_pattern()
+        setattr(formset, 'preview_url_pattern', url)
+        return formset
+
 
 class ImageAdmin(admin.ModelAdmin):
     form = forms.ImageAdminForm
@@ -72,7 +78,7 @@ class ImageAdmin(admin.ModelAdmin):
         response = {
             "small_preview_url": image.small_preview_url,
             "position": image.position,
-            "image_data": data,
+            "image_data": json.dumps(data),
             "zoom_url": utils.create_static_url(
                 "content_gallery/img/zoom-small.png"
             ),

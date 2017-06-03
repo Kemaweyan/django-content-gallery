@@ -67,7 +67,7 @@ class ImageAdmin(AjaxRequestMixin, ViewsTestCase):
             {
                 "small_preview_url": self.image1.small_preview_url,
                 "position": self.image1.position,
-                "image_data": 'bar',
+                "image_data": json.dumps('bar'),
                 "zoom_url": 'foo',
             }
         )
