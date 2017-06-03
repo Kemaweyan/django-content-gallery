@@ -6,7 +6,7 @@ app_name = 'gallery'
 
 urlpatterns = [
     url(
-        r'^ajax/choices/(?P<pk>\d+)$',
+        r'^ajax/choices/(?P<pk>\d+)/$',
         views.choices,
         name='choices'
     ),

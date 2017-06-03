@@ -7,11 +7,19 @@ from .. import utils
 
 from .utils import create_image_file, get_image_size, patch_settings
 
-class TestGetChoicesUrlPattern(TestCase):
+class TestPatterns(TestCase):
 
-    def test_removing_pk(self):
+    def test_get_choices_url_pattern(self):
         url = utils.get_choices_url_pattern()
-        self.assertRegex(url, r'/\w+/ajax/choices/')
+        self.assertRegex(url, r'^/\w+/ajax/choices/$')
+
+    def test_get_gallery_data_url_pattern(self):
+        url = utils.get_gallery_data_url_pattern()
+        self.assertRegex(url, r'^/\w+/ajax/gallery_data/$')
+
+    def test_get_admin_new_image_preview_url_pattern(self):
+        url = utils.get_admin_new_image_preview_url_pattern()
+        self.assertEqual(url, '/admin/gallery/image/ajax/preview/')
 
 
 class TestCalculateImageSize(TestCase):

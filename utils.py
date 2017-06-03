@@ -19,7 +19,25 @@ def get_choices_url_pattern():
     # get 'choices' URL with any id
     choices_url = urlresolvers.reverse('gallery:choices', args=(0,))
     # remove id (last digits in the URL)
-    return re.sub(r'\d+$', '', choices_url)
+    return re.sub(r'\d+/?$', '', choices_url)
+
+def get_gallery_data_url_pattern():
+    choices_url = urlresolvers.reverse(
+        'gallery:gallery_data',
+        args=(
+            'app_label',
+            'content_type',
+            0
+        )
+    )
+    return re.sub(r'\w+/\w+/\d+/?$', '', choices_url)
+
+def get_admin_new_image_preview_url_pattern():
+    preview_url = urlresolvers.reverse(
+        'admin:gallery_new_image_preview',
+         args=(0,)
+    )
+    return re.sub(r'\d+/?$', '', preview_url)
 
 def calculate_image_size(size, max_size):
     # copied from PIL.Image.thumbnail
