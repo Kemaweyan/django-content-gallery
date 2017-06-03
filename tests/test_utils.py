@@ -19,7 +19,7 @@ class TestPatterns(TestCase):
 
     def test_get_admin_new_image_preview_url_pattern(self):
         url = utils.get_admin_new_image_preview_url_pattern()
-        self.assertEqual(url, '/admin/gallery/image/ajax/preview/')
+        self.assertRegex(url, r'^/admin/\w+/image/ajax/preview/$')
 
 
 class TestCalculateImageSize(TestCase):
