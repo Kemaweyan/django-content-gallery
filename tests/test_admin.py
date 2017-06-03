@@ -11,8 +11,10 @@ from .base_test_cases import ViewsTestCase, AjaxRequestMixin
 
 class ImageAdminInline(TestCase):
 
+    def setUp(self):
+        self.inline_admin = mock.MagicMock(spec=admin.ImageAdminInline)
+
     def test_get_queryset(self):
-        inline_admin = mock.MagicMock(spec=admin.ImageAdminInline)
         qs = mock.MagicMock()
         qs.order_by = mock.MagicMock(return_value='bar')
         with mock.patch.object(
@@ -20,9 +22,33 @@ class ImageAdminInline(TestCase):
             'get_queryset',
             return_value=qs
         ) as get_queryset:
-            result = admin.ImageAdminInline.get_queryset(inline_admin, 'foo')
-            get_queryset.assert_called_with('foo')
+            result = admin.ImageAdminInline.get_queryset(
+                self.inline_admin,
+                'request'
+            )
+            get_queryset.assert_called_with('request')
         qs.order_by.assert_called_with('position')
+
+    def test_get_formset(self):
+        formset = mock.MagicMock()
+        with mock.patch.object(
+            GenericInlineModelAdmin,
+            'get_formset',
+            return_value=formset
+        ) as get_formset, mock.patch.object(
+            utils,
+            'get_admin_new_image_preview_url_pattern',
+            return_value='url_pattern'
+        ) as get_pattern:
+            result = admin.ImageAdminInline.get_formset(
+                self.inline_admin,
+                'request'
+            )
+            get_formset.assert_called_with('request', None)
+            get_pattern.assert_called()
+        self.assertEqual(formset, result)
+        self.assertEqual(formset.preview_url_pattern, 'url_pattern')
+        
 
 
 class ImageAdmin(AjaxRequestMixin, ViewsTestCase):
