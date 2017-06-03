@@ -4,6 +4,7 @@ from django import template
 from django.utils import html
 
 from .. import settings
+from .. import utils
 
 register = template.Library()
 
@@ -58,3 +59,8 @@ def gallery_small_preview(obj):
     image_data = gallery_image_data(obj)
     context.update(image_data)
     return context
+
+
+@register.simple_tag
+def gallery_data_url_pattern():
+    return utils.get_gallery_data_url_pattern()

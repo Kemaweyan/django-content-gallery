@@ -36,8 +36,8 @@
         }
 
         function loadData(app_label, content_type, object_id, callback) {
-            currentImage = 0;
-            url = "/gallery/ajax/gallery_data/" + app_label + "/" + content_type + "/" + object_id;
+            var currentImage = 0;
+            var url = $("#content-gallery").attr("data-url-pattern") + app_label + "/" + content_type + "/" + object_id;
 
             $.ajax({
                 url: url,

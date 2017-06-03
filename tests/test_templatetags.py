@@ -5,6 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 
 from ..templatetags import content_gallery
 from .. import models
+from .. import utils
 
 from .base_test_cases import ViewsTestCase
 from .utils import get_image_in_memory_data, patch_settings
@@ -127,3 +128,16 @@ class TestGallerySmallPreview(ViewsTestCase):
                 'zoom_left': 200 - 15
             }
         )
+
+
+class TestGalleryDataUrlPattern(TestCase):
+
+    def test_get_url_pattern(self):
+        with mock.patch.object(
+            utils,
+            'get_gallery_data_url_pattern',
+            return_value='url_pattern'
+        ) as get_pattern:
+            result = content_gallery.gallery_data_url_pattern()
+            get_pattern.assert_called()
+        self.assertEqual(result, 'url_pattern')
