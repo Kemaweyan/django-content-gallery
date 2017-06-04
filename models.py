@@ -55,7 +55,7 @@ class ImageManager(models.Manager):
 class Image(models.Model):
     """
     A model of image objects. It stores the image itself, its position
-    between other images and a link to the object the image is related to.
+    between other images and the link to the object the image is related to.
     """
 
     image = fields.GalleryImageField(upload_to=settings.CONF['path'])
@@ -76,8 +76,8 @@ class Image(models.Model):
         # do not try to read content_type value if there is no related object
         if self.object_id:
             self.init_type = self.content_type
-        # store image name to be able to keep correct filenames when
-        # new images will be uploaded replacing old files
+        # store the name of the image to be able to keep correct filenames
+        # when new images will be uploaded replacing old files
         self.image_name = self.image.name
 
     def __str__(self):
@@ -85,8 +85,8 @@ class Image(models.Model):
 
     def _get_position(self):
         """
-        Calculates a position of new image and assing the value
-        to the 'position' field. New images are placed it the end of the list
+        Calculates a position of added image and assing the value to the
+        ``position`` field. New images are placed into the end of the list
         """
         # get all images related to the same object
         images = Image.objects.filter(
@@ -109,8 +109,8 @@ class Image(models.Model):
 
     def _get_slug(self):
         """
-        Creates unique slug using str version of related object.
-        The slug is used for names of image files.
+        Creates an unique slug using str version of the related object.
+        The slug is used to create names of the image files.
         """
         title = str(self.content_object)
         return slugify_unique(title)
@@ -121,7 +121,7 @@ class Image(models.Model):
         """
         if not self.pk or self._object_changed():
             # create new position and new slug for new image
-            # of if related object has been changed
+            # or if related object has been changed
             self._get_position()
             slug = self._get_slug()
         else:
@@ -130,7 +130,7 @@ class Image(models.Model):
 
     def save(self, *args, **kwargs):
         """
-        Saves iamge object
+        Saves the image object
         """
         # save image data first
         self._save_data()
@@ -144,7 +144,7 @@ class Image(models.Model):
 
     def delete(self, *args, **kwargs):
         """
-        Deletes iamge object
+        Deletes the image object
         """
         # delete image data first
         self.delete_files()
@@ -190,7 +190,7 @@ class ContentGalleryMixin(models.Model):
     """
     A mixin that adds the ContentGallery features to any model
     of you project. It allows to access all related images via
-    the 'gallery' field. The 'gallery_visible' flag is used to hide
+    the ``gallery`` field. The ``gallery_visible`` flag is used to hide
     your model from the list in the content_gallery.Image admin page
     by setting it to False. But you still can add images from the
     admin pages of you models.
