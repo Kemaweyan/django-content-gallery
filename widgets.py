@@ -77,19 +77,23 @@ class ObjectIdSelect(forms.Select):
 
 
 class ImageWidget(widgets.AdminFileWidget):
-    template = (
-        '<p class="file-upload content-gallery-images">'
-        '<span class="content-gallery-preview-container" '
-        'style="width: {}px; height: {}px;">'
-        '<a class="content-gallery-preview content-gallery-inline-box '
-        'content-gallery-centered-image content-gallery-images '
-        'content-gallery-open-view" style="width: {}px; height: {}px; '
-        'line-height: {}px;" href="#" data-image="{}">'
-        '<img src="%(initial_url)s" alt="Image preview"></a>'
-        '<img src="{}" class="content-gallery-zoom '
-        'content-gallery-preview-zoom" style="left: {}px;" alt="zoom"></span>'
-        '%(clear_template)s<br />%(input_text)s: %(input)s</p>'
-    )
+    template = '''
+        <p class="file-upload content-gallery-images">
+          <span class="content-gallery-preview-container" 
+            style="width: {}px; height: {}px;">
+              <a class="content-gallery-preview content-gallery-inline-box
+                content-gallery-centered-image content-gallery-images
+                content-gallery-open-view" style="width: {}px; height: {}px;
+                line-height: {}px;" href="#" data-image="{}">
+                    <img src="%(initial_url)s" alt="Image preview">
+              </a>
+              <img src="{}" class="content-gallery-zoom 
+                content-gallery-preview-zoom" style="left: {}px;" alt="zoom">
+          </span>
+          %(clear_template)s
+          <br />
+          %(input_text)s: %(input)s
+        </p>'''
 
     def render(self, name, image, attrs=None):
         if isinstance(image, fields.GalleryImageFieldFile):
