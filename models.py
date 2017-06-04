@@ -42,7 +42,7 @@ class ImageQuerySet(models.QuerySet):
 
 class ImageManager(models.Manager):
     """
-    A custom Manager that returns specific QeurySet. Used in Image model
+    A custom Manager that returns specific QuerySet. Used in the Image model
     """
 
     def get_queryset(self):
