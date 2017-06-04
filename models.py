@@ -92,7 +92,7 @@ class Image(models.Model):
         images = Image.objects.filter(
             content_type__exact=self.content_type,
             object_id__exact=self.object_id
-        ).order_by('-position')
+        ).order_by('-position')[:1]
         if images:
             # a new position is greater by 1 than the last position
             self.position = images[0].position + 1
