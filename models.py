@@ -86,7 +86,7 @@ class Image(models.Model):
     def _get_position(self):
         """
         Calculates a position of added image and assing the value to the
-        ``position`` field. New images are placed into the end of the list
+        'position' field. New images are placed into the end of the list
         """
         # get all images related to the same object
         images = Image.objects.filter(
@@ -190,7 +190,7 @@ class ContentGalleryMixin(models.Model):
     """
     A mixin that adds the ContentGallery features to any model
     of you project. It allows to access all related images via
-    the ``gallery`` field. The ``gallery_visible`` flag is used to hide
+    the 'gallery' field. The 'gallery_visible' flag is used to hide
     your model from the list in the content_gallery.Image admin page
     by setting it to False. But you still can add images from the
     admin pages of you models.
