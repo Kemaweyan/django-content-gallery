@@ -3,21 +3,27 @@ from django.core.exceptions import ImproperlyConfigured
 
 # default settings
 CONF = {
+    # the size of full-size image
     'image_width': 752,
     'image_height': 608,
 
+    # the size of small image
     'small_image_width': 564,
     'small_image_height': 456,
 
+    # the size of thumbnail
     'thumbnail_width': 94,
     'thumbnail_height': 76,
 
+    # the size of image preview
     'preview_width': 376,
     'preview_height': 304,
 
+    # the size of small image preview
     'small_preview_width': 141,
     'small_preview_height': 114,
 
+    # the path to image files
     'path': 'gallery',
 }
 
