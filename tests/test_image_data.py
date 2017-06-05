@@ -24,7 +24,7 @@ class TestImageFile(MockImageTestCase):
             'bar'
         )
         self.assertEqual(image_file.name, 'foo.jpg')
-        self.assertEqual(image_file.word, 'bar')
+        self.assertEqual(image_file.suffix, 'bar')
         self.assertEqual(image_file.size[0], 100)
         self.assertEqual(image_file.size[1], 50)
 
@@ -37,7 +37,7 @@ class TestImageFile(MockImageTestCase):
         self.assertEqual(self.image_file.name, 'bar.jpg')
 
     def test_create_filename_with_path(self):
-        self.image_file.word = 'bar'
+        self.image_file.suffix = 'bar'
         name = image_data.ImageFile._create_filename(
             self.image_file,
             'gallery/foo.jpg'
@@ -45,7 +45,7 @@ class TestImageFile(MockImageTestCase):
         self.assertEqual(name, 'gallery/foo_bar.jpg')
 
     def test_create_filename_without_path(self):
-        self.image_file.word = 'bar'
+        self.image_file.suffix = 'bar'
         name = image_data.ImageFile._create_filename(
             self.image_file,
             'foo.jpg'

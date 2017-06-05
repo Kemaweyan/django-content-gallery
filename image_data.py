@@ -129,9 +129,9 @@ class ImageFile(BaseImageData):
     into the files directly.
     """
 
-    def __init__(self, image, width, height, word):
+    def __init__(self, image, width, height, suffix):
         # store the suffix word used in the file name
-        self.word = word
+        self.suffix = suffix
         super().__init__(image, width, height)
 
     def _create_filename(self, filename):
@@ -140,7 +140,7 @@ class ImageFile(BaseImageData):
         in the end of the file name and returns it.
         """
         name, ext = os.path.splitext(filename)
-        return "{}_{}{}".format(name, self.word, ext)
+        return "{}_{}{}".format(name, self.suffix, ext)
 
     def _create_image(self, image):
         """
