@@ -12,6 +12,10 @@ from . import forms
 from . import utils
 
 class ImageAdminInline(GenericInlineModelAdmin):
+    """
+    Inline model admin of Image that could be added to related models.
+    Adds to admin page a collection of images related to the object.
+    """
     model = models.Image
     form = forms.ImageAdminInlineForm
     template = "content_gallery/admin/image_admin_inline.html"
@@ -45,10 +49,18 @@ class ImageAdminInline(GenericInlineModelAdmin):
         }
 
     def get_queryset(self, request):
+        """
+        Returns a collection of Image objects ordered by 'position' value.
+        """
         qs = super().get_queryset(request)
         return qs.order_by('position')
 
     def get_formset(self, request, obj=None, **kwargs):
+        """
+        Adds 'preview_url_pattern' attribute to the formset object.
+        The attribute contains the pattern of URL used by JavaScript code
+        to get data of new added image to show its preview.
+        """
         formset = super().get_formset(request, obj, **kwargs)
         url = utils.get_admin_new_image_preview_url_pattern()
         setattr(formset, 'preview_url_pattern', url)
@@ -56,10 +68,17 @@ class ImageAdminInline(GenericInlineModelAdmin):
 
 
 class ImageAdmin(admin.ModelAdmin):
+    """
+    Model admin of Image.
+    """
     form = forms.ImageAdminForm
     change_form_template = "content_gallery/admin/image_admin.html"
 
     def get_urls(self):
+        """
+        Adds extra URL pattern for getting data of images. Used by
+        JavaScript code in inline admin for new added images.
+        """
         urls = super().get_urls()
         extra_urls = [
             url(
@@ -71,6 +90,10 @@ class ImageAdmin(admin.ModelAdmin):
         return extra_urls + urls
 
     def preview(self, request, pk):
+        """
+        A view that returns data of an image object.
+        """
+        # allow only AJAX requests
         if not request.is_ajax():
             raise PermissionDenied
         image = get_object_or_404(models.Image, pk=pk)
