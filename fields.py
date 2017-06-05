@@ -107,7 +107,6 @@ class GalleryImageFieldFile(files.ImageFieldFile):
 
     @property
     def image_url(self):
-    def thumbnail_url(self):
         """
         URL to the full-size image file
         """
