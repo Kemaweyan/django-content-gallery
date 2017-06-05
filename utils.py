@@ -16,12 +16,19 @@ def get_choices_url_pattern():
     Returns the pattern of URL for getting product choices
     via AJAX in JS code.
     """
-    # get 'choices' URL with any id
+    # get 'choices' URL using 'reverse',
+    # the pattern requires one numeric argument
     choices_url = urlresolvers.reverse('gallery:choices', args=(0,))
-    # remove id (last digits in the URL)
+    # remove argument (last digits in the URL with '/' optionally)
     return re.sub(r'\d+/?$', '', choices_url)
 
 def get_gallery_data_url_pattern():
+    """
+    Returns the pattern of URL for getting data of images
+    related to the object
+    """
+    # get 'gallery_data' using 'reverse',
+    # the pattern requires two words and one number as arguments
     choices_url = urlresolvers.reverse(
         'gallery:gallery_data',
         args=(
@@ -30,35 +37,61 @@ def get_gallery_data_url_pattern():
             0
         )
     )
+    # remove arguments
     return re.sub(r'\w+/\w+/\d+/?$', '', choices_url)
 
 def get_admin_new_image_preview_url_pattern():
+    """
+    Returns the pattern of URL for getting data of the image.
+    Used to get data of new added image.
+    """
+    # get 'gallery_new_image_preview' using 'reverse',
+    # the pattern requires one numeric argument
     preview_url = urlresolvers.reverse(
         'admin:gallery_new_image_preview',
          args=(0,)
     )
+    # remove argument (last digits in the URL with '/' optionally)
     return re.sub(r'\d+/?$', '', preview_url)
 
 def calculate_image_size(size, max_size):
-    # copied from PIL.Image.thumbnail
+    """
+    Returns the size of the image after resizing.
+    The same code is used in PIL.Image.thumbnail
+    The results of this function is used by JavaScript
+    in resize effect while changing image.
+    """
     x, y = size
+    # if the width is greater than the target
     if x > max_size[0]:
+        # proportionally decrease the height but not less than 1px
         y = int(max(y * max_size[0] / x, 1))
-        x = int(max_size[0])
+        x = int(max_size[0])  # set the width to the target width
+    # if the height is still greater than the target
     if y > max_size[1]:
+        # proportionally decrease the width but not less than 1px
         x = int(max(x * max_size[1] / y, 1))
-        y = int(max_size[1])
+        y = int(max_size[1])  # set the height to the target height
     return x, y
 
 def get_ext(filename):
+    """
+    Returns the ext of the file name with prefix dot
+    """
     name, ext = os.path.splitext(filename)
     return ext
 
 def get_name(filename):
+    """
+    Returns the name of the file name without the ext
+    """
     name, ext = os.path.splitext(filename)
     return name
 
 def create_path(filename):
+    """
+    Returns the path to the file located in the gallery folder
+    """
     return os.path.join(
         django_settings.MEDIA_ROOT,
         settings.CONF['path'],
@@ -66,26 +99,49 @@ def create_path(filename):
     )
 
 def create_url(filename):
+    """
+    Returns the URL of the file located in the gallery folder
+    """
+    # remove slashes to avoid double slashes in the URL
+    # keep the first slash in the MEDIA_URL
     media_url = django_settings.MEDIA_URL.rstrip('/')
     gallery_path = settings.CONF['path'].strip('/')
     return '/'.join([media_url, gallery_path, filename])
 
 def name_in_db(name):
+    """
+    Returns the name of the file after saving data to the database
+    Adds the gallery folder to the file name
+    """
     return os.path.join(settings.CONF['path'], name)
 
 def image_resize(src, dst, size):
+    """
+    Resizes the image and saves it to the 'dst' (filename of io object)
+    """
     with Image.open(src) as img:
-        img.thumbnail(size)
+        img.thumbnail(size)  # use 'thumbnail' to keep aspect ratio
         img.save(dst, img.format)
 
 def create_in_memory_image(image, name, size):
-    output = io.BytesIO()
+    """
+    Resizes the image and saves it as InMemoryUploadedFile object
+    Returns the InMemoryUploadedFile object with the image data
+    """
+    output = io.BytesIO()  # create an io object
+    # resize the image and save it to the io object
     image_resize(image, output, size)
+    # get MIME type of the image
     mime = magic.from_buffer(output.getvalue(), mime=True)
+    # create InMemoryUploadedFile using data from the io
     return uploadedfile.InMemoryUploadedFile(output, 'ImageField', name,
         mime, sys.getsizeof(output), None)
 
 def create_image_data(image):
+    """
+    Returns a dict with the full-size image
+    and the small image URLs with sizes
+    """
     return {
         "image": {
             "url": image.image_url,
@@ -100,5 +156,9 @@ def create_image_data(image):
     }
 
 def create_static_url(url):
+    """
+    Returns a URL to the file located in the static folder
+    """
+    # remove ending slash to avoid double slashes
     static = django_settings.STATIC_URL.rstrip("/")
     return "/".join([static, url])
