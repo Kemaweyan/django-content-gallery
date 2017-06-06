@@ -10,28 +10,12 @@ from .. import utils
 from .base_test_cases import ViewsTestCase
 from .utils import get_image_in_memory_data, patch_settings
 
-class TestGetFirstImage(ViewsTestCase):
-
-    def test_get_image(self):
-        img = content_gallery.get_first_image(self.object)
-        self.assertEquals(self.image1, img)
-
-    def test_get_image_change_order(self):
-        self.image1.position = 2
-        self.image1.save()
-        img = content_gallery.get_first_image(self.object)
-        self.assertEquals(self.image2, img)
-
-    def test_get_image_none(self):
-        img = content_gallery.get_first_image(self.alone_object)
-        self.assertIsNone(img)
-
 
 class TestGalleryImageData(ViewsTestCase):
 
     def test_object_without_images(self):
         with mock.patch.object(
-                content_gallery,
+                utils,
                 'get_first_image',
                 return_value=None
         ) as get_first_image:
@@ -43,7 +27,7 @@ class TestGalleryImageData(ViewsTestCase):
 
     def test_object_with_image(self):
         with mock.patch.object(
-                content_gallery,
+                utils,
                 'get_first_image',
                 return_value=self.image1
         ) as get_first_image:
@@ -56,7 +40,7 @@ class TestGalleryImageData(ViewsTestCase):
     @mock.patch('django.utils.html.escape', lambda x: x)
     def test_object_with_image_unescaped(self):
         with mock.patch.object(
-                content_gallery,
+                utils,
                 'get_first_image',
                 return_value=self.image1
         ) as get_first_image:

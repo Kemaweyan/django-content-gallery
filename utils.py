@@ -162,3 +162,9 @@ def create_static_url(url):
     # remove ending slash to avoid double slashes
     static = django_settings.STATIC_URL.rstrip("/")
     return "/".join([static, url])
+
+def get_first_image(obj):
+    images = obj.gallery.all().order_by('position')[:1]
+    if not images:
+        return None
+    return images[0]

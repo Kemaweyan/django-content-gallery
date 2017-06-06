@@ -6,6 +6,7 @@ from django.conf import settings as django_settings
 from .. import utils
 
 from .utils import create_image_file, get_image_size, patch_settings
+from .base_test_cases import ViewsTestCase
 
 class TestPatterns(TestCase):
 
@@ -220,3 +221,20 @@ class TestCreateImageData(TestCase):
         self.assertEqual(data['small_image']['url'], 'bar')
         self.assertEqual(data['small_image']['width'], 800)
         self.assertEqual(data['small_image']['height'], 600)
+
+
+class TestGetFirstImage(ViewsTestCase):
+
+    def test_get_image(self):
+        img = utils.get_first_image(self.object)
+        self.assertEquals(self.image1, img)
+
+    def test_get_image_change_order(self):
+        self.image1.position = 2
+        self.image1.save()
+        img = utils.get_first_image(self.object)
+        self.assertEquals(self.image2, img)
+
+    def test_get_image_none(self):
+        img = utils.get_first_image(self.alone_object)
+        self.assertIsNone(img)

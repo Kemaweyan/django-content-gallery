@@ -8,16 +8,9 @@ from .. import utils
 
 register = template.Library()
 
-def get_first_image(obj):
-    images = obj.gallery.all().order_by('position')[:1]
-    if not images:
-        return None
-    return images[0]
-
-
 @register.simple_tag
 def gallery_image_data(obj):
-    image = get_first_image(obj)
+    image = utils.get_first_image(obj)
     try:
         data = {
             'app_label': image.content_type.app_label,
