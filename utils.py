@@ -164,7 +164,15 @@ def create_static_url(url):
     return "/".join([static, url])
 
 def get_first_image(obj):
+    """
+    Returns the first image related to the object or None
+    if there is no images. The first image is the image
+    with the smallest value of the 'position' field. 
+    """
+    # get one image ordered by 'position'
     images = obj.gallery.all().order_by('position')[:1]
+    # return None if result is empty
     if not images:
         return None
+    # return the first image
     return images[0]
