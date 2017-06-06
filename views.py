@@ -10,34 +10,55 @@ from . import models
 from . import utils
 
 def choices(request, pk):
+    """
+    Returns a list of available objects of the model.
+    The 'pk' argument is the primary key of the ContentType.
+    """
+    # allow only AJAX requests
     if not request.is_ajax():
         raise PermissionDenied
     response = []
+    # get content type with specified pk and determine its model class
     ctype = get_object_or_404(ContentType, pk=pk)
     model_class = ctype.model_class()
     try:
+        # look for 'gallery_visible' attribute in the model
         if model_class.gallery_visible:
+            # the model permits to add it to the list
+            # get all objects
             qs = model_class.objects.all()
+            # add objects to the list
             for product in qs:
                 response.append({"id": str(product.id), "name": str(product)})
         else:
+            # the model does not permit to add it to the list
             raise PermissionDenied
     except AttributeError:
+        # the model has not the 'gallery_visible' attribute
+        # so images couldn't be attached to the model
         raise Http404
+    # send the response in JSON format
     return HttpResponse(json.dumps(response), content_type='application/json')
 
 
 def gallery_data(request, app_label, content_type, object_id):
+    """
+    Returns data of all images attached to the object.
+    """
+    # allow only AJAX requests
     if not request.is_ajax():
         raise PermissionDenied
+    # the maximum size of full-size images
     image_size = {
         "width": settings.CONF['image_width'],
         "height": settings.CONF['image_height']
     }
+    # the maximum size of small images
     small_image_size = {
         "width": settings.CONF['small_image_width'],
         "height": settings.CONF['small_image_height']
     }
+    # the maximum size of thumbnails
     thumbnail_size = {
         "width": settings.CONF['thumbnail_width'],
         "height": settings.CONF['thumbnail_height']
