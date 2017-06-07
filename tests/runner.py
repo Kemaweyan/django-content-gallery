@@ -4,7 +4,7 @@ import tempfile
 from django.conf import settings
 from django.test.runner import DiscoverRunner
 
-class CustomTestSuiteRunner(DiscoverRunner):
+class GalleryTestSuiteRunner(DiscoverRunner):
 
     def setup_test_environment(self):
         super().setup_test_environment()
