@@ -53,7 +53,7 @@
             checkScrollButtons(newLeft);
         }
 
-        function loadImage(src, callback) {
+        function preloadImage(src, callback) {
             var img = new Image();
             img.onload = callback;
             img.src = src;
@@ -71,16 +71,16 @@
                 src = img.image;
                 size = img.image_size;
             }
-            loadImage(src, function () {
-                callback(size, src);
-            });
+            callback(size, src);
         }
 
         function setImageAnim(index) {
             setImage(index, function (size, src) {
-                animateSync.safeAnimate($image, {width: 0, height: 0}, function () {
-                    $image.attr("src", src);
-                    animateSync.safeAnimate($image, {width: size.width, height: size.height}, null);
+                preloadImage(src, function () {
+                    animateSync.safeAnimate($image, {width: 0, height: 0}, function () {
+                        $image.attr("src", src);
+                        animateSync.safeAnimate($image, {width: size.width, height: size.height}, null);
+                    });
                 });
             });
         }
@@ -166,13 +166,14 @@
         }
 
         function resize() {
+            var index = gallery.current();
+            setImageFast(index);
+
             setThumbnailViewSize(imgSize, thumbnailSize);
             maxOffset = $thumbnailsContainer.width() - $thumbnails.width();
 
             setImageHeight(imgSize.height);
 
-            var index = gallery.current();
-            setImageFast(index);
             scrollToImage(index);
         }
 
