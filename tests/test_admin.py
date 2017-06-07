@@ -1,7 +1,6 @@
 import json
 
 from django.test import mock, TestCase
-from django.contrib.contenttypes.admin import GenericInlineModelAdmin
 from django.core.urlresolvers import reverse
 
 from .. import admin
@@ -17,9 +16,9 @@ class ImageAdminInline(TestCase):
     def test_get_queryset(self):
         qs = mock.MagicMock()
         qs.order_by = mock.MagicMock(return_value='bar')
-        with mock.patch.object(
-            GenericInlineModelAdmin,
-            'get_queryset',
+        with mock.patch(
+            'django.contrib.contenttypes.admin'
+            '.GenericInlineModelAdmin.get_queryset',
             return_value=qs
         ) as get_queryset:
             result = admin.ImageAdminInline.get_queryset(
@@ -31,9 +30,9 @@ class ImageAdminInline(TestCase):
 
     def test_get_formset(self):
         formset = mock.MagicMock()
-        with mock.patch.object(
-            GenericInlineModelAdmin,
-            'get_formset',
+        with mock.patch(
+            'django.contrib.contenttypes.admin'
+            '.GenericInlineModelAdmin.get_formset',
             return_value=formset
         ) as get_formset, mock.patch.object(
             utils,
