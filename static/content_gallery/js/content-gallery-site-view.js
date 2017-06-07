@@ -55,7 +55,7 @@
 
         function loadImage(src, callback) {
             var img = new Image();
-            //img.onload = callback;
+            img.onload = callback;
             img.src = src;
         }
 
