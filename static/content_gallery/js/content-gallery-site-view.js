@@ -11,7 +11,8 @@
             $choices,
             $thumbnailsView,
             $imageView,
-            $thumbnailsContainer;
+            $thumbnailsContainer,
+            $loadingSplash;
 
         var thumbnailWidth, maxOffset, imgSize, thumbnailSize, small;
 
@@ -55,7 +56,14 @@
 
         function preloadImage(src, callback) {
             var img = new Image();
-            img.onload = callback;
+            var timer = setTimeout(function () {
+                $loadingSplash.show();
+            }, 500);
+            img.onload = function () {
+                clearTimeout(timer);
+                $loadingSplash.hide();
+                callback();
+            }
             img.src = src;
         }
 
@@ -186,6 +194,7 @@
             $scrollRight = $(".content-gallery-scroll-right");
             $thumbnailsContainer = $(".content-gallery-thumbnails-container");
             $thumbnails = $(".content-gallery-thumbnails-container > ul");
+            $loadingSplash = $("#content-gallery-loading-splash");
 
             $thumbnails.on("click", "li.choice", function () {
                 setImageByIndex($(this).index());

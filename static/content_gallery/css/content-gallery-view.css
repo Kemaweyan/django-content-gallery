@@ -70,3 +70,12 @@
     border: 1px solid #777;
     margin: 0 3px;
 }
+
+#content-gallery-view #content-gallery-loading-splash {
+    position: relative;
+    left: 0;
+    top: -100%;
+    background-color: #fff;
+    opacity: 0.5;
+    display: none;
+}
