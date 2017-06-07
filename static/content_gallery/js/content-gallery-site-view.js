@@ -11,7 +11,8 @@
             $choices,
             $thumbnailsView,
             $imageView,
-            $thumbnailsContainer;
+            $thumbnailsContainer,
+            $loadingSplash;
 
         var thumbnailWidth, maxOffset, imgSize, thumbnailSize, small;
 
@@ -53,6 +54,19 @@
             checkScrollButtons(newLeft);
         }
 
+        function preloadImage(src, callback) {
+            var img = new Image();
+            var timer = setTimeout(function () {
+                $loadingSplash.show();
+            }, 500);
+            img.onload = function () {
+                clearTimeout(timer);
+                $loadingSplash.hide();
+                callback();
+            }
+            img.src = src;
+        }
+
         function setImage(index, callback) {
             var img = gallery.getImage(index);
             if (!img) return;
@@ -70,9 +84,11 @@
 
         function setImageAnim(index) {
             setImage(index, function (size, src) {
-                animateSync.safeAnimate($image, {width: 0, height: 0}, function () {
-                    $image.attr("src", src);
-                    animateSync.safeAnimate($image, {width: size.width, height: size.height}, null);
+                preloadImage(src, function () {
+                    animateSync.safeAnimate($image, {width: 0, height: 0}, function () {
+                        $image.attr("src", src);
+                        animateSync.safeAnimate($image, {width: size.width, height: size.height}, null);
+                    });
                 });
             });
         }
@@ -158,13 +174,14 @@
         }
 
         function resize() {
+            var index = gallery.current();
+            setImageFast(index);
+
             setThumbnailViewSize(imgSize, thumbnailSize);
             maxOffset = $thumbnailsContainer.width() - $thumbnails.width();
 
             setImageHeight(imgSize.height);
 
-            var index = gallery.current();
-            setImageFast(index);
             scrollToImage(index);
         }
 
@@ -177,6 +194,7 @@
             $scrollRight = $(".content-gallery-scroll-right");
             $thumbnailsContainer = $(".content-gallery-thumbnails-container");
             $thumbnails = $(".content-gallery-thumbnails-container > ul");
+            $loadingSplash = $("#content-gallery-loading-splash");
 
             $thumbnails.on("click", "li.choice", function () {
                 setImageByIndex($(this).index());
