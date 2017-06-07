@@ -53,6 +53,12 @@
             checkScrollButtons(newLeft);
         }
 
+        function loadImage(src, callback) {
+            var img = new Image();
+            //img.onload = callback;
+            img.src = src;
+        }
+
         function setImage(index, callback) {
             var img = gallery.getImage(index);
             if (!img) return;
@@ -65,7 +71,9 @@
                 src = img.image;
                 size = img.image_size;
             }
-            callback(size, src);
+            loadImage(src, function () {
+                callback(size, src);
+            });
         }
 
         function setImageAnim(index) {
