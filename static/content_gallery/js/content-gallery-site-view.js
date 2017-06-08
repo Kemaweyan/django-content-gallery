@@ -65,7 +65,7 @@
             return $.Deferred(loader).promise();
         }
 
-        function setImage(index, callback) {
+        function getImage(index) {
             var img = gallery.getImage(index);
             if (!img) return;
             $choices.addClass("choice");
@@ -77,29 +77,27 @@
                 src = img.image;
                 size = img.image_size;
             }
-            callback(size, src);
+            return {size: size, src: src};
         }
 
         function setImageAnim(index) {
-            setImage(index, function (size, src) {
-                var preload = preloadImage(src).then(function () {
-                    $loadingSplash.hide();
-                });
-                var animation = animateSync.safeAnimate($image, {width: 0, height: 0}).then(function () {
-                    if (preload.state() != "resolved")
-                        $loadingSplash.show();
-                });
-                $.when(preload, animation).done(function (a, b) {
-                    $image.attr("src", src);
-                    animateSync.safeAnimate($image, {width: size.width, height: size.height});
-                });
+            var image = getImage(index);
+            var preload = preloadImage(image.src).then(function () {
+                $loadingSplash.hide();
+            });
+            var animation = animateSync.safeAnimate($image, {width: 0, height: 0}).then(function () {
+                if (preload.state() != "resolved")
+                    $loadingSplash.show();
+            });
+            $.when(preload, animation).done(function (a, b) {
+                $image.attr("src", image.src);
+                animateSync.safeAnimate($image, {width: image.size.width, height: image.size.height});
             });
         }
 
         function setImageFast(index) {
-            setImage(index, function (size, src) {
-                $image.attr("src", src).css({width: size.width, height: size.height});
-            });
+            var image = getImage(index);
+            $image.attr("src", image.src).css({width: image.size.width, height: image.size.height});
         }
 
         function slideImage(index) {
