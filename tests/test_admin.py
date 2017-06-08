@@ -85,7 +85,9 @@ class TestImageAdminInline(TestCase):
 
 class TestImageAdmin(AjaxRequestMixin, ViewsTestCase):
     """
-    Tests for the Image admin
+    Tests for the Image admin. Inherits the TestModel object, two
+    images related to that and one another TestModel object without
+    related images. Also has the 'send_ajax_request method
     """
 
     @staticmethod
