@@ -125,3 +125,16 @@ class TestGalleryDataUrlPattern(TestCase):
             result = content_gallery.gallery_data_url_pattern()
             get_pattern.assert_called()
         self.assertEqual(result, 'url_pattern')
+
+
+class TestObfuscateFilter(TestCase):
+
+    def test_obfuscate(self):
+        with mock.patch.object(
+            utils,
+            'get_obfuscated_file',
+            return_value='path'
+        ) as get_obfuscated_file:
+            result = content_gallery.obfuscate('foo')
+            get_obfuscated_file.assert_called_with('foo')
+        self.assertEqual(result, 'path')

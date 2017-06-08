@@ -83,3 +83,12 @@ def gallery_data_url_pattern():
     The template tag is used in the gallery template.
     """
     return utils.get_gallery_data_url_pattern()
+
+
+@register.filter
+def obfuscate(path):
+    """
+    Returns the link to the original static file in DEBUG mode
+    of to the obfuscated file if the DEBUG is False.
+    """
+    return utils.get_obfuscated_file(path)

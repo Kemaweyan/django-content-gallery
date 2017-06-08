@@ -1,7 +1,7 @@
 {% load static content_gallery %}
 
-<link href="{% static 'content_gallery/css/content-gallery.css' %}" type="text/css" rel="StyleSheet">
-<link href="{% static 'content_gallery/css/content-gallery-view.css' %}" type="text/css" rel="StyleSheet">
+<link href="{% static 'content_gallery/css/content-gallery.css'|obfuscate %}" type="text/css" rel="StyleSheet">
+<link href="{% static 'content_gallery/css/content-gallery-view.css'|obfuscate %}" type="text/css" rel="StyleSheet">
 <div id="content-gallery" data-url-pattern="{% gallery_data_url_pattern %}">
   <div id="content-gallery-black-box" class="content-gallery-close"></div>
   <div id='content-gallery-view'>
@@ -25,7 +25,7 @@
     </div>
   </div>
 </div>
-<script type="text/javascript" src="{% static 'content_gallery/js/content-gallery.js' %}"></script>
-<script type="text/javascript" src="{% static 'content_gallery/js/content-gallery-sync.js' %}"></script>
-<script type="text/javascript" src="{% static 'content_gallery/js/content-gallery-view.js' %}"></script>
-<script type="text/javascript" src="{% static 'content_gallery/js/content-gallery-site-view.js' %}"></script>
+<script type="text/javascript" src="{% static 'content_gallery/js/content-gallery.js'|obfuscate %}"></script>
+<script type="text/javascript" src="{% static 'content_gallery/js/content-gallery-sync.js'|obfuscate %}"></script>
+<script type="text/javascript" src="{% static 'content_gallery/js/content-gallery-view.js'|obfuscate %}"></script>
+<script type="text/javascript" src="{% static 'content_gallery/js/content-gallery-site-view.js'|obfuscate %}"></script>
