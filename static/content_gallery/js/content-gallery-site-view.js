@@ -82,8 +82,13 @@
 
         function setImageAnim(index) {
             setImage(index, function (size, src) {
-                var preload = preloadImage(src);
-                var animation = animateSync.safeAnimate($image, {width: 0, height: 0});
+                var preload = preloadImage(src).then(function () {
+                    $loadingSplash.hide();
+                });
+                var animation = animateSync.safeAnimate($image, {width: 0, height: 0}).then(function () {
+                    if (preload.state() != "resolved")
+                        $loadingSplash.show();
+                });
                 $.when(preload, animation).done(function (a, b) {
                     $image.attr("src", src);
                     animateSync.safeAnimate($image, {width: size.width, height: size.height});
