@@ -161,7 +161,9 @@ def create_static_url(url):
     """
     # remove ending slash to avoid double slashes
     static = django_settings.STATIC_URL.rstrip("/")
-    return "/".join([static, url])
+    path = "/".join([static, url])
+    # use obfuscated file in non-DEBUG mode
+    return get_obfuscated_file(path)
 
 def get_first_image(obj):
     """
@@ -176,3 +178,12 @@ def get_first_image(obj):
         return None
     # return the first image
     return images[0]
+
+def get_obfuscated_file(path):
+    """
+    Adds .min to the filename in non-debug mode
+    """
+    if not django_settings.DEBUG:
+        return path
+    name, ext = os.path.splitext(path)
+    return "".join([name, ".min", ext])

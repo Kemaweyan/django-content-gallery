@@ -152,9 +152,16 @@ class TestFilenameUtils(TestCase):
         self.assertEqual(name, 'gallery/foo.jpg')
 
     @override_settings(STATIC_URL='/static/')
-    def test_create_static_url(self):
-        name = utils.create_static_url('gallery/foo.jpg')
+    def test_create_static_url_result(self):
+        with mock.patch.object(utils, 'get_obfuscated_file', lambda x: x):
+            name = utils.create_static_url('gallery/foo.jpg')
         self.assertEqual(name, '/static/gallery/foo.jpg')
+
+    @override_settings(STATIC_URL='/static/')
+    def test_create_static_url_obfuscation_call(self):
+        with mock.patch.object(utils, 'get_obfuscated_file') as obfuscation:
+            utils.create_static_url('gallery/foo.jpg')
+            obfuscation.assert_called_with('/static/gallery/foo.jpg')
 
 
 class TestImageUtils(TestCase):
@@ -238,3 +245,26 @@ class TestGetFirstImage(ViewsTestCase):
     def test_get_image_none(self):
         img = utils.get_first_image(self.alone_object)
         self.assertIsNone(img)
+
+
+class TestGetObfuscatedFile(TestCase):
+
+    @override_settings(DEBUG=True)
+    def test_debug_mode(self):
+        js = utils.get_obfuscated_file('foo.js')
+        self.assertEqual(js, 'foo.js')
+
+    @override_settings(DEBUG=True)
+    def test_debug_mode_with_path(self):
+        js = utils.get_obfuscated_file('foo/bar.js')
+        self.assertEqual(js, 'foo/bar.js')
+
+    @override_settings(DEBUG=False)
+    def test_non_debug_mode(self):
+        js = utils.get_obfuscated_file('foo.js')
+        self.assertEqual(js, 'foo.min.js')
+
+    @override_settings(DEBUG=False)
+    def test_non_debug_mode_with_path(self):
+        js = utils.get_obfuscated_file('foo/bar.js')
+        self.assertEqual(js, 'foo/bar.min.js')
