@@ -11,14 +11,13 @@
             callback();
         }
 
-        function safeAnimate($obj, css, callback) {
+        function safeAnimate($obj, css) {
             ++activeTasks;
 
-            $obj.animate(css, function () {
+            return $obj.animate(css)
+            .promise()
+            .then(function () {
                 --activeTasks;
-
-                if (callback)
-                    callback();
             });
         }
 

@@ -49,22 +49,20 @@
             }
 
             if (left != newLeft)
-                animateSync.safeAnimate($thumbnails, {left: newLeft}, null);
+                animateSync.safeAnimate($thumbnails, {left: newLeft});
 
             checkScrollButtons(newLeft);
         }
 
-        function preloadImage(src, callback) {
-            var img = new Image();
-            var timer = setTimeout(function () {
-                $loadingSplash.show();
-            }, 500);
-            img.onload = function () {
-                clearTimeout(timer);
-                $loadingSplash.hide();
-                callback();
+        function preloadImage(src) {
+            var loader = function(deffered) {
+                var img = new Image();
+                img.onload = function () {
+                    deffered.resolve(img);
+                }
+                img.src = src;
             }
-            img.src = src;
+            return $.Deferred(loader).promise();
         }
 
         function setImage(index, callback) {
@@ -84,11 +82,11 @@
 
         function setImageAnim(index) {
             setImage(index, function (size, src) {
-                preloadImage(src, function () {
-                    animateSync.safeAnimate($image, {width: 0, height: 0}, function () {
-                        $image.attr("src", src);
-                        animateSync.safeAnimate($image, {width: size.width, height: size.height}, null);
-                    });
+                var preload = preloadImage(src);
+                var animation = animateSync.safeAnimate($image, {width: 0, height: 0});
+                $.when(preload, animation).done(function (a, b) {
+                    $image.attr("src", src);
+                    animateSync.safeAnimate($image, {width: size.width, height: size.height});
                 });
             });
         }
@@ -157,7 +155,7 @@
             animateSync.safeRun(function () {
                 left = thumbnailsLeft();
                 if (left < 0) {
-                    animateSync.safeAnimate($thumbnails, {left: "+=" + thumbnailWidth}, null);
+                    animateSync.safeAnimate($thumbnails, {left: "+=" + thumbnailWidth});
                     checkScrollButtons(left + thumbnailWidth);
                 }
             });
@@ -167,7 +165,7 @@
             animateSync.safeRun(function () {
                 left = thumbnailsLeft();
                 if (left > maxOffset) {
-                    animateSync.safeAnimate($thumbnails, {left: "-=" + thumbnailWidth}, null);
+                    animateSync.safeAnimate($thumbnails, {left: "-=" + thumbnailWidth});
                     checkScrollButtons(left - thumbnailWidth);
                 }
             });
