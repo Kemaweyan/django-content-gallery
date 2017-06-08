@@ -183,7 +183,7 @@ def get_obfuscated_file(path):
     """
     Adds .min to the filename in non-debug mode
     """
-    if not django_settings.DEBUG:
+    if django_settings.DEBUG:
         return path
     name, ext = os.path.splitext(path)
     return "".join([name, ".min", ext])
