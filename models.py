@@ -77,7 +77,7 @@ class Image(models.Model):
         if self.object_id:
             self.init_type = self.content_type
         # store the name of the image to be able to keep correct filenames
-        # when new images will be uploaded replacing old files
+        # when new images have been uploaded replacing old files
         self.image_name = self.image.name
 
     def __str__(self):
