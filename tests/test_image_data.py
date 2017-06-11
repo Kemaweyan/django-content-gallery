@@ -3,11 +3,7 @@ from django.test import mock, TestCase
 from .. import image_data
 from .. import utils
 
-class MockImageTestCase(TestCase):
-
-    def setUp(self):
-        self.image = mock.MagicMock()
-        self.image.name = 'gallery/foo.jpg'
+from .base_test_cases import MockImageTestCase
 
 
 class TestImageFile(MockImageTestCase):

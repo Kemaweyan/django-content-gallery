@@ -155,6 +155,20 @@ class ViewsTestCase(TestCase):
         cls.alone_object.delete()
 
 
+class MockImageTestCase(TestCase):
+    """
+    A base test case with a mock image object
+    """
+
+    def setUp(self):
+        """
+        Creates a new mock Image object for each test
+        Sets a known name of the image
+        """
+        self.image = mock.MagicMock(spec=models.Image)
+        self.image.name = 'gallery/foo.jpg'
+
+
 class AjaxRequestMixin:
     """
     A mixin provides emulation of AJAX requests
