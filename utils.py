@@ -54,7 +54,7 @@ def get_admin_new_image_preview_url_pattern():
     # remove argument (last digits in the URL with '/' optionally)
     return re.sub(r'\d+/?$', '', preview_url)
 
-def calculate_image_size(size, max_size):
+def calculate_image_size(size, target_size):
     """
     Returns the size of the image after resizing.
     The same code is used in PIL.Image.thumbnail
@@ -63,15 +63,15 @@ def calculate_image_size(size, max_size):
     """
     x, y = size
     # if the width is greater than the target
-    if x > max_size[0]:
+    if x > target_size[0]:
         # proportionally decrease the height but not less than 1px
-        y = int(max(y * max_size[0] / x, 1))
-        x = int(max_size[0])  # set the width to the target width
+        y = int(max(y * target_size[0] / x, 1))
+        x = int(target_size[0])  # set the width to the target width
     # if the height is still greater than the target
-    if y > max_size[1]:
+    if y > target_size[1]:
         # proportionally decrease the width but not less than 1px
-        x = int(max(x * max_size[1] / y, 1))
-        y = int(max_size[1])  # set the height to the target height
+        x = int(max(x * target_size[1] / y, 1))
+        y = int(target_size[1])  # set the height to the target height
     return x, y
 
 def get_ext(filename):
