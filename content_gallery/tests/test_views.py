@@ -22,7 +22,7 @@ class TestChoices(AjaxRequestMixin, TestCase):
         """
         A helper method that returns the URL to the view
         """
-        return reverse('gallery:choices', args=(pk,))
+        return reverse('content_gallery:choices', args=(pk,))
 
     @classmethod
     def setUpClass(cls):
@@ -132,7 +132,7 @@ class TestGalleryData(AjaxRequestMixin, ViewsTestCase):
         """
         A helper method that returns the URL to the view
         """
-        return reverse('gallery:gallery_data', kwargs=kwargs)
+        return reverse('content_gallery:gallery_data', kwargs=kwargs)
 
     @classmethod
     def setUpClass(cls):

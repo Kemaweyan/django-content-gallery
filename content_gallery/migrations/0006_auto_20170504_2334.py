@@ -3,19 +3,19 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
-import gallery.fields
+import content_gallery.fields
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('gallery', '0005_auto_20170320_0028'),
+        ('content_gallery', '0005_auto_20170320_0028'),
     ]
 
     operations = [
         migrations.AlterField(
             model_name='image',
             name='image',
-            field=gallery.fields.GalleryImageField(upload_to='gallery'),
+            field=content_gallery.fields.GalleryImageField(upload_to='gallery'),
         ),
     ]

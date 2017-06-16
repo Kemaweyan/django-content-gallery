@@ -71,7 +71,8 @@ def gallery_data(request, app_label, content_type, object_id):
     )
     # get the object of the model or raise 404
     obj = get_object_or_404(ctype.model_class(), pk=object_id)
-    qs = obj.gallery.order_by('position')  # order images by 'position'
+    # order images by 'position'
+    qs = obj.content_gallery.order_by('position')
     # the target size of the small image from the settings
     max_size = (
         settings.CONF['small_image_width'],

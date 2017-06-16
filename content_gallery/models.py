@@ -196,7 +196,7 @@ class ContentGalleryMixin(models.Model):
     admin pages of you models.
     """
 
-    gallery = GenericRelation(Image)  # the manager of related images
+    content_gallery = GenericRelation(Image)  # the manager of related images
     gallery_visible = True  # the flag of visibility in the Image admin
 
     class Meta:

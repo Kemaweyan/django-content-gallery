@@ -26,7 +26,7 @@ class TestUniqueSlugCheck(ImageTestCase):
         with mock.patch.object(
             utils,
             'name_in_db',
-            return_value='gallery/foo.jpg'
+            return_value='content_gallery/foo.jpg'
         ) as name_in_db:
             # call the function
             result = models._unique_slug_check("foo.jpg", [])

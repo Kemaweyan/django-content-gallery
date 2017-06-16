@@ -24,7 +24,7 @@ CONF = {
     'small_preview_height': 114,
 
     # the path to image files
-    'path': 'gallery',
+    'path': 'content_gallery',
 }
 
 # overwrite defaults with settings specified in project settings file

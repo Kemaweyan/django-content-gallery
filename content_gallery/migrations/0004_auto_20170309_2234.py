@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('gallery', '0003_auto_20170305_1729'),
+        ('content_gallery', '0003_auto_20170305_1729'),
     ]
 
     operations = [

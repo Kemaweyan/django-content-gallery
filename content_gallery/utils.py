@@ -18,7 +18,7 @@ def get_choices_url_pattern():
     """
     # get 'choices' URL using 'reverse',
     # the pattern requires one numeric argument
-    choices_url = urlresolvers.reverse('gallery:choices', args=(0,))
+    choices_url = urlresolvers.reverse('content_gallery:choices', args=(0,))
     # remove argument (last digits in the URL with '/' optionally)
     return re.sub(r'\d+/?$', '', choices_url)
 
@@ -30,7 +30,7 @@ def get_gallery_data_url_pattern():
     # get 'gallery_data' using 'reverse',
     # the pattern requires two words and one number as arguments
     choices_url = urlresolvers.reverse(
-        'gallery:gallery_data',
+        'content_gallery:gallery_data',
         args=(
             'app_label',
             'content_type',
@@ -172,7 +172,7 @@ def get_first_image(obj):
     with the smallest value of the 'position' field. 
     """
     # get one image ordered by 'position'
-    images = obj.gallery.all().order_by('position')[:1]
+    images = obj.content_gallery.all().order_by('position')[:1]
     # return None if result is empty
     if not images:
         return None

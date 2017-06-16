@@ -2,7 +2,7 @@ from django.conf.urls import url
 
 from . import views
 
-app_name = 'gallery'
+app_name = 'content_gallery'
 
 urlpatterns = [
     # a URL for getting a list of objets of the model
