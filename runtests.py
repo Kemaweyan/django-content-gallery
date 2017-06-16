@@ -3,7 +3,7 @@
 import os
 import sys
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'content_gallery_testapp.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'content_gallery_testapp.settings_test'
 
 import django
 from django.test.utils import get_runner
