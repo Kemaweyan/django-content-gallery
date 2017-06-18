@@ -126,5 +126,3 @@ STATICFILES_DIRS = [
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/'
-
-TEST_RUNNER = 'content_gallery.tests.runner.GalleryTestSuiteRunner'
