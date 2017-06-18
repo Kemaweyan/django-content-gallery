@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'testapp',
-    'content_gallery'
+    'content_gallery',
+    'admin_jqueryui',
 ]
 
 MIDDLEWARE = [
