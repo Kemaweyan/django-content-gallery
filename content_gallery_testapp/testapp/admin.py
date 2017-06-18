@@ -1,5 +1,12 @@
 from django.contrib import admin
 
+from content_gallery.admin import ImageAdminInline
+
 from . import models
 
-admin.site.register(models.Cat)
+class CatAdmin(admin.ModelAdmin):
+    inlines = [
+        ImageAdminInline,
+    ]
+
+admin.site.register(models.Cat, CatAdmin)

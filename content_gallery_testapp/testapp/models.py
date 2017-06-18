@@ -1,6 +1,8 @@
 from django.db import models
 
-class Cat(models.Model):
+from content_gallery.models import ContentGalleryMixin
+
+class Cat(ContentGalleryMixin, models.Model):
 
     SEX_CHOICES = {
         ('M', "Male"),
