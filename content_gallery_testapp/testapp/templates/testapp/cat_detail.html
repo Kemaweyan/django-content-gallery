@@ -1,0 +1,12 @@
+{% extends "testapp/cat_base.html" %}
+{% load static content_gallery %}
+{% block body %}
+<div class="cat-content">
+  <div class="cat-photo">
+    {% gallery_preview cat %}
+  </div>
+  <div class="cat-description">
+    <h1>{{ cat.name }} ({{ cat.get_sex_display }}, {{ cat.age }} year{{ cat.age|pluralize }})</h1>
+  </div>
+</div>
+{% endblock body %}
