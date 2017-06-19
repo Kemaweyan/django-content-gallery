@@ -69,8 +69,7 @@
     opacity: 1;
 }
 #content-gallery-view .content-gallery-inactive {
-    cursor: default;
-    opacity: 0;
+    display: none;
 }
 #content-gallery-view .content-gallery-inactive:hover {
     opacity: 0;

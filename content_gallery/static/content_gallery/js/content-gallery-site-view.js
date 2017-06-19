@@ -126,6 +126,8 @@
         }
 
         function nextImage() {
+            if (gallery.count() < 2)
+                return;
             animateSync.safeRun(function () {
                 index = gallery.next();
                 slideImage(index);
@@ -133,6 +135,8 @@
         }
 
         function previousImage() {
+            if (gallery.count() < 2)
+                return;
             animateSync.safeRun(function () {
                index = gallery.prev();
                slideImage(index);
@@ -230,6 +234,16 @@
                                     )
                                 );
                 });
+                
+                if (gallery.count() > 1) {
+                    $(".content-gallery-prev-widget").removeClass("content-gallery-inactive");
+                    $(".content-gallery-next-widget").removeClass("content-gallery-inactive");
+                    $(".content-gallery-next-button").css({cursor: "pointer"});
+                } else {
+                    $(".content-gallery-prev-widget").addClass("content-gallery-inactive");
+                    $(".content-gallery-next-widget").addClass("content-gallery-inactive");
+                    $(".content-gallery-next-button").css({cursor: "default"});
+                }
 
                 $choices = $thumbnails.children();
                 callback();
