@@ -2,6 +2,12 @@
 import os
 import sys
 
+# create a path to the content_gallery to use local package
+# instead of installed in the system
+path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# insert the path right after current directory
+sys.path.insert(1, path)
+
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
     try:
