@@ -1,0 +1,11 @@
+[report]
+
+omit =
+    */migrations/*
+    ~/.virtualenvs/*
+
+show_missing = True
+precision = 2
+
+[html]
+directory = htmlcov/
