@@ -1,11 +1,13 @@
 {% load static %}
 <div class="content-gallery-preview-container content-gallery-images" style="width: {{ div_width }}px; height: {{ div_height }}px;">
 {% if image %}
-  <a href="#" data-image="{{ data_image }}" class="content-gallery-open-view content-gallery-preview content-gallery-centered-image"
-      style="width: {{ image_width }}px; height: {{ image_height }}px; line-height: {{ image_height }}px;">
-    <div><img src="{{ image.preview_url }}" alt="{{ image }}"></div>
-  </a>
-  <img src="{% static 'content_gallery/img/zoom.png' %}" class="content-gallery-zoom content-gallery-preview-zoom" style="left: {{ zoom_left }}px;" alt="zoom">
+  <div data-image="{{ data_image }}" class="content-gallery-open-view">
+    <div class="content-gallery-preview content-gallery-centered-image"
+        style="width: {{ image_width }}px; height: {{ image_height }}px; line-height: {{ image_height }}px;">
+      <img src="{{ image.preview_url }}" alt="{{ image }}">
+    </div>
+    <img src="{% static 'content_gallery/img/zoom.png' %}" class="content-gallery-zoom content-gallery-preview-zoom" style="left: {{ zoom_left }}px;" alt="zoom">
+  </div>
 {% else %}
   <div class="content-gallery-preview content-gallery-centered-image"
       style="width: {{ image_width }}px; height: {{ image_height }}px; line-height: {{ image_height }}px;">
