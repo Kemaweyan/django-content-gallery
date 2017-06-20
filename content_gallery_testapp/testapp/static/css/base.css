@@ -6,7 +6,7 @@ body {
 }
 h1 {
     margin: 0;
-    font: bold 24pt Helvetica,Arial,sans-serif;
+    font: bold 24pt Roboto,Helvetica,Arial,sans-serif;
     text-align: center;
     line-height: 80px;
     color: #ecebea;
@@ -14,17 +14,17 @@ h1 {
 h2 {
     color: #4b7b63;
     margin: 5px 0 40px 20px;
-    font: bold 22pt Helvetica,Arial,sans-serif;
+    font: bold 22pt Roboto,Helvetica,Arial,sans-serif;
     text-align: left;
 }
 h3 {
     color: #4b7b63;
     margin: 10px 0 20px 0;
-    font: bold 20pt Helvetica,Arial,sans-serif;
+    font: bold 20pt Roboto,Helvetica,Arial,sans-serif;
     text-align: left;
 }
 p, .back-link {
-    font: 15px Arial,sans-serif;
+    font: 15px Roboto,Arial,sans-serif;
     color: #ecebea;
     text-align: center;
     margin: 0;
@@ -54,10 +54,20 @@ a:hover {
     border-right: 1px solid #233d30;
     border-radius: 5px 5px 0 0;
     padding: 10px;
-    height: 30px;
+    height: 60px;
 }
 .footer p {
     line-height: 30px;
+    height: 30px;
+}
+.footer .logos {
+    height: 30px;
+    margin: 5px 0;
+    text-align: center;
+}
+.footer .logos a {
+    display: inline-block;
+    margin: 0 80px;
 }
 
 .cat-content {
@@ -66,7 +76,7 @@ a:hover {
     border: 1px solid #233d30;
     border-radius: 5px;
     padding: 10px;
-    background-color: #fff;
+    background: url(../img/footprint.png) right bottom no-repeat #fff;
 }
 .cat-photo {
     width: 400px;

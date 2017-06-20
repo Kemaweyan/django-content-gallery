@@ -1,7 +1,7 @@
 (function ($) {
     function setContentHeight() {
         var winHeight = $(window).height();
-        var height = winHeight - 244;
+        var height = winHeight - 274;
         if (height < 500)
             height = 500;
         $(".cat-content").css({'min-height': height + "px"});

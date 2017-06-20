@@ -4,9 +4,11 @@
 <head>
   <meta charset="utf-8">
   <title>The django-content-gallery test application</title>
+  <link href='http://fonts.googleapis.com/css?family=Roboto' rel='StyleSheet' type='text/css'>
   <link href="{% static 'css/base.css' %}" type="text/css" rel="StyleSheet">
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
   <script src="{% static 'js/base.js' %}"></script>
+  <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
 </head>
 <body>
 {% include "content_gallery/_image_view.html" %}
@@ -18,6 +20,11 @@
 {% endblock content %}
 </div>
 <div class="footer">
+  <div class="logos">
+    <a href="https://python.org"><img src="{% static 'img/python.png' %}"></a>
+    <a href="https://djangoproject.com"><img src="{% static 'img/django.png' %}"></a>
+    <a href="https://github.com"><img src="{% static 'img/github.png' %}"></a>
+  </div>
   <p>The <a href="https://github.com/Kemaweyan/django-content-gallery">django-content-gallery</a>
   project &copy; 2017</p>
 </div>
