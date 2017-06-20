@@ -6,10 +6,20 @@
   <title>The django-content-gallery test application</title>
   <link href="{% static 'css/base.css' %}" type="text/css" rel="StyleSheet">
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="{% static 'js/base.js' %}"></script>
 </head>
 <body>
 {% include "content_gallery/_image_view.html" %}
-{% block body %}
-{% endblock body %}
+<div class="header">
+  <h1>The django-content-gallery test application</h1>
+</div>
+<div class="cat-content">
+{% block content %}
+{% endblock content %}
+</div>
+<div class="footer">
+  <p>The <a href="https://github.com/Kemaweyan/django-content-gallery">django-content-gallery</a>
+  project &copy; 2017</p>
+</div>
 </body>
 </html>

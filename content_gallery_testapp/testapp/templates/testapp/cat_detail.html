@@ -1,12 +1,17 @@
 {% extends "testapp/cat_base.html" %}
 {% load static content_gallery %}
-{% block body %}
-<div class="cat-content">
-  <div class="cat-photo">
-    {% gallery_preview cat %}
-  </div>
-  <div class="cat-description">
-    <h1>{{ cat.name }} ({{ cat.get_sex_display }}, {{ cat.age }} year{{ cat.age|pluralize }})</h1>
-  </div>
+{% block content %}
+<div class="cat-photo">
+  {% gallery_preview cat %}
 </div>
-{% endblock body %}
+<div class="cat-description">
+  <h2>{{ cat.name }}</h2>   {% if cat.about %}
+    <p>{{ cat.about }}</p>
+  {% endif %}
+  <p>This page demonstrates a preview widget of the django-content-gallery
+  application. The widget displays a preview of the first image related to
+  the object or the no-image icon if there are not images. Click on the
+  preview opens the gallery with all related to the object images. The
+  preview widget is meant for using mainly on detail views.</p>
+</div>
+{% endblock content %}
