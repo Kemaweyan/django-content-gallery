@@ -38,10 +38,12 @@
     display: block;
     border-radius: 5px;
     margin: 5px;
+    background-color: #fff;
 }
 .content-gallery-preview-container .content-gallery-zoom {
     position: relative;
     visibility: hidden;
+    cursor: pointer;
 }
 .content-gallery-preview-container .content-gallery-preview-zoom {
     top: -60px;
