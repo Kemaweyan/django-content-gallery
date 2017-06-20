@@ -5,13 +5,20 @@
   {% gallery_preview cat %}
 </div>
 <div class="cat-description">
-  <h2>{{ cat.name }}</h2>   {% if cat.about %}
+  <h2>{{ cat.name }}</h2>
+  {% if cat.about %}
     <p>{{ cat.about }}</p>
+  {% else %}
+    <p class="no-description">no description</p>
   {% endif %}
   <p>This page demonstrates a preview widget of the django-content-gallery
   application. The widget displays a preview of the first image related to
   the object or the no-image icon if there are not images. Click on the
   preview opens the gallery with all related to the object images. The
   preview widget is meant for using mainly on detail views.</p>
+</div>
+<div class="cleaner"></div>
+<div class="back-link">
+  &#8227; <a href="..">Back to the list</a>
 </div>
 {% endblock content %}

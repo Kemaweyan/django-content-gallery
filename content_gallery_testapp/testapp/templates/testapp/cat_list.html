@@ -1,0 +1,43 @@
+{% extends "testapp/cat_base.html" %}
+{% load static content_gallery %}
+{% block content %}
+
+<p>This is a test apllication that demonstrates how to integrate the
+django-content-gallery into a project. The application contains two views:
+a list view containing a list of cats and a detail view with detailed information
+of a cat. The database contains two cats: the one named Semargl with a collection
+of photos to demonstrate features of the content gallery, and some unknown cat
+that has not photos to demontrate an empty gallery.</p>
+
+<p>This page demonstrates a small preview widget of the django-content-gallery
+application. The widget displays a small preview of the first image related to
+the object or the small no-image icon if there are not images. Click on the
+preview opens the gallery with all related to the object images. The small 
+preview widget is meant for using mainly on list views.</p>
+
+<table class="cats-table">
+  <tbody>
+    {% for cat in cats %}
+      <tr>
+        <td class="table-photo">
+          {% gallery_small_preview cat %}
+        </td>
+        <td class="table-description">
+          <h3><a href="{{ cat.pk }}">{{ cat.name }}</a></h3>
+          {% if cat.age or cat.sex %}
+            <p>
+            {% if cat.age %}
+              {{ cat.age }} year{{ cat.age|pluralize }} old
+            {% endif %}
+            {% if cat.sex %}
+              {% if cat.age %},{% endif %}
+              {{ cat.get_sex_display|lower }}
+            {% endif %}
+            </p>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock content %}
