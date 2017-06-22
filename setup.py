@@ -4,18 +4,29 @@ import os
 from setuptools import setup, find_packages
 import content_gallery
 
-data_files = [
-    "static/content_gallery/img/*",
-    "static/content_gallery/css/*",
-    "static/content_gallery/js/*",
-    "static/content_gallery/admin/img/*",
-    "static/content_gallery/admin/css/*",
-    "static/content_gallery/admin/js/*",
-    "templates/content_gallery/*",
-    "templates/content_gallery/templatetags/*",
-    "templates/content_gallery/admin/*",
-    "templates/content_gallery/admin/edit_inline/*",
+FILE_TYPES = [
+    ".js",
+    ".css",
+    ".png",
+    ".gif",
+    ".html"
 ]
+
+def has_required_files(files):
+    for f in files:
+        name, ext = os.path.splitext(f)
+        if ext in FILE_TYPES:
+            return True
+    return False
+
+def find_data_dirs(path):
+    dirs = []
+    for name, dlist, files in os.walk(path):
+        if has_required_files(files):
+            relpath = os.path.relpath(name, 'content_gallery')
+            dirs.append(os.path.join(relpath, '*'))
+    return dirs
+
 
 setup(
     name = "django-content-gallery",
@@ -28,7 +39,7 @@ setup(
     # long_description = open('README').read(),
     url = "https://github.com/Kemaweyan/django-content-gallery",
     license = "BSD-3-Clause",
-    package_data = {"content_gallery": data_files},
+    package_data = {"content_gallery": find_data_dirs('content_gallery')},
     packages=find_packages(exclude=["content_gallery.tests", "content_gallery_testapp", "content_gallery_testapp.*"]),
     test_suite='runtests.runtests'
 )
