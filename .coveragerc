@@ -3,6 +3,7 @@
 omit =
     */migrations/*
     ~/.virtualenvs/*
+    content_gallery_testapp/*
 
 show_missing = True
 precision = 2
