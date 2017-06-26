@@ -36,7 +36,7 @@ setup(
     author = "Taras Gaidukov",
     author_email = "kemaweyan@gmail.com",
     keywords = "django image gallery photo",
-    # long_description = open('README').read(),
+    long_description = open('README.rst').read(),
     url = "https://github.com/Kemaweyan/django-content-gallery",
     license = "BSD-3-Clause",
     package_data = {"content_gallery": find_data_dirs('content_gallery')},
