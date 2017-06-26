@@ -63,4 +63,6 @@ code to your admin.py
 
     admin.site.register(models.YourModel, YourModelAdmin)
 
-Now the **django-content-gallery** is available for your models.
+Now the **django-content-gallery** is available for your models. For more details, see the
+**content_gallery_testapp** which is an example of the **django-content-gallery** usage.
+
