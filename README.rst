@@ -25,7 +25,7 @@ Then add the *content_gallery* to INSTALLED_APPS in the settings of your project
         'content_gallery',
     ]
 
-Add the *content_gallery.urls* to the urls.py of your project (you could use any
+Add the ``content_gallery.urls`` to the urls.py of your project (you could use any
 URL pattern, not only ``^content_gallery\``):
 
 .. code-block::
@@ -35,7 +35,7 @@ URL pattern, not only ``^content_gallery\``):
         url(r'^content_gallery/', include('content_gallery.urls')),
     ]
 
-Now to make you models able to attach a gallery, use the *ContentGalleryMixin* in
+Now to make you models able to attach a gallery, use the ``ContentGalleryMixin`` in
 models you want to use the content-gallery with:
 
 .. code-block::
@@ -47,7 +47,7 @@ models you want to use the content-gallery with:
         ...
 
 Also to be able to edit attached image collection on the admin page of your model,
-you need to add the *ImageAdminInline* to inlines of your model admin. Add following
+you need to add the ``ImageAdminInline`` to inlines of your model admin. Add following
 code to your admin.py
 
 .. code-block::
