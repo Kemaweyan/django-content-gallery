@@ -72,3 +72,4 @@ code to your admin.py
 Now the **django-content-gallery** is available for your models. For more details, see the
 **content_gallery_testapp** which is an example of the **django-content-gallery** usage.
 
+
