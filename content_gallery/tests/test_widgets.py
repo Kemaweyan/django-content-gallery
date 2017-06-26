@@ -79,7 +79,7 @@ class TestContentTypeSelect(TestCase):
             # call the render method
             result = widgets.ContentTypeSelect.render(widget, 'name', 'value')
             # check whether the helper function has been called
-            get_url_pattern.assert_called()
+            get_url_pattern.assert_called_with()
             # check whether the parent's method has been called
             # with the same arguments
             render.assert_called_with('name', 'value', None)

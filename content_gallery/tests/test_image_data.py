@@ -241,7 +241,7 @@ class TestImageFile(MockImageTestCase):
         # with the old image name
         self.image_file._set_name.assert_called_with('gallery/bar.jpg')
         # check whether the delete method has been called
-        self.image_file.delete.assert_called()
+        self.image_file.delete.assert_called_with()
         # check whether the name has not been changed
         self.assertEqual(self.image_file.name, 'gallery/bar.jpg')
         # check whether the _change_ext method has been called
@@ -331,7 +331,7 @@ class TestImageFile(MockImageTestCase):
         # with the old image name
         self.image_file._set_name.assert_called_with('gallery/foo.jpg')
         # check whether the delete method has been called
-        self.image_file.delete.assert_called()
+        self.image_file.delete.assert_called_with()
         # set whether the name has been constructed from given slug and
         # the ext of uploaded image
         self.assertEqual(self.image_file.name, 'baz.png')

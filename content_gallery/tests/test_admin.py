@@ -74,7 +74,7 @@ class TestImageAdminInline(TestCase):
             # with the same argument
             get_formset.assert_called_with('request', None)
             # check whether the helper function has been called
-            get_pattern.assert_called()
+            get_pattern.assert_called_with()
         # check whether the method returns the result of parent's method
         self.assertEqual(formset, result)
         # check whether the 'preview_url_pattern' of returned object

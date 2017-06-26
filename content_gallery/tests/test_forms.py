@@ -242,7 +242,7 @@ class TestImageAdminForm(TestCase):
             # call the method with the mock object
             result = forms.ImageAdminForm.clean(self.form)
             # check whether the parent method has been called
-            clean.assert_called()
+            clean.assert_called_with()
             # check whether the method returns
             # the result of the parent method
             self.assertEqual(result, 'foo')
@@ -265,7 +265,7 @@ class TestImageAdminForm(TestCase):
             # call the method with the mock object
             result = forms.ImageAdminForm.clean(self.form)
             # check whether the parent method has been called
-            clean.assert_called()
+            clean.assert_called_with()
             # check whether the method returns
             # the result of the parent method
             self.assertEqual(result, {})
@@ -290,7 +290,7 @@ class TestImageAdminForm(TestCase):
             # call the method with the mock object
             result = forms.ImageAdminForm.clean(self.form)
             # check whether the parent method has been called
-            clean.assert_called()
+            clean.assert_called_with()
             # check whether the method returns
             # the result of the parent method
             self.assertEqual(result, data)

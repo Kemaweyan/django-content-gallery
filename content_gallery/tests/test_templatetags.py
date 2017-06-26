@@ -220,7 +220,7 @@ class TestGalleryDataUrlPattern(TestCase):
             # call the gallery_data_url_pattern tag function
             result = content_gallery.gallery_data_url_pattern()
             # check whether the helper function has been called
-            get_pattern.assert_called()
+            get_pattern.assert_called_with()
         # check whether the tag returns the result
         # of the helper function
         self.assertEqual(result, 'url_pattern')

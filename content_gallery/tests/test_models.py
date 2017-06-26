@@ -379,8 +379,8 @@ class TestImageQuerySet(TestCase):
             # call the delete method
             models.ImageQuerySet.delete(query_set)
             # check whether the parent's delete method has been called
-            delete.assert_called()
+            delete.assert_called_with()
         # check whether the delete_files methods
         # of both objects have been called
-        obj1.delete_files.assert_called()
-        obj2.delete_files.assert_called()
+        obj1.delete_files.assert_called_with()
+        obj2.delete_files.assert_called_with()

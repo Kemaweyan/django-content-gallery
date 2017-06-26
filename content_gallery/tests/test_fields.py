@@ -144,7 +144,7 @@ class TestGalleryImageFieldFile(ImageTestCase):
         self.field_file.save_files('bar', 'baz')
 
         # check whether the _check_dir has been called
-        self.field_file._check_dir.assert_called()
+        self.field_file._check_dir.assert_called_with()
         # check whether the save methods of all image objects
         # has been called with the arguments passed to tested method
         self.field_file.image_data.save.assert_called_with(
@@ -191,7 +191,7 @@ class TestGalleryImageFieldFile(ImageTestCase):
         self.field_file.save_files('bar', 'baz')
 
         # check whether the _check_dir has been called
-        self.field_file._check_dir.assert_called()
+        self.field_file._check_dir.assert_called_with()
         # check whether the save methods of all image objects
         # has been called with the arguments passed to tested method
         self.field_file.image_data.save.assert_called_with(
@@ -230,11 +230,11 @@ class TestGalleryImageFieldFile(ImageTestCase):
         # call the method
         self.field_file.delete_files()
         # check whether all delete methods has been called
-        self.field_file.image_data.delete.assert_called()
-        self.field_file.thumbnail.delete.assert_called()
-        self.field_file.preview.delete.assert_called()
-        self.field_file.small_preview.delete.assert_called()
-        self.field_file.small_image.delete.assert_called()
+        self.field_file.image_data.delete.assert_called_with()
+        self.field_file.thumbnail.delete.assert_called_with()
+        self.field_file.preview.delete.assert_called_with()
+        self.field_file.small_preview.delete.assert_called_with()
+        self.field_file.small_image.delete.assert_called_with()
 
     def test_thumbnail_url(self):
         """
