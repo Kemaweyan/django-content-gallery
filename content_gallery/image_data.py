@@ -78,7 +78,7 @@ class BaseImageData(metaclass=ABCMeta):
         # it will be overwritten if slug specified, it happens when
         # a new image object is created or the related object changed
         self._set_name(name)
-        if is_uploaded and self.name:
+        if is_uploaded and name:
             # delete the old file if it exists
             # and a new image has been uploaded
             self.delete()
