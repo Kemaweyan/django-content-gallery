@@ -1,6 +1,11 @@
 django-content-gallery
 ======================
 
+.. image:: https://travis-ci.org/Kemaweyan/django-content-gallery.svg?branch=master
+    :target: https://travis-ci.org/Kemaweyan/django-content-gallery
+.. image:: https://coveralls.io/repos/github/Kemaweyan/django-content-gallery/badge.svg?branch=master
+    :target: https://coveralls.io/github/Kemaweyan/django-content-gallery?branch=master
+
 **django-content-gallery** is a Django application that allows to attach a collection
 of images to objects of any models in you Django projects. It also allows you easily
 add and remove images, re-attach images to another object (i.e. move an image to another
