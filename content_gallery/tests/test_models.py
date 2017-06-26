@@ -222,8 +222,8 @@ class TestImage(MultipleObjectsImageTestCase):
         image._save_data()
         # check whether the _get_slug and the _get_position methods
         # have been called
-        image._get_slug.assert_called_once()
-        image._get_position.assert_called_once()
+        image._get_slug.assert_called_once_with()
+        image._get_position.assert_called_once_with()
         # check whether the save_files method of the image field
         # has been called with the slug and the name of the image
         image.image.save_files.assert_called_once_with('foo', 'foo.jpg')
@@ -265,8 +265,8 @@ class TestImage(MultipleObjectsImageTestCase):
         self.image._save_data()
         # check whether the _get_slug and the _get_position methods
         # have been called
-        self.image._get_slug.assert_called_once()
-        self.image._get_position.assert_called_once()
+        self.image._get_slug.assert_called_once_with()
+        self.image._get_position.assert_called_once_with()
         # get a name of the image
         name = self.get_name('foo.jpg')
         # check whether the save_files method of the image field
@@ -284,7 +284,7 @@ class TestImage(MultipleObjectsImageTestCase):
         self.image.delete_files()
         # check whether the delete_files method of the image field
         # has been called
-        self.image.image.delete_files.assert_called_once()
+        self.image.image.delete_files.assert_called_once_with()
 
     def test_thumbnail_url_property(self):
         """

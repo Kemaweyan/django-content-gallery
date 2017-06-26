@@ -104,7 +104,7 @@ class TestGalleryImageFieldFile(ImageTestCase):
         with patch_settings({'path': 'gallery'}):
             self.field_file._check_dir()
         # check whether isdir has been called with the path
-        isdir.assert_called_width(path)
+        isdir.assert_called_with(path)
         # check whether mkdir has not been called
         mkdir.assert_not_called()
 
