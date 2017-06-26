@@ -16,7 +16,7 @@ To install the django-content-gallery type following command:
 
     $ pip install django-content-gallery
 
-Then add the *content_gallery* to INSTALLED_APPS in the settings of your project:
+Then add the ``content_gallery`` to INSTALLED_APPS in the settings of your project:
 
 .. code-block::
 
