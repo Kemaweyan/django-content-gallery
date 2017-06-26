@@ -35,7 +35,7 @@ URL pattern, not only ``^content_gallery\``):
         url(r'^content_gallery/', include('content_gallery.urls')),
     ]
 
-Now to make you models able to attach a gallery, use the ``ContentGalleryMixin`` in
+Now to make your models able to attach a gallery, use the ``ContentGalleryMixin`` in
 models you want to use the content-gallery with:
 
 .. code-block::
