@@ -4,3 +4,4 @@ htmlcov/
 *egg-info/
 build/
 dist/
+.eggs/

@@ -42,6 +42,16 @@ URL pattern, not only ``^content_gallery\``):
         url(r'^content_gallery/', include('content_gallery.urls')),
     ]
 
+For Django 1.8 you should also add the ``namespace='content_gallery'`` argument of
+the ``include`` function:
+
+.. code-block::
+
+    urlpatterns = [
+        ...
+        url(r'^content_gallery/', include('content_gallery.urls', namespace='content_gallery')),
+    ]
+
 Create tables in the database using the ``migrate`` command:
 
 .. code-block::

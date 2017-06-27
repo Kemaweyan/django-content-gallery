@@ -1,5 +1,5 @@
-Django==1.10.5
-python-magic==0.4.13
-Pillow==4.0.0
-awesome-slugify==1.6.5
+Django>=1.8
+Pillow>=3.0.0
+python-magic>=0.4.2
+awesome-slugify>=1.6
 django-admin-jqueryui112

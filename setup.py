@@ -43,10 +43,10 @@ setup(
     packages=find_packages(exclude=["content_gallery.tests", "content_gallery_testapp", "content_gallery_testapp.*"]),
     test_suite='runtests.runtests',
     install_requires=[
-        'Django==1.10.5',
-        'python-magic==0.4.13',
-        'Pillow==4.0.0',
-        'awesome-slugify==1.6.5',
+        'Django>=1.8',
+        'Pillow>=3.0.0',
+        'python-magic>=0.4.2',
+        'awesome-slugify>=1.6',
         'django-admin-jqueryui112',
     ]
 )
