@@ -12,6 +12,16 @@ add and remove images, re-attach images to another object (i.e. move an image to
 collection) and change an order of images in the collection as well.
 
 
+Requirements
+============
+
+* **Django** 1.10+
+* **Pillow** 3.0.0+
+* **python-magic** 0.4.2+
+* **awesome-slugify** 1.6+
+* **django-admin-jqueryui112** 1.12.1+
+
+
 Installation
 ============
 
