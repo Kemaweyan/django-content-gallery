@@ -43,7 +43,7 @@ setup(
     packages=find_packages(exclude=["content_gallery.tests", "content_gallery_testapp", "content_gallery_testapp.*"]),
     test_suite='runtests.runtests',
     install_requires=[
-        'Django>=1.8',
+        'Django>=1.10',
         'Pillow>=3.0.0',
         'python-magic>=0.4.2',
         'awesome-slugify>=1.6',
