@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^gallery/', include('content_gallery.urls')),
+    url(r'^gallery/', include('content_gallery.urls', namespace='content_gallery')),
     url(r'^testapp/', include('testapp.urls')),
     url(r'^$', RedirectView.as_view(pattern_name="testapp:cat_list")),
 ]
