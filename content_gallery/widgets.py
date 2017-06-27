@@ -138,16 +138,16 @@ class ImageWidget(widgets.AdminFileWidget):
           %(input_text)s: %(input)s
         </p>'''
 
-    def render(self, name, image, attrs=None):
+    def render(self, name, value, attrs=None):
         """
         Renders custom widget with the image preview for uploaded images
         or the default widget if the image has not yet been uploaded.
         """
         # if the image is uploaded, the 'image' argument
         # is an instance of GalleryImageFieldFile
-        if isinstance(image, fields.GalleryImageFieldFile):
+        if isinstance(value, fields.GalleryImageFieldFile):
             # get image data
-            data = utils.create_image_data(image)
+            data = utils.create_image_data(value)
             # fill the template and replace the default one
             self.template_with_initial = self.template.format(
                 settings.CONF['preview_width'] + 14,
@@ -160,7 +160,7 @@ class ImageWidget(widgets.AdminFileWidget):
                 settings.CONF['preview_width'] - 55
             )
         # render the widget
-        return super().render(name, image, attrs)
+        return super().render(name, value, attrs)
 
 
 class ImageInlineWidget(forms.Widget):
@@ -169,18 +169,18 @@ class ImageInlineWidget(forms.Widget):
     """
     template_name = 'content_gallery/admin/edit_inline/image_widget.html'
 
-    def render(self, name, image, attrs=None):
+    def render(self, name, value, attrs=None):
         """
         Renders the widget using the template file.
         """
         # return empty string for non-existing image
-        if not image:
+        if not value:
             return "";
         # get image data
-        data = utils.create_image_data(image)
+        data = utils.create_image_data(value)
         # the widget contains the small preview image
         context = {
-            "preview_src": image.small_preview_url,
+            "preview_src": value.small_preview_url,
             "image_data": json.dumps(data)
         }
         # render the widget
