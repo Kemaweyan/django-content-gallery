@@ -2,3 +2,4 @@ Django==1.10.5
 python-magic==0.4.13
 Pillow==4.0.0
 awesome-slugify==1.6.5
+django-admin-jqueryui112

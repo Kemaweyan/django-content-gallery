@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'testapp',
     'content_gallery',
-    # 'admin_jqueryui',
+    'admin_jqueryui',
 ]
 
 MIDDLEWARE = [
