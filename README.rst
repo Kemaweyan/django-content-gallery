@@ -21,13 +21,15 @@ To install the django-content-gallery type following command:
 
     $ pip install django-content-gallery
 
-Then add the ``content_gallery`` to INSTALLED_APPS in the settings of your project:
+Then add the ``content_gallery`` to INSTALLED_APPS in the settings of your project and the
+``admin_jqueryui`` to enable sorting images in the admin panel:
 
 .. code-block::
 
     INSTALLED_APPS = [
         ...
         'content_gallery',
+        'admin_jqueryui',
     ]
 
 Add the ``content_gallery.urls`` to the urls.py of your project (you could use any
