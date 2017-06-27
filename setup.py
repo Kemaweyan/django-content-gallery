@@ -41,5 +41,12 @@ setup(
     license = "BSD-3-Clause",
     package_data = {"content_gallery": find_data_dirs('content_gallery')},
     packages=find_packages(exclude=["content_gallery.tests", "content_gallery_testapp", "content_gallery_testapp.*"]),
-    test_suite='runtests.runtests'
+    test_suite='runtests.runtests',
+    install_requires=[
+        'Django==1.10.5',
+        'python-magic==0.4.13',
+        'Pillow==4.0.0',
+        'awesome-slugify==1.6.5',
+        'django-admin-jqueryui112',
+    ]
 )
