@@ -7,10 +7,12 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^gallery/', include('content_gallery.urls', namespace='content_gallery')),
+    # set the root URL for the Content Gallery app
+    url(r'^gallery/', include('content_gallery.urls')),
     url(r'^testapp/', include('testapp.urls')),
     url(r'^$', RedirectView.as_view(pattern_name="testapp:cat_list")),
 ]
 
+# serve images from MEDIA_ROOT directory in DEBUG mode
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -38,8 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'testapp',
-    'content_gallery',
-    'admin_jqueryui',
+    'content_gallery',  # add the Content Gallery app
+    'admin_jqueryui',  # for sorting images in admin
 ]
 
 MIDDLEWARE = [
@@ -123,6 +123,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+# MEDIA_ROOT and MEDIA_URL are required by the Content Gallery
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
