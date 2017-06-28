@@ -48,5 +48,18 @@ setup(
         'python-magic>=0.4.2',
         'awesome-slugify>=1.6',
         'django-admin-jqueryui112',
-    ]
+    ],
+    classifiers=[
+        'Framework :: Django :: 1.10',
+        'Framework :: Django :: 1.11',
+        'Development Status :: 4 - Beta',
+        'Environment :: Web Environment',
+		'Programming Language :: Python :: 3.4',
+		'Programming Language :: Python :: 3.5',
+		'Programming Language :: Python :: 3.6',
+        'Intended Audience :: Developers',
+        'Operating System :: OS Independent',
+        'License :: OSI Approved :: BSD License',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+    ],
 )
