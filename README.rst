@@ -15,11 +15,18 @@ collection) and change an order of images in the collection as well.
 Requirements
 ============
 
+* **Python** 3.4+
 * **Django** 1.10+
 * **Pillow** 3.0.0+
 * **python-magic** 0.4.2+
 * **awesome-slugify** 1.6+
 * **django-admin-jqueryui112** 1.12.1+
+
+.. NOTE::
+	Windows users should also copy ``magic1.dll``, ``regex2.dll`` and ``zlib1.dll`` onto
+	the PATH. These libraries are required by the **python-magic** package and could be
+	downloaded on the `File for Windows <http://gnuwin32.sourceforge.net/packages/file.htm>`_
+	official page.
 
 
 Installation
