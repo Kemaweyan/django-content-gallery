@@ -167,7 +167,7 @@ want the content-gallery to be available:
     {% include "content_gallery/_image_view.html" %}
 
 The **django-content-gallery** uses jQuery within its scripts, so make sure that jQuery is
-is available on your pages where the content-gallery is used.
+available on your pages where the content-gallery is used.
 
 To add the gallery related to your objects onto your pages the **django-content-gallery** provides
 two template tags. Those template tags are located in the ``content_gallery`` template tag set, so
