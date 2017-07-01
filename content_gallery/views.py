@@ -94,8 +94,13 @@ def gallery_data(request, app_label, content_type, object_id):
 
     images = []
     for img in qs:
-        # actual size of the full-size image
-        size = (img.image.width, img.image.height)
+        try:
+            # actual size of the full-size image
+            # it raises an exception if the image file does not exist
+            size = (img.image.width, img.image.height)
+        except:
+            # skip non-existing images
+            continue
         # calculate the actual size of the small image
         small_width, small_height = utils.calculate_image_size(
             size,

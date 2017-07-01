@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 
 from .. import models
 from .. import utils
+from .. import fields
 
 from .models import *
 from .base_test_cases import *
@@ -288,3 +289,26 @@ class TestGalleryData(AjaxRequestMixin, ViewsTestCase):
                 }
             ]
         )
+
+    def test_image_files_do_not_exist(self):
+        """
+        Checks whether the gallery_data view skips images
+        if their image files do not exist.
+        """
+        # patch the image field in the Image
+        # it is an object returned by GalleryImageField.attr_class
+        with mock.patch.object(
+            fields.GalleryImageField,
+            'attr_class'
+        ) as field_file:
+            # create an object and remove its 'width' attribute
+            # it causes raising the AttributeError which is similar
+            # to behavior of GalleryImageFieldFile when the image file
+            # does not exist
+            del field_file().width
+            # call the view function
+            resp = self.send_ajax_request(self.url)
+        # decode JSON response
+        data = json.loads(resp.content.decode("utf-8"))
+        # check whether the list is empty, i.e. all images have been skipped
+        self.assertListEqual(data['images'], [])

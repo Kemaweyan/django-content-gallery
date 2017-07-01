@@ -225,6 +225,9 @@
             thumbnailsReset();
 
             gallery.load(data.app_label, data.content_type, data.object_id, function (response) {
+
+                if (gallery.count() == 0) return;
+
                 $.each(response, function (index, img) {
                     $thumbnails.append($("<li></li>")
                                 .addClass("choice")
