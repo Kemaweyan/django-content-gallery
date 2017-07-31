@@ -18,7 +18,7 @@ def get_image_data():
     # create filled with red color image 200x200 px
     size = (200, 200)
     color = (255, 0, 0, 0)
-    image = Image.new("RGBA", size, color)
+    image = Image.new("RGB", size, color)
     # save the image data in JPEG format to the io buffer
     image.save(io, format='JPEG')
     io.seek(0)  # seek to the beginning
