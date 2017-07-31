@@ -46,8 +46,15 @@ To install the **django-content-gallery** type following command:
 
     $ pip install django-content-gallery
 
-Then add the ``content_gallery`` to INSTALLED_APPS in the settings of your project and the
-``admin_jqueryui`` to enable sorting images in the admin panel:
+Then in ``settings.py``:
+
+* Add the ``content_gallery`` to INSTALLED_APPS in the settings of your project
+  and the ``admin_jqueryui`` to enable sorting images in the admin panel.
+
+* Add the ``django.template.context_processors.media`` context processor to the
+  the ``context_processor`` list under the ``OPTIONS`` dict in ``TEMPLATES``
+
+* Add the path to  ``MEDIA_ROOT`` and ``MEDIA_URL``
 
 .. code-block::
 
@@ -57,8 +64,26 @@ Then add the ``content_gallery`` to INSTALLED_APPS in the settings of your proje
         'admin_jqueryui',
     ]
 
+    TEMPLATES = [
+        {
+            ...
+            'OPTIONS': {
+                'context_processors': [
+                    ...
+                    'django.template.context_processors.media',
+                     ],
+            },
+        },
+    ]
+
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+    MEDIA_URL = '/media/'
+
+
 Add the ``content_gallery.urls`` to the urls.py of your project (you could use any
-URL pattern, not only ``^content_gallery\``):
+URL pattern, not only ``^content_gallery\``), and add the handling of
+``MEDIA_ROOT`` when working locally/in debug mode:
+
 
 .. code-block::
 
@@ -66,6 +91,9 @@ URL pattern, not only ``^content_gallery\``):
         ...
         url(r'^content_gallery/', include('content_gallery.urls')),
     ]
+
+    if settings.DEBUG:
+        urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 Create tables in the database using the ``migrate`` command:
 
@@ -185,7 +213,7 @@ is your object. This tag is meant to be used generally in templates of detail vi
 	{% gallery_preview your_object %}
 
 This code adds the preview widget that shows a preview of the first image related to the object.
- 
+
 The ``gallery_small_preview`` tag adds a small preview onto the page, it uses such object as an
 argument as well, and is meant to be used generally in templates of list views:
 
@@ -200,6 +228,15 @@ Also the **django-content-gallery** provides a simple template tag named ``galle
 that also gets an object as an argument and returns a dict object that contains an object of
 the first image and JSON data for constructing a link to the object. You could use this template
 tag to construct you own custom widgets.
+
+For simply accessing all images data associated with an object from within a
+template, you can generate a queryset like this:
+
+.. code-block::
+
+  {% for image in myobject.content_gallery.all %}
+    <img src="{{ image.thumbnail_url }}">
+  {% endfor %}
 
 For more details, see the **content_gallery_testapp** which is an example of
 the **django-content-gallery** usage.
